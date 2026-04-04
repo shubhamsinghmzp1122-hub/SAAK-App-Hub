@@ -41,66 +41,6 @@
         ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
         ::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 4px; }
 
-        /* Login Screen */
-        #loginScreen {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: var(--bg-gradient);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-
-        .login-box {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            padding: 50px 30px;
-            border-radius: 20px;
-            text-align: center;
-            box-shadow: var(--card-shadow);
-            backdrop-filter: blur(10px);
-            width: 90%;
-            max-width: 400px;
-            animation: fadeIn 1s ease-in;
-        }
-
-        .login-box h2 {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-            color: var(--text-main);
-        }
-
-        .login-box p {
-            color: var(--text-muted);
-            margin-bottom: 30px;
-            font-size: 0.95rem;
-        }
-
-        .login-btn {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            font-size: 1.1rem;
-            padding: 14px;
-            background: white;
-            color: #333;
-            border: none;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .login-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-            background: #f1f1f1;
-        }
-
         /* Header */
         header {
             display: flex;
@@ -124,18 +64,9 @@
             gap: 10px;
         }
 
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            width: 40%;
-            justify-content: flex-end;
-        }
-
         .search-bar {
             position: relative;
-            width: 100%;
-            max-width: 400px;
+            width: 40%;
         }
 
         .search-bar input {
@@ -162,25 +93,7 @@
             color: var(--text-muted);
         }
 
-        .logout-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: 0.3s ease;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .logout-btn:hover {
-            background: rgba(255, 0, 0, 0.6);
-        }
-
-        /* Featured Banner */
+        /* Featured Banner - Removed internal items to serve as button container */
         .featured-banner {
             margin: 30px 5%;
             padding: 40px;
@@ -188,7 +101,7 @@
             background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80') center/cover;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: center; /* Centered content for button */
             justify-content: center;
             box-shadow: var(--card-shadow);
             border: 1px solid var(--glass-border);
@@ -215,7 +128,9 @@
         }
 
         /* App Grid */
-        .container { padding: 30px 5% 20px; }
+        .container {
+            padding: 30px 5% 20px;
+        }
         
         .section-title {
             font-size: 1.5rem;
@@ -242,7 +157,7 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             display: flex;
             flex-direction: column;
-            cursor: pointer;
+            cursor: pointer; /* Indication for clickable cards */
         }
 
         .app-card:hover {
@@ -251,57 +166,117 @@
         }
 
         .app-icon {
-            width: 70px; height: 70px; border-radius: 15px; object-fit: cover; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
+            object-fit: cover;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
         .app-info h3 { font-size: 1.2rem; margin-bottom: 5px; }
         .app-info p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; flex-grow: 1; }
         
         .rating { color: #ffd700; font-size: 0.9rem; margin-bottom: 15px; }
+        
         .app-card .btn { width: 100%; text-align: center; margin-top: auto; }
 
         /* Modal / Popup */
         .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.4s ease;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
         }
 
-        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
 
         .modal-content {
             background: linear-gradient(135deg, #1e293b, #0f172a);
-            width: 90%; max-width: 800px; max-height: 90vh;
-            border-radius: 20px; border: 1px solid var(--glass-border);
-            overflow-y: auto; position: relative;
-            transform: translateY(50px) scale(0.9); transition: all 0.4s ease; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            overflow-y: auto;
+            position: relative;
+            transform: translateY(50px) scale(0.9);
+            transition: all 0.4s ease;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
 
-        .modal-overlay.active .modal-content { transform: translateY(0) scale(1); }
+        .modal-overlay.active .modal-content {
+            transform: translateY(0) scale(1);
+        }
 
         .close-btn {
-            position: sticky; top: 15px; float: right; right: 20px;
-            background: rgba(255,255,255,0.1); border: none; color: white;
-            width: 35px; height: 35px; border-radius: 50%; cursor: pointer;
-            z-index: 2; transition: background 0.3s;
+            position: sticky;
+            top: 15px;
+            float: right;
+            right: 20px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 2;
+            transition: background 0.3s;
         }
+
         .close-btn:hover { background: rgba(255,0,0,0.7); }
 
-        .modal-header-info { display: flex; gap: 20px; padding: 30px 30px 10px; align-items: center; }
-        .modal-header-info img { width: 100px; height: 100px; border-radius: 20px; }
-        .modal-meta { display: flex; gap: 20px; margin-top: 10px; font-size: 0.85rem; color: var(--text-muted); }
+        .modal-header-info {
+            display: flex;
+            gap: 20px;
+            padding: 30px 30px 10px;
+            align-items: center;
+        }
+
+        .modal-header-info img {
+            width: 100px; height: 100px; border-radius: 20px;
+        }
+
+        .modal-meta {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
         .modal-meta div { text-align: center; border-right: 1px solid var(--glass-border); padding-right: 20px; }
         .modal-meta div:last-child { border-right: none; }
 
         /* Screenshots */
         .screenshots {
-            display: flex; overflow-x: auto; gap: 15px; padding: 20px 30px; scroll-snap-type: x mandatory;
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            padding: 20px 30px;
+            scroll-snap-type: x mandatory;
         }
+
         .screenshots img {
-            height: 250px; border-radius: 10px; scroll-snap-align: start;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: transform 0.3s; cursor: pointer;
+            height: 250px;
+            border-radius: 10px;
+            scroll-snap-align: start;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s;
+            cursor: pointer;
         }
+        
         .screenshots img:hover { transform: scale(1.02); }
 
         /* Modal Sections */
@@ -311,22 +286,56 @@
         .modal-section ul { padding-left: 20px; }
 
         /* Review System */
-        .review-form { background: rgba(0,0,0,0.2); padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        .review-form {
+            background: rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
         .star-rating-input {
-            display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 5px; margin-bottom: 15px;
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            gap: 5px;
+            margin-bottom: 15px;
         }
+
         .star-rating-input input { display: none; }
-        .star-rating-input label { color: var(--text-muted); font-size: 1.5rem; cursor: pointer; transition: color 0.2s; }
-        .star-rating-input input:checked ~ label, .star-rating-input label:hover, .star-rating-input label:hover ~ label { color: #ffd700; }
-        
-        .review-form textarea {
-            width: 100%; padding: 10px; margin-bottom: 15px; background: rgba(255,255,255,0.05);
-            border: 1px solid var(--glass-border); border-radius: 5px; color: white; outline: none;
+        .star-rating-input label {
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.2s;
         }
-        .review-form textarea:focus { border-color: var(--primary-color); }
+
+        .star-rating-input input:checked ~ label,
+        .star-rating-input label:hover,
+        .star-rating-input label:hover ~ label {
+            color: #ffd700;
+        }
+
+        .review-form input[type="text"], .review-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 5px;
+            color: white;
+            outline: none;
+        }
+
+        .review-form input:focus, .review-form textarea:focus { border-color: var(--primary-color); }
 
         .review-list { display: flex; flex-direction: column; gap: 15px; }
-        .review-card { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 8px; border-left: 3px solid var(--primary-color); }
+        .review-card {
+            background: rgba(255,255,255,0.03);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid var(--primary-color);
+        }
+
         .review-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
         .review-user { font-weight: 600; }
         .review-time { font-size: 0.8rem; color: var(--text-muted); }
@@ -334,51 +343,128 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Contact Modal Styles */
-        .contact-grid { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
-        .contact-card {
-            display: flex; align-items: center; gap: 20px; background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border); padding: 15px 20px; border-radius: 12px;
-            text-decoration: none; color: white; transition: all 0.3s ease;
+        .contact-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
         }
-        .contact-card:hover {
-            transform: translateY(-5px); background: rgba(255, 255, 255, 0.1);
-            border-color: var(--primary-color); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-        }
-        .contact-card i { font-size: 2.2rem; color: #E1306C; }
-        .contact-info { display: flex; flex-direction: column; }
-        .contact-info h4 { margin: 0; font-size: 1.1rem; color: white; }
-        .contact-info p { margin: 0; font-size: 0.9rem; color: var(--text-muted); }
 
-        /* Screenshot Full Preview Modal */
-        #screenshotModal { z-index: 2000; }
-        #screenshotModal img {
-            max-width: 95vw; max-height: 90vh; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-            object-fit: contain; transform: scale(0.9); opacity: 0; transition: transform 0.3s ease, opacity 0.3s ease;
+        .contact-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 15px 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
         }
-        #screenshotModal.active img { transform: scale(1); opacity: 1; }
-        #screenshotModal img.swipe-left { transform: translateX(-100px) scale(0.9) !important; opacity: 0 !important; }
-        #screenshotModal img.swipe-right { transform: translateX(100px) scale(0.9) !important; opacity: 0 !important; }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .contact-card i {
+            font-size: 2.2rem;
+            color: #E1306C; /* Instagram Brand Color */
+        }
+
+        .contact-card .contact-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .contact-info h4 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: white;
+        }
+
+        .contact-info p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Screenshot Full Preview Modal & Swipe Transitions */
+        #screenshotModal {
+            z-index: 2000;
+        }
+        
+        #screenshotModal img {
+            max-width: 95vw;
+            max-height: 90vh;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            object-fit: contain;
+            transform: scale(0.9);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        #screenshotModal.active img {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        #screenshotModal img.swipe-left {
+            transform: translateX(-100px) scale(0.9) !important;
+            opacity: 0 !important;
+        }
+
+        #screenshotModal img.swipe-right {
+            transform: translateX(100px) scale(0.9) !important;
+            opacity: 0 !important;
+        }
 
         .nav-btn {
-            position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(5px); border: none; color: white; width: 45px; height: 45px;
-            border-radius: 50%; cursor: pointer; z-index: 2010; transition: background 0.3s, transform 0.2s;
-            display: flex; justify-content: center; align-items: center; font-size: 1.2rem;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            border: none;
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 2010;
+            transition: background 0.3s, transform 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
         }
-        .nav-btn:hover { background: rgba(255, 255, 255, 0.3); transform: translateY(-50%) scale(1.1); }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-50%) scale(1.1);
+        }
+
         .prev-btn { left: 20px; }
         .next-btn { right: 20px; }
 
         /* Responsive */
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 15px; }
-            .header-actions { width: 100%; justify-content: space-between; }
-            .search-bar { width: 100%; max-width: none; flex-grow: 1; margin-right: 10px; }
+            .search-bar { width: 100%; }
             .featured-banner { margin: 15px 5%; padding: 20px; }
             .modal-header-info { flex-direction: column; text-align: center; }
             .modal-meta { justify-content: center; flex-wrap: wrap; gap: 10px; }
             .modal-meta div { border: none; padding: 0; width: 45%; }
-            .nav-btn { width: 40px; height: 40px; font-size: 1.1rem; }
+            
+            .nav-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
             .prev-btn { left: 10px; }
             .next-btn { right: 10px; }
         }
@@ -386,201 +472,165 @@
 </head>
 <body>
 
-    <div id="loginScreen">
-        <div class="login-box">
-            <i class="fa-brands fa-google-play" style="font-size: 4rem; color: var(--primary-color); margin-bottom: 20px;"></i>
-            <h2>SAAK App Hub</h2>
-            <p>Welcome! Please sign in to access apps and reviews.</p>
-            <button class="login-btn" onclick="loginWithGoogle()">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" style="width: 20px; height: 20px;">
-                Continue with Google
-            </button>
+    <header>
+        <div class="logo">
+            <i class="fa-brands fa-google-play"></i>
+            SAAK App Hub
+        </div>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search for apps...">
+            <i class="fas fa-search"></i>
+        </div>
+    </header>
+
+    <main class="container">
+        <h2 class="section-title">Recommended for You</h2>
+        <div class="app-grid" id="appGrid">
+            </div>
+    </main>
+
+    <div style="text-align: center; margin: 40px auto; padding-bottom: 20px;">
+        <button class="btn" onclick="openTeamModal()" style="font-size: 1.1rem; padding: 12px 30px;">Team Information</button>
+    </div>
+
+    <div class="modal-overlay" id="appModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            
+            <div class="modal-header-info">
+                <img id="modalIcon" src="" alt="App Icon">
+                <div class="modal-titles">
+                    <h2 id="modalName">App Name</h2>
+                    <p style="color: var(--primary-color)" id="modalDev">Developer</p>
+                    <div class="modal-meta">
+                        <div><strong id="modalRating">4.5 <i class="fas fa-star" style="color:#ffd700"></i></strong><br>Reviews</div>
+                        <div><strong id="modalSize">25 MB</strong><br>Size</div>
+                        <div><strong id="modalVersion">1.0.0</strong><br>Version</div>
+                    </div>
+                    <button id="modalInstallBtn" class="btn" style="margin-top: 15px; width: 100%;"><i class="fas fa-download"></i> Install</button>
+                </div>
+            </div>
+
+            <div class="screenshots" id="modalScreenshots">
+                </div>
+
+            <div class="modal-section">
+                <h4>About this app</h4>
+                <p id="modalFullDesc"></p>
+                <br>
+                <small style="color:var(--text-muted)">Released on: <span id="modalDate"></span></small>
+            </div>
+
+            <div class="modal-section">
+                <h4>Key Features</h4>
+                <ul id="modalFeatures"></ul>
+            </div>
+
+            <div class="modal-section">
+                <h4>What's New</h4>
+                <p id="modalWhatsNew" style="white-space: pre-line;"></p>
+            </div>
+
+            <div class="modal-section">
+                <h4>Ratings and Reviews</h4>
+                
+                <div class="review-form">
+                    <p style="margin-bottom: 10px;">Rate this app:</p>
+                    <div class="star-rating-input">
+                        <input type="radio" id="star5" name="rating" value="5"><label for="star5" class="fas fa-star"></label>
+                        <input type="radio" id="star4" name="rating" value="4"><label for="star4" class="fas fa-star"></label>
+                        <input type="radio" id="star3" name="rating" value="3"><label for="star3" class="fas fa-star"></label>
+                        <input type="radio" id="star2" name="rating" value="2"><label for="star2" class="fas fa-star"></label>
+                        <input type="radio" id="star1" name="rating" value="1"><label for="star1" class="fas fa-star"></label>
+                    </div>
+                    <input type="text" id="reviewerName" placeholder="Your Name">
+                    <textarea id="reviewText" rows="3" placeholder="Describe your experience (what's good, bad, bugs, suggestions...)"></textarea>
+                    <button class="btn" onclick="submitReview()">Submit Review</button>
+                </div>
+
+                <div class="review-list" id="reviewList">
+                    </div>
+            </div>
         </div>
     </div>
 
-    <div id="mainContent" style="display: none;">
-        <header>
-            <div class="logo">
-                <i class="fa-brands fa-google-play"></i>
-                SAAK App Hub
-            </div>
-            <div class="header-actions">
-                <div class="search-bar">
-                    <input type="text" id="searchInput" placeholder="Search for apps...">
-                    <i class="fas fa-search"></i>
-                </div>
-                <button class="logout-btn" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i> Logout</button>
-            </div>
-        </header>
-
-        <main class="container">
-            <h2 class="section-title">Recommended for You</h2>
-            <div class="app-grid" id="appGrid">
-            </div>
-        </main>
-
-        <div style="text-align: center; margin: 40px auto; padding-bottom: 20px;">
-            <button class="btn" onclick="openTeamModal()" style="font-size: 1.1rem; padding: 12px 30px;">Team Information</button>
-        </div>
-
-        <div class="modal-overlay" id="appModal">
-            <div class="modal-content">
-                <button class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
+    <div class="modal-overlay" id="teamModal">
+        <div class="modal-content" style="max-width: 600px;">
+            <button class="close-btn" onclick="closeTeamModal()"><i class="fas fa-times"></i></button>
+            
+            <div class="modal-section" style="border-top: none; padding-top: 30px;">
+                <h2 style="color: var(--primary-color); text-align: center; margin-bottom: 15px;">Team Information</h2>
                 
-                <div class="modal-header-info">
-                    <img id="modalIcon" src="" alt="App Icon">
-                    <div class="modal-titles">
-                        <h2 id="modalName">App Name</h2>
-                        <p style="color: var(--primary-color)" id="modalDev">Developer</p>
-                        <div class="modal-meta">
-                            <div><strong id="modalRating">4.5 <i class="fas fa-star" style="color:#ffd700"></i></strong><br>Reviews</div>
-                            <div><strong id="modalSize">25 MB</strong><br>Size</div>
-                            <div><strong id="modalVersion">1.0.0</strong><br>Version</div>
-                        </div>
-                        <button id="modalInstallBtn" class="btn" style="margin-top: 15px; width: 100%;"><i class="fas fa-download"></i> Install</button>
-                    </div>
+                <div style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 30px; text-align: center;">
+                    <p style="margin-bottom: 10px;"><strong>About the Developer Team</strong></p>
+                    <p style="margin-bottom: 10px;">This application has been proudly developed and published by Shubham, who leads the overall app development, coding, and project execution.</p>
+                    <p style="margin-bottom: 10px;">Arpit contributed as the Idea Finder, helping with creative concepts, feature planning, and innovative app ideas.</p>
+                    <p style="margin-bottom: 10px;">Abhishek worked as the Design Finder, supporting the visual design, layout ideas, and user interface improvements.</p>
+                    <p style="margin-bottom: 10px;">Kartik has been the Full Supporter, providing continuous support, feedback throughout the complete development process.</p>
+                    <p>Together, this team focuses on creating simple, useful, and enjoyable applications for users.</p>
                 </div>
 
-                <div class="screenshots" id="modalScreenshots"></div>
-
-                <div class="modal-section">
-                    <h4>About this app</h4>
-                    <p id="modalFullDesc"></p>
-                    <br>
-                    <small style="color:var(--text-muted)">Released on: <span id="modalDate"></span></small>
-                </div>
-
-                <div class="modal-section">
-                    <h4>Key Features</h4>
-                    <ul id="modalFeatures"></ul>
-                </div>
-
-                <div class="modal-section">
-                    <h4>What's New</h4>
-                    <p id="modalWhatsNew" style="white-space: pre-line;"></p>
-                </div>
-
-                <div class="modal-section">
-                    <h4>Ratings and Reviews</h4>
-                    
-                    <div class="review-form">
-                        <p style="margin-bottom: 10px;">Rate this app:</p>
-                        <div class="star-rating-input">
-                            <input type="radio" id="star5" name="rating" value="5"><label for="star5" class="fas fa-star"></label>
-                            <input type="radio" id="star4" name="rating" value="4"><label for="star4" class="fas fa-star"></label>
-                            <input type="radio" id="star3" name="rating" value="3"><label for="star3" class="fas fa-star"></label>
-                            <input type="radio" id="star2" name="rating" value="2"><label for="star2" class="fas fa-star"></label>
-                            <input type="radio" id="star1" name="rating" value="1"><label for="star1" class="fas fa-star"></label>
-                        </div>
-                        <textarea id="reviewText" rows="3" placeholder="Describe your experience (what's good, bad, bugs, suggestions...)"></textarea>
-                        <button class="btn" onclick="submitReview()">Submit Review</button>
-                    </div>
-
-                    <div class="review-list" id="reviewList">
-                        <p style="color: var(--text-muted);">Loading reviews...</p>
-                    </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn" onclick="openContactModal()" style="font-size: 1.1rem; padding: 10px 30px;">Contact Us</button>
                 </div>
             </div>
-        </div>
-
-        <div class="modal-overlay" id="teamModal">
-            <div class="modal-content" style="max-width: 600px;">
-                <button class="close-btn" onclick="closeTeamModal()"><i class="fas fa-times"></i></button>
-                
-                <div class="modal-section" style="border-top: none; padding-top: 30px;">
-                    <h2 style="color: var(--primary-color); text-align: center; margin-bottom: 15px;">Team Information</h2>
-                    
-                    <div style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 30px; text-align: center;">
-                        <p style="margin-bottom: 10px;"><strong>About the Developer Team</strong></p>
-                        <p style="margin-bottom: 10px;">This application has been proudly developed and published by Shubham, who leads the overall app development, coding, and project execution.</p>
-                        <p style="margin-bottom: 10px;">Arpit contributed as the Idea Finder, helping with creative concepts, feature planning, and innovative app ideas.</p>
-                        <p style="margin-bottom: 10px;">Abhishek worked as the Design Finder, supporting the visual design, layout ideas, and user interface improvements.</p>
-                        <p style="margin-bottom: 10px;">Kartik has been the Full Supporter, providing continuous support, feedback throughout the complete development process.</p>
-                        <p>Together, this team focuses on creating simple, useful, and enjoyable applications for users.</p>
-                    </div>
-
-                    <div style="text-align: center; margin-top: 20px;">
-                        <button class="btn" onclick="openContactModal()" style="font-size: 1.1rem; padding: 10px 30px;">Contact Us</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal-overlay" id="contactModal">
-            <div class="modal-content" style="max-width: 600px;">
-                <button class="close-btn" onclick="closeContactModal()"><i class="fas fa-times"></i></button>
-                
-                <div class="modal-section" style="border-top: none; padding-top: 30px;">
-                    <h3 style="color: var(--primary-color); text-align: center; margin-bottom: 10px;">Contact Our Team</h3>
-                    <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem;">Get in touch with the creators on Instagram.</p>
-                    
-                    <div class="contact-grid">
-                        <a href="https://www.instagram.com/i_am_shubham_singh_0001?igsh=MWduMDRnY2RlZm1ldQ==" target="_blank" class="contact-card">
-                            <i class="fab fa-instagram"></i>
-                            <div class="contact-info">
-                                <h4>Shubham</h4>
-                                <p>Lead Developer</p>
-                            </div>
-                        </a>
-                        <a href="https://www.instagram.com/arpittt__06?igsh=a29hbWZhaGRqZ3Fi" target="_blank" class="contact-card">
-                            <i class="fab fa-instagram"></i>
-                            <div class="contact-info">
-                                <h4>Arpit</h4>
-                                <p>Idea Finder</p>
-                            </div>
-                        </a>
-                        <a href="https://www.instagram.com/_mr_abhishek_patel00?igsh=aHhmMmttajd3OHhv" target="_blank" class="contact-card">
-                            <i class="fab fa-instagram"></i>
-                            <div class="contact-info">
-                                <h4>Abhishek</h4>
-                                <p>Design Finder</p>
-                            </div>
-                        </a>
-                        <a href="https://www.instagram.com/kartik_o707?igsh=MTcxaXcyd21qeXMxYQ==" target="_blank" class="contact-card">
-                            <i class="fab fa-instagram"></i>
-                            <div class="contact-info">
-                                <h4>Kartik</h4>
-                                <p>Full Supporter</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal-overlay" id="screenshotModal">
-            <button class="close-btn" style="position: absolute; top: 20px; right: 20px; z-index: 2010;" onclick="closeScreenshotModal()"><i class="fas fa-times"></i></button>
-            <button class="nav-btn prev-btn" onclick="prevScreenshot(event)"><i class="fas fa-chevron-left"></i></button>
-            <button class="nav-btn next-btn" onclick="nextScreenshot(event)"><i class="fas fa-chevron-right"></i></button>
-            <img id="fullScreenshot" src="" alt="Full Screen Preview">
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        // Switched from signInWithRedirect to signInWithPopup to fix redirect/popup issues
-        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    <div class="modal-overlay" id="contactModal">
+        <div class="modal-content" style="max-width: 600px;">
+            <button class="close-btn" onclick="closeContactModal()"><i class="fas fa-times"></i></button>
+            
+            <div class="modal-section" style="border-top: none; padding-top: 30px;">
+                <h3 style="color: var(--primary-color); text-align: center; margin-bottom: 10px;">Contact Our Team</h3>
+                <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem;">Get in touch with the creators on Instagram.</p>
+                
+                <div class="contact-grid">
+                    <a href="https://www.instagram.com/i_am_shubham_singh_0001?igsh=MWduMDRnY2RlZm1ldQ==" target="_blank" class="contact-card">
+                        <i class="fab fa-instagram"></i>
+                        <div class="contact-info">
+                            <h4>Shubham</h4>
+                            <p>Lead Developer</p>
+                        </div>
+                    </a>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAIkDUb_kKF2pDbONhIjlArvZqVWorDOro",
-            authDomain: "saak-app-hub.firebaseapp.com",
-            databaseURL: "https://saak-app-hub-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "saak-app-hub",
-            storageBucket: "saak-app-hub.firebasestorage.app",
-            messagingSenderId: "599027696371",
-            appId: "1:599027696371:web:896ce1bfcc1d9a6aa1ed86"
-        };
+                    <a href="https://www.instagram.com/arpittt__06?igsh=a29hbWZhaGRqZ3Fi" target="_blank" class="contact-card">
+                        <i class="fab fa-instagram"></i>
+                        <div class="contact-info">
+                            <h4>Arpit</h4>
+                            <p>Idea Finder</p>
+                        </div>
+                    </a>
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getDatabase(app);
-        const provider = new GoogleAuthProvider();
+                    <a href="https://www.instagram.com/_mr_abhishek_patel00?igsh=aHhmMmttajd3OHhv" target="_blank" class="contact-card">
+                        <i class="fab fa-instagram"></i>
+                        <div class="contact-info">
+                            <h4>Abhishek</h4>
+                            <p>Design Finder</p>
+                        </div>
+                    </a>
 
-        let currentUser = null;
-        let currentReviewUnsubscribe = null; // Added to prevent duplicate Firebase listeners
+                    <a href="https://www.instagram.com/kartik_o707?igsh=MTcxaXcyd21qeXMxYQ==" target="_blank" class="contact-card">
+                        <i class="fab fa-instagram"></i>
+                        <div class="contact-info">
+                            <h4>Kartik</h4>
+                            <p>Full Supporter</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        // Apps Database
+    <div class="modal-overlay" id="screenshotModal">
+        <button class="close-btn" style="position: absolute; top: 20px; right: 20px; z-index: 2010;" onclick="closeScreenshotModal()"><i class="fas fa-times"></i></button>
+        <button class="nav-btn prev-btn" onclick="prevScreenshot(event)"><i class="fas fa-chevron-left"></i></button>
+        <button class="nav-btn next-btn" onclick="nextScreenshot(event)"><i class="fas fa-chevron-right"></i></button>
+        <img id="fullScreenshot" src="" alt="Full Screen Preview">
+    </div>
+
+    <script>
+        // Database of Apps
         const appsData = [
             {
                 id: 'tiktoktue',
@@ -594,7 +644,13 @@
                 date: 'Dec 06, 2025',
                 icon: 'images/oxicon.png',
                 screenshots: [
-                    'images/oxs1.png', 'images/oxs2.png', 'images/oxs3.png', 'images/oxs4.png', 'images/oxs5.png', 'images/oxs6.png', 'images/oxs7.png'
+                    'images/oxs1.png',
+                    'images/oxs2.png',
+                    'images/oxs3.png',
+                    'images/oxs4.png',
+                    'images/oxs5.png',
+                    'images/oxs6.png',
+                    'images/oxs7.png'
                 ],
                 features: ['Smooth Tic Tac Toe gameplay', '2 player mode', 'AI vs player mode', 'level up mode', 'high level themes', 'clean game board', 'easy and fast controls'],
                 whatsNew: '- improved game speed\n- smoother touch response\n- bug fixes\n- better board design',
@@ -612,7 +668,10 @@
                 date: 'Dec 24, 2025',
                 icon: 'images/udicon.png',
                 screenshots: [
-                    'images/uds1.png', 'images/uds2.png', 'images/uds3.png', 'images/uds4.png'
+                    'images/uds1.png',
+                    'images/uds2.png',
+                    'images/uds3.png',
+                    'images/uds4.png'
                 ],
                 features: ['drawing canvas', 'multiple brush tools', 'color palette', 'erase tool', 'save drawing option', 'smooth touch drawing', 'save & edit drawing'],
                 whatsNew: '- improved brush smoothness\n- new color options\n- better canvas controls\n- minor bug fixes',
@@ -630,7 +689,13 @@
                 date: 'Mar 28, 2026',
                 icon: 'images/lsicon.png',
                 screenshots: [
-                    'images/lss1.png', 'images/lss2.png', 'images/lss3.png', 'images/lss4.png', 'images/lss5.png', 'images/lss6.png', 'images/lss7.png'
+                    'images/lss1.png',
+                    'images/lss2.png',
+                    'images/lss3.png',
+                    'images/lss4.png',
+                    'images/lss5.png',
+                    'images/lss6.png',
+                    'images/lss7.png'
                 ],
                 features: ['alphabet learning', 'English word practice', 'math activities', 'easy student interface', 'fun educational sections', 'learning dashboard', 'game mode questions'],
                 whatsNew: '- added new study content\n- improved learning sections\n- smoother navigation\n- performance improvements',
@@ -642,30 +707,7 @@
         let currentScreenshots = [];
         let currentScreenshotIndex = 0;
 
-        // Firebase Auth State
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                currentUser = user;
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('mainContent').style.display = 'block';
-                renderApps(appsData);
-            } else {
-                currentUser = null;
-                document.getElementById('loginScreen').style.display = 'flex';
-                document.getElementById('mainContent').style.display = 'none';
-            }
-        });
-
-        // Global functions mapped for inline HTML onclick attributes
-        window.loginWithGoogle = () => {
-            signInWithPopup(auth, provider).catch((error) => {
-                console.error("Login Error:", error);
-                alert("Failed to login with Google: " + error.message);
-            });
-        };
-        
-        window.logoutUser = () => signOut(auth);
-
+        // Render Apps to Grid
         function renderApps(apps) {
             const grid = document.getElementById('appGrid');
             grid.innerHTML = '';
@@ -673,7 +715,7 @@
             apps.forEach(app => {
                 const card = document.createElement('div');
                 card.className = 'app-card';
-                card.onclick = () => window.openModal(app.id); 
+                card.onclick = () => openModal(app.id); // Triggers app details modal
                 card.innerHTML = `
                     <img src="${app.icon}" class="app-icon" alt="${app.name}">
                     <div class="app-info">
@@ -687,13 +729,15 @@
             });
         }
 
+        // Search Functionality
         document.getElementById('searchInput').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
             const filtered = appsData.filter(app => app.name.toLowerCase().includes(term));
             renderApps(filtered);
         });
 
-        window.openModal = (appId) => {
+        // Open App Modal
+        function openModal(appId) {
             const app = appsData.find(a => a.id === appId);
             if (!app) return;
             
@@ -709,10 +753,12 @@
             document.getElementById('modalFullDesc').innerText = app.fullDesc;
             document.getElementById('modalWhatsNew').innerText = app.whatsNew;
 
+            // Set dynamic download link for the modal install button
             document.getElementById('modalInstallBtn').onclick = function() {
                 window.open(app.downloadLink, '_blank');
             };
 
+            // Load Features
             const featuresList = document.getElementById('modalFeatures');
             featuresList.innerHTML = '';
             app.features.forEach(f => {
@@ -721,29 +767,33 @@
                 featuresList.appendChild(li);
             });
 
+            // Load Screenshots with Click to Preview Function
             const screensContainer = document.getElementById('modalScreenshots');
             screensContainer.innerHTML = '';
-            currentScreenshots = app.screenshots;
+            currentScreenshots = app.screenshots; // Store globally for slider
             
             app.screenshots.forEach((src, index) => {
                 let img = document.createElement('img');
                 img.src = src;
-                img.onclick = () => window.openScreenshotModal(index);
+                img.onclick = () => openScreenshotModal(index);
                 screensContainer.appendChild(img);
             });
 
-            window.loadReviews(appId);
+            loadReviews(appId);
             
+            // Show modal
             document.getElementById('appModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        };
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
 
-        window.closeModal = () => {
+        // Close App Modal
+        function closeModal() {
             document.getElementById('appModal').classList.remove('active');
             document.body.style.overflow = 'auto';
             currentAppId = null;
-        };
+        }
 
+        // Fullscreen Screenshot Functions with Sliding Animation
         let isAnimating = false;
 
         function updateNavButtons() {
@@ -751,160 +801,108 @@
             const nextBtn = document.querySelector('.next-btn');
             if(!prevBtn || !nextBtn) return;
 
-            prevBtn.style.display = currentScreenshotIndex <= 0 ? 'none' : 'flex';
-            nextBtn.style.display = currentScreenshotIndex >= currentScreenshots.length - 1 ? 'none' : 'flex';
+            if (currentScreenshotIndex <= 0) {
+                prevBtn.style.display = 'none';
+            } else {
+                prevBtn.style.display = 'flex';
+            }
+
+            if (currentScreenshotIndex >= currentScreenshots.length - 1) {
+                nextBtn.style.display = 'none';
+            } else {
+                nextBtn.style.display = 'flex';
+            }
         }
 
-        window.openScreenshotModal = (index) => {
+        function openScreenshotModal(index) {
             currentScreenshotIndex = index;
             const imgElement = document.getElementById('fullScreenshot');
             
-            imgElement.style.transition = 'none';
+            imgElement.style.transition = 'none'; // reset transition state
             imgElement.classList.remove('swipe-left', 'swipe-right');
             imgElement.src = currentScreenshots[currentScreenshotIndex];
             
-            void imgElement.offsetWidth;
-            imgElement.style.transition = '';
+            void imgElement.offsetWidth; // Force reflow
+            imgElement.style.transition = ''; // restore css transitions
             
             updateNavButtons();
             document.getElementById('screenshotModal').classList.add('active');
-        };
+        }
 
-        window.closeScreenshotModal = () => {
+        function closeScreenshotModal() {
             document.getElementById('screenshotModal').classList.remove('active');
+            // Keep body overflow hidden if app modal is still active underneath
             if (!document.getElementById('appModal').classList.contains('active') && 
                 !document.getElementById('teamModal').classList.contains('active') && 
                 !document.getElementById('contactModal').classList.contains('active')) {
                 document.body.style.overflow = 'auto';
             }
-        };
+        }
 
         function changeScreenshot(direction) {
             if (isAnimating || currentScreenshots.length <= 1) return;
+
+            // Prevent blank sliding past first or last images
             if (direction === 'next' && currentScreenshotIndex >= currentScreenshots.length - 1) return;
             if (direction === 'prev' && currentScreenshotIndex <= 0) return;
 
             isAnimating = true;
+
             const imgElement = document.getElementById('fullScreenshot');
             
-            imgElement.classList.add(direction === 'next' ? 'swipe-left' : 'swipe-right');
+            // Add slide out animation class based on direction
+            if (direction === 'next') {
+                imgElement.classList.add('swipe-left');
+            } else {
+                imgElement.classList.add('swipe-right');
+            }
 
+            // Wait for slide out animation, then swap and slide in
             setTimeout(() => {
-                currentScreenshotIndex += direction === 'next' ? 1 : -1;
+                if (direction === 'next') {
+                    currentScreenshotIndex++;
+                } else {
+                    currentScreenshotIndex--;
+                }
+                
                 imgElement.src = currentScreenshots[currentScreenshotIndex];
                 
+                // Teleport to the opposite side instantly
                 imgElement.style.transition = 'none';
                 imgElement.classList.remove('swipe-left', 'swipe-right');
-                imgElement.classList.add(direction === 'next' ? 'swipe-right' : 'swipe-left');
                 
-                void imgElement.offsetWidth;
+                if (direction === 'next') {
+                    imgElement.classList.add('swipe-right');
+                } else {
+                    imgElement.classList.add('swipe-left');
+                }
                 
+                void imgElement.offsetWidth; // Force reflow
+                
+                // Animate sliding back into the center
                 imgElement.style.transition = '';
                 imgElement.classList.remove('swipe-left', 'swipe-right');
                 
                 updateNavButtons();
-                setTimeout(() => isAnimating = false, 300);
-            }, 300);
+
+                setTimeout(() => {
+                    isAnimating = false;
+                }, 300); // Time to finish slide in
+
+            }, 300); // Time to finish slide out (Matches CSS transition)
         }
 
-        window.nextScreenshot = (e) => { if(e) e.stopPropagation(); changeScreenshot('next'); };
-        window.prevScreenshot = (e) => { if(e) e.stopPropagation(); changeScreenshot('prev'); };
-
-        // Modals
-        window.openTeamModal = () => { document.getElementById('teamModal').classList.add('active'); document.body.style.overflow = 'hidden'; };
-        window.closeTeamModal = () => { document.getElementById('teamModal').classList.remove('active'); if(!document.getElementById('contactModal').classList.contains('active')) document.body.style.overflow = 'auto'; };
-        window.openContactModal = () => { window.closeTeamModal(); document.getElementById('contactModal').classList.add('active'); document.body.style.overflow = 'hidden'; };
-        window.closeContactModal = () => { document.getElementById('contactModal').classList.remove('active'); document.body.style.overflow = 'auto'; };
-
-        // Firebase Review System
-        window.submitReview = () => {
-            if (!currentUser) return alert("You must be logged in to submit a review.");
-
-            const text = document.getElementById('reviewText').value.trim();
-            let rating = 0;
-            const radios = document.getElementsByName('rating');
-            for (let r of radios) { if (r.checked) { rating = parseInt(r.value); break; } }
-
-            if (rating === 0) return alert('Please select a star rating.');
-            if (text === '') return alert('Please write a review comment.');
-
-            const newReview = {
-                name: currentUser.displayName || 'App User',
-                uid: currentUser.uid,
-                rating: rating,
-                text: text,
-                timestamp: Date.now()
-            };
-
-            const commentsRef = ref(db, 'comments/' + currentAppId);
-            push(commentsRef, newReview).then(() => {
-                document.getElementById('reviewText').value = '';
-                for (let r of radios) r.checked = false;
-            }).catch(err => {
-                console.error("Review Error: ", err);
-                alert("Failed to submit review. Try again.");
-            });
-        };
-
-        window.loadReviews = (appId) => {
-            const reviewList = document.getElementById('reviewList');
-            reviewList.innerHTML = '<p style="color: var(--text-muted);">Loading reviews...</p>';
-
-            // Clean up old listener to prevent duplicates firing when modal opens repeatedly
-            if (currentReviewUnsubscribe) {
-                currentReviewUnsubscribe();
-            }
-
-            const commentsRef = ref(db, 'comments/' + appId);
-            // onValue returns an unsubscribe function which we save to clear out later
-            currentReviewUnsubscribe = onValue(commentsRef, (snapshot) => {
-                reviewList.innerHTML = '';
-                const data = snapshot.val();
-                
-                if (data) {
-                    const reviewsArray = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
-                    
-                    reviewsArray.forEach(rev => {
-                        let starsHTML = '';
-                        for(let i=1; i<=5; i++) {
-                            starsHTML += i <= rev.rating ? '<i class="fas fa-star" style="color:#ffd700;"></i>' : '<i class="far fa-star" style="color:var(--text-muted);"></i>';
-                        }
-                        
-                        const dateObj = new Date(rev.timestamp);
-                        const timeStr = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-
-                        const card = document.createElement('div');
-                        card.className = 'review-card';
-                        card.innerHTML = `
-                            <div class="review-header">
-                                <span class="review-user">${rev.name}</span>
-                                <span class="review-time">${timeStr}</span>
-                            </div>
-                            <div style="margin-bottom: 5px;">${starsHTML}</div>
-                            <p style="font-size: 0.9rem; color: var(--text-muted);">${rev.text}</p>
-                        `;
-                        reviewList.appendChild(card);
-                    });
-                } else {
-                    reviewList.innerHTML = '<p style="color: var(--text-muted);">No reviews yet. Be the first to review!</p>';
-                }
-            });
-        };
-
-        // Window Clicks
-        window.onclick = function(event) {
-            const appModalOverlay = document.getElementById('appModal');
-            const teamModalOverlay = document.getElementById('teamModal');
-            const contactModalOverlay = document.getElementById('contactModal');
-            const screenshotModalOverlay = document.getElementById('screenshotModal');
-            
-            if (event.target == appModalOverlay) window.closeModal();
-            else if (event.target == teamModalOverlay) window.closeTeamModal();
-            else if (event.target == contactModalOverlay) window.closeContactModal();
-            else if (event.target == screenshotModalOverlay) window.closeScreenshotModal();
+        function nextScreenshot(e) {
+            if(e) e.stopPropagation();
+            changeScreenshot('next');
         }
 
-        // Swipes
+        function prevScreenshot(e) {
+            if(e) e.stopPropagation();
+            changeScreenshot('prev');
+        }
+
+        // Touch Swipe Event Listeners
         let touchStartX = 0;
         let touchEndX = 0;
         const screenshotModalElement = document.getElementById('screenshotModal');
@@ -915,13 +913,151 @@
 
         screenshotModalElement.addEventListener('touchend', e => {
             touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, {passive: true});
+
+        function handleSwipe() {
             const threshold = 50;
             if (!screenshotModalElement.classList.contains('active')) return;
 
-            if (touchStartX - touchEndX > threshold) window.nextScreenshot();
-            else if (touchEndX - touchStartX > threshold) window.prevScreenshot();
-        }, {passive: true});
+            if (touchStartX - touchEndX > threshold) {
+                nextScreenshot(); // Swiped left
+            } else if (touchEndX - touchStartX > threshold) {
+                prevScreenshot(); // Swiped right
+            }
+        }
 
+        // Team/Contact Modal Functions
+        function openTeamModal() {
+            document.getElementById('teamModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeTeamModal() {
+            document.getElementById('teamModal').classList.remove('active');
+            if(!document.getElementById('contactModal').classList.contains('active')) {
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function openContactModal() {
+            closeTeamModal();
+            document.getElementById('contactModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeContactModal() {
+            document.getElementById('contactModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Review System (LocalStorage)
+        function submitReview() {
+            const name = document.getElementById('reviewerName').value.trim() || 'Anonymous User';
+            const text = document.getElementById('reviewText').value.trim();
+            
+            // Get selected stars
+            let rating = 0;
+            const radios = document.getElementsByName('rating');
+            for (let r of radios) {
+                if (r.checked) {
+                    rating = r.value;
+                    break;
+                }
+            }
+
+            if (rating === 0) {
+                alert('Please select a star rating.');
+                return;
+            }
+            if (text === '') {
+                alert('Please write a review comment.');
+                return;
+            }
+
+            const newReview = {
+                name: name,
+                rating: rating,
+                text: text,
+                time: new Date().toLocaleDateString()
+            };
+
+            // Fetch existing reviews from local storage
+            let allReviews = JSON.parse(localStorage.getItem('shubham_reviews')) || {};
+            if (!allReviews[currentAppId]) {
+                allReviews[currentAppId] = [];
+            }
+            
+            // Prepend so newest is on top
+            allReviews[currentAppId].unshift(newReview);
+            localStorage.setItem('shubham_reviews', JSON.stringify(allReviews));
+
+            // Reset form
+            document.getElementById('reviewerName').value = '';
+            document.getElementById('reviewText').value = '';
+            for (let r of radios) r.checked = false;
+
+            loadReviews(currentAppId);
+        }
+
+        function loadReviews(appId) {
+            const reviewList = document.getElementById('reviewList');
+            reviewList.innerHTML = '';
+
+            let allReviews = JSON.parse(localStorage.getItem('shubham_reviews')) || {};
+            let appReviews = allReviews[appId] || [];
+
+            // Add some mock reviews if empty to demonstrate functionality
+            if (appReviews.length === 0) {
+                appReviews = [
+                    { name: 'John Doe', rating: 5, text: 'Amazing app! The UI is flawless and no bugs so far.', time: 'Just now' },
+                    { name: 'Sarah Smith', rating: 4, text: 'Great features, but it drains battery a bit faster. Still highly recommended.', time: 'Yesterday' }
+                ];
+            }
+
+            appReviews.forEach(rev => {
+                let starsHTML = '';
+                for(let i=1; i<=5; i++) {
+                    if(i <= rev.rating) starsHTML += '<i class="fas fa-star" style="color:#ffd700;"></i>';
+                    else starsHTML += '<i class="far fa-star" style="color:var(--text-muted);"></i>';
+                }
+
+                const card = document.createElement('div');
+                card.className = 'review-card';
+                card.innerHTML = `
+                    <div class="review-header">
+                        <span class="review-user">${rev.name}</span>
+                        <span class="review-time">${rev.time}</span>
+                    </div>
+                    <div style="margin-bottom: 5px;">${starsHTML}</div>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">${rev.text}</p>
+                `;
+                reviewList.appendChild(card);
+            });
+        }
+
+        // Initialize App
+        window.onload = () => {
+            renderApps(appsData);
+        };
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const appModalOverlay = document.getElementById('appModal');
+            const teamModalOverlay = document.getElementById('teamModal');
+            const contactModalOverlay = document.getElementById('contactModal');
+            const screenshotModalOverlay = document.getElementById('screenshotModal');
+            
+            if (event.target == appModalOverlay) {
+                closeModal();
+            } else if (event.target == teamModalOverlay) {
+                closeTeamModal();
+            } else if (event.target == contactModalOverlay) {
+                closeContactModal();
+            } else if (event.target == screenshotModalOverlay) {
+                closeScreenshotModal();
+            }
+        }
     </script>
 </body>
 </html>
