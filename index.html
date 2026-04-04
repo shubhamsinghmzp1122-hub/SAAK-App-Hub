@@ -681,7 +681,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
         const firebaseConfig = {
@@ -717,16 +717,25 @@
             }
         });
 
-        // Trigger Login Popup
         window.googleLogin = async function () {
           try {
-            await signInWithPopup(auth, provider);
-            alert("Login successful");
-            location.reload();
+            await signInWithRedirect(auth, provider);
           } catch (error) {
             alert("Login failed: " + error.message);
           }
         };
+
+        window.addEventListener("load", async () => {
+          try {
+            const result = await getRedirectResult(auth);
+            if (result && result.user) {
+              alert("Login successful");
+              location.reload();
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        });
 
         // Trigger Logout 
         window.doGoogleLogout = function () {
