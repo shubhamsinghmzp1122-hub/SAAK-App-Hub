@@ -558,7 +558,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithRedirect, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        // Switched from signInWithRedirect to signInWithPopup to fix redirect/popup issues
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
@@ -577,6 +578,7 @@
         const provider = new GoogleAuthProvider();
 
         let currentUser = null;
+        let currentReviewUnsubscribe = null; // Added to prevent duplicate Firebase listeners
 
         // Apps Database
         const appsData = [
@@ -655,7 +657,13 @@
         });
 
         // Global functions mapped for inline HTML onclick attributes
-        window.loginWithGoogle = () => signInWithRedirect(auth, provider);
+        window.loginWithGoogle = () => {
+            signInWithPopup(auth, provider).catch((error) => {
+                console.error("Login Error:", error);
+                alert("Failed to login with Google: " + error.message);
+            });
+        };
+        
         window.logoutUser = () => signOut(auth);
 
         function renderApps(apps) {
@@ -810,7 +818,7 @@
 
         // Firebase Review System
         window.submitReview = () => {
-            if (!currentUser) return;
+            if (!currentUser) return alert("You must be logged in to submit a review.");
 
             const text = document.getElementById('reviewText').value.trim();
             let rating = 0;
@@ -842,8 +850,14 @@
             const reviewList = document.getElementById('reviewList');
             reviewList.innerHTML = '<p style="color: var(--text-muted);">Loading reviews...</p>';
 
+            // Clean up old listener to prevent duplicates firing when modal opens repeatedly
+            if (currentReviewUnsubscribe) {
+                currentReviewUnsubscribe();
+            }
+
             const commentsRef = ref(db, 'comments/' + appId);
-            onValue(commentsRef, (snapshot) => {
+            // onValue returns an unsubscribe function which we save to clear out later
+            currentReviewUnsubscribe = onValue(commentsRef, (snapshot) => {
                 reviewList.innerHTML = '';
                 const data = snapshot.val();
                 
