@@ -295,7 +295,7 @@
         <div class="logo" style="font-size: 2.5rem; margin-bottom: 30px;">
             <i class="fa-brands fa-google-play"></i> SAAK App Hub
         </div>
-        <button class="btn" style="font-size: 1.2rem; padding: 15px 40px; display: flex; align-items: center; gap: 10px;" onclick="if(window.doGoogleLogin) window.doGoogleLogin()">
+        <button class="btn" style="font-size: 1.2rem; padding: 15px 40px; display: flex; align-items: center; gap: 10px;" onclick="if(window.googleLogin) window.googleLogin()">
             Continue with Google <i class="fab fa-google"></i>
         </button>
     </div>
@@ -718,8 +718,14 @@
         });
 
         // Trigger Login Popup
-        window.doGoogleLogin = function () {
-            signInWithPopup(auth, provider).catch(err => alert("Login failed: " + err.message));
+        window.googleLogin = async function () {
+          try {
+            await signInWithPopup(auth, provider);
+            alert("Login successful");
+            location.reload();
+          } catch (error) {
+            alert("Login failed: " + error.message);
+          }
         };
 
         // Trigger Logout 
