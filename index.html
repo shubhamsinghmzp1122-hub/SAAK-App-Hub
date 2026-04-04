@@ -41,17 +41,64 @@
         ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
         ::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 4px; }
 
-        /* Full Screen Login Overlay */
+        /* Login Screen */
         #loginScreen {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
             background: var(--bg-gradient);
-            z-index: 99999;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .login-box {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 50px 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            backdrop-filter: blur(10px);
+            width: 90%;
+            max-width: 400px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .login-box h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--text-main);
+        }
+
+        .login-box p {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .login-btn {
+            width: 100%;
+            display: flex;
             align-items: center;
             justify-content: center;
-            text-align: center;
+            gap: 12px;
+            font-size: 1.1rem;
+            padding: 14px;
+            background: white;
+            color: #333;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: #f1f1f1;
         }
 
         /* Header */
@@ -77,11 +124,18 @@
             gap: 10px;
         }
 
-        .search-bar {
-            position: relative;
-            width: 40%;
+        .header-actions {
             display: flex;
             align-items: center;
+            gap: 20px;
+            width: 40%;
+            justify-content: flex-end;
+        }
+
+        .search-bar {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
         }
 
         .search-bar input {
@@ -100,12 +154,30 @@
             box-shadow: 0 0 10px rgba(0, 230, 118, 0.2);
         }
 
-        .search-bar i.fa-search {
+        .search-bar i {
             position: absolute;
             right: 15px;
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-muted);
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.3s ease;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 0, 0, 0.6);
         }
 
         /* Featured Banner */
@@ -144,8 +216,19 @@
 
         /* App Grid */
         .container { padding: 30px 5% 20px; }
-        .section-title { font-size: 1.5rem; margin-bottom: 20px; border-left: 4px solid var(--primary-color); padding-left: 10px; }
-        .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 25px; }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 10px;
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+            gap: 25px;
+        }
 
         /* App Card */
         .app-card {
@@ -162,11 +245,18 @@
             cursor: pointer;
         }
 
-        .app-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
+        .app-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+        }
 
-        .app-icon { width: 70px; height: 70px; border-radius: 15px; object-fit: cover; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .app-icon {
+            width: 70px; height: 70px; border-radius: 15px; object-fit: cover; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
         .app-info h3 { font-size: 1.2rem; margin-bottom: 5px; }
         .app-info p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; flex-grow: 1; }
+        
         .rating { color: #ffd700; font-size: 0.9rem; margin-bottom: 15px; }
         .app-card .btn { width: 100%; text-align: center; margin-top: auto; }
 
@@ -185,8 +275,7 @@
             width: 90%; max-width: 800px; max-height: 90vh;
             border-radius: 20px; border: 1px solid var(--glass-border);
             overflow-y: auto; position: relative;
-            transform: translateY(50px) scale(0.9); transition: all 0.4s ease;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            transform: translateY(50px) scale(0.9); transition: all 0.4s ease; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
 
         .modal-overlay.active .modal-content { transform: translateY(0) scale(1); }
@@ -197,7 +286,6 @@
             width: 35px; height: 35px; border-radius: 50%; cursor: pointer;
             z-index: 2; transition: background 0.3s;
         }
-
         .close-btn:hover { background: rgba(255,0,0,0.7); }
 
         .modal-header-info { display: flex; gap: 20px; padding: 30px 30px 10px; align-items: center; }
@@ -224,7 +312,9 @@
 
         /* Review System */
         .review-form { background: rgba(0,0,0,0.2); padding: 20px; border-radius: 10px; margin-bottom: 20px; }
-        .star-rating-input { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 5px; margin-bottom: 15px; }
+        .star-rating-input {
+            display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 5px; margin-bottom: 15px;
+        }
         .star-rating-input input { display: none; }
         .star-rating-input label { color: var(--text-muted); font-size: 1.5rem; cursor: pointer; transition: color 0.2s; }
         .star-rating-input input:checked ~ label, .star-rating-input label:hover, .star-rating-input label:hover ~ label { color: #ffd700; }
@@ -250,13 +340,16 @@
             border: 1px solid var(--glass-border); padding: 15px 20px; border-radius: 12px;
             text-decoration: none; color: white; transition: all 0.3s ease;
         }
-        .contact-card:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.1); border-color: var(--primary-color); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4); }
+        .contact-card:hover {
+            transform: translateY(-5px); background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-color); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
         .contact-card i { font-size: 2.2rem; color: #E1306C; }
-        .contact-card .contact-info { display: flex; flex-direction: column; }
+        .contact-info { display: flex; flex-direction: column; }
         .contact-info h4 { margin: 0; font-size: 1.1rem; color: white; }
         .contact-info p { margin: 0; font-size: 0.9rem; color: var(--text-muted); }
 
-        /* Screenshot Full Preview Modal & Swipe Transitions */
+        /* Screenshot Full Preview Modal */
         #screenshotModal { z-index: 2000; }
         #screenshotModal img {
             max-width: 95vw; max-height: 90vh; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.6);
@@ -268,8 +361,9 @@
 
         .nav-btn {
             position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(5px); border: none; color: white; width: 45px; height: 45px; border-radius: 50%;
-            cursor: pointer; z-index: 2010; transition: background 0.3s, transform 0.2s; display: flex; justify-content: center; align-items: center; font-size: 1.2rem;
+            backdrop-filter: blur(5px); border: none; color: white; width: 45px; height: 45px;
+            border-radius: 50%; cursor: pointer; z-index: 2010; transition: background 0.3s, transform 0.2s;
+            display: flex; justify-content: center; align-items: center; font-size: 1.2rem;
         }
         .nav-btn:hover { background: rgba(255, 255, 255, 0.3); transform: translateY(-50%) scale(1.1); }
         .prev-btn { left: 20px; }
@@ -278,7 +372,8 @@
         /* Responsive */
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 15px; }
-            .search-bar { width: 100%; }
+            .header-actions { width: 100%; justify-content: space-between; }
+            .search-bar { width: 100%; max-width: none; flex-grow: 1; margin-right: 10px; }
             .featured-banner { margin: 15px 5%; padding: 20px; }
             .modal-header-info { flex-direction: column; text-align: center; }
             .modal-meta { justify-content: center; flex-wrap: wrap; gap: 10px; }
@@ -292,31 +387,36 @@
 <body>
 
     <div id="loginScreen">
-        <div class="logo" style="font-size: 2.5rem; margin-bottom: 30px;">
-            <i class="fa-brands fa-google-play"></i> SAAK App Hub
+        <div class="login-box">
+            <i class="fa-brands fa-google-play" style="font-size: 4rem; color: var(--primary-color); margin-bottom: 20px;"></i>
+            <h2>SAAK App Hub</h2>
+            <p>Welcome! Please sign in to access apps and reviews.</p>
+            <button class="login-btn" onclick="loginWithGoogle()">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" style="width: 20px; height: 20px;">
+                Continue with Google
+            </button>
         </div>
-        <button class="btn" style="font-size: 1.2rem; padding: 15px 40px; display: flex; align-items: center; gap: 10px;" onclick="if(window.googleLogin) window.googleLogin()">
-            Continue with Google <i class="fab fa-google"></i>
-        </button>
     </div>
 
-    <div id="websiteContent" style="display: none;">
+    <div id="mainContent" style="display: none;">
         <header>
             <div class="logo">
                 <i class="fa-brands fa-google-play"></i>
                 SAAK App Hub
             </div>
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Search for apps...">
-                <i class="fas fa-search"></i>
-                <i class="fas fa-sign-out-alt" style="margin-left: 20px; cursor: pointer; color: var(--text-muted); font-size: 1.2rem;" title="Logout" onclick="if(window.doGoogleLogout) window.doGoogleLogout()"></i>
+            <div class="header-actions">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search for apps...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <button class="logout-btn" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </div>
         </header>
 
         <main class="container">
             <h2 class="section-title">Recommended for You</h2>
             <div class="app-grid" id="appGrid">
-                </div>
+            </div>
         </main>
 
         <div style="text-align: center; margin: 40px auto; padding-bottom: 20px;">
@@ -341,8 +441,7 @@
                     </div>
                 </div>
 
-                <div class="screenshots" id="modalScreenshots">
-                    </div>
+                <div class="screenshots" id="modalScreenshots"></div>
 
                 <div class="modal-section">
                     <h4>About this app</h4>
@@ -374,11 +473,11 @@
                             <input type="radio" id="star1" name="rating" value="1"><label for="star1" class="fas fa-star"></label>
                         </div>
                         <textarea id="reviewText" rows="3" placeholder="Describe your experience (what's good, bad, bugs, suggestions...)"></textarea>
-                        <button class="btn" onclick="if(window.submitFirebaseReview) window.submitFirebaseReview()">Submit Review</button>
+                        <button class="btn" onclick="submitReview()">Submit Review</button>
                     </div>
 
                     <div class="review-list" id="reviewList">
-                        <div style="text-align: center; color: var(--text-muted); padding: 20px;">Loading live reviews...</div>
+                        <p style="color: var(--text-muted);">Loading reviews...</p>
                     </div>
                 </div>
             </div>
@@ -418,19 +517,31 @@
                     <div class="contact-grid">
                         <a href="https://www.instagram.com/i_am_shubham_singh_0001?igsh=MWduMDRnY2RlZm1ldQ==" target="_blank" class="contact-card">
                             <i class="fab fa-instagram"></i>
-                            <div class="contact-info"><h4>Shubham</h4><p>Lead Developer</p></div>
+                            <div class="contact-info">
+                                <h4>Shubham</h4>
+                                <p>Lead Developer</p>
+                            </div>
                         </a>
                         <a href="https://www.instagram.com/arpittt__06?igsh=a29hbWZhaGRqZ3Fi" target="_blank" class="contact-card">
                             <i class="fab fa-instagram"></i>
-                            <div class="contact-info"><h4>Arpit</h4><p>Idea Finder</p></div>
+                            <div class="contact-info">
+                                <h4>Arpit</h4>
+                                <p>Idea Finder</p>
+                            </div>
                         </a>
                         <a href="https://www.instagram.com/_mr_abhishek_patel00?igsh=aHhmMmttajd3OHhv" target="_blank" class="contact-card">
                             <i class="fab fa-instagram"></i>
-                            <div class="contact-info"><h4>Abhishek</h4><p>Design Finder</p></div>
+                            <div class="contact-info">
+                                <h4>Abhishek</h4>
+                                <p>Design Finder</p>
+                            </div>
                         </a>
                         <a href="https://www.instagram.com/kartik_o707?igsh=MTcxaXcyd21qeXMxYQ==" target="_blank" class="contact-card">
                             <i class="fab fa-instagram"></i>
-                            <div class="contact-info"><h4>Kartik</h4><p>Full Supporter</p></div>
+                            <div class="contact-info">
+                                <h4>Kartik</h4>
+                                <p>Full Supporter</p>
+                            </div>
                         </a>
                     </div>
                 </div>
@@ -443,248 +554,12 @@
             <button class="nav-btn next-btn" onclick="nextScreenshot(event)"><i class="fas fa-chevron-right"></i></button>
             <img id="fullScreenshot" src="" alt="Full Screen Preview">
         </div>
-    </div> 
-    
-    <script>
-        // Database of Apps
-        const appsData = [
-            {
-                id: 'tiktoktue',
-                name: 'Tik Tok Tue',
-                shortDesc: 'A fun and smooth Tic Tac Toe game app with simple gameplay, two-player mode, clean interface, and fast result popup. Perfect for quick entertainment and brain challenge.',
-                fullDesc: 'A fun and smooth Tic Tac Toe game app with simple gameplay, two-player mode, clean interface, and fast result popup. Perfect for quick entertainment and brain challenge.',
-                rating: 4.8,
-                dev: 'OX Game',
-                version: '15.4.2',
-                size: '33.48 MB',
-                date: 'Dec 06, 2025',
-                icon: 'images/oxicon.png',
-                screenshots: ['images/oxs1.png', 'images/oxs2.png', 'images/oxs3.png', 'images/oxs4.png', 'images/oxs5.png', 'images/oxs6.png', 'images/oxs7.png'],
-                features: ['Smooth Tic Tac Toe gameplay', '2 player mode', 'AI vs player mode', 'level up mode', 'high level themes', 'clean game board', 'easy and fast controls'],
-                whatsNew: '- improved game speed\n- smoother touch response\n- bug fixes\n- better board design',
-                downloadLink: 'https://drive.google.com/file/d/1U3IMz-bF6fCqOZ7QcoV09qmMjskQHHIK/view?usp=drivesdk'
-            },
-            {
-                id: 'ultimatedrawpro',
-                name: 'Ultimate Draw Pro',
-                shortDesc: 'A creative and easy-to-use drawing app for sketching, painting, coloring, and making beautiful artwork with multiple tools and smooth canvas controls.',
-                fullDesc: 'A creative and easy-to-use drawing app for sketching, painting, coloring, and making beautiful artwork with multiple tools and smooth canvas controls.',
-                rating: 4.9,
-                dev: 'Creative App',
-                version: '5.2.0',
-                size: '33.92 MB',
-                date: 'Dec 24, 2025',
-                icon: 'images/udicon.png',
-                screenshots: ['images/uds1.png', 'images/uds2.png', 'images/uds3.png', 'images/uds4.png'],
-                features: ['drawing canvas', 'multiple brush tools', 'color palette', 'erase tool', 'save drawing option', 'smooth touch drawing', 'save & edit drawing'],
-                whatsNew: '- improved brush smoothness\n- new color options\n- better canvas controls\n- minor bug fixes',
-                downloadLink: 'https://drive.google.com/file/d/1MnPoXv0wfM9-IVXzKzrreT9MQA9ca6-6/view?usp=drivesdk'
-            },
-            {
-                id: 'learningsmart',
-                name: 'Learning Smart',
-                shortDesc: 'A smart educational learning app designed for kids and students with English learning, alphabet practice, math activities, and fun study features.',
-                fullDesc: 'A smart educational learning app designed for kids and students with English learning, alphabet practice, math activities, and fun study features.',
-                rating: 4.6,
-                dev: 'Educational app',
-                version: '3.1.1',
-                size: '33.26 MB',
-                date: 'Mar 28, 2026',
-                icon: 'images/lsicon.png',
-                screenshots: ['images/lss1.png', 'images/lss2.png', 'images/lss3.png', 'images/lss4.png', 'images/lss5.png', 'images/lss6.png', 'images/lss7.png'],
-                features: ['alphabet learning', 'English word practice', 'math activities', 'easy student interface', 'fun educational sections', 'learning dashboard', 'game mode questions'],
-                whatsNew: '- added new study content\n- improved learning sections\n- smoother navigation\n- performance improvements',
-                downloadLink: 'https://drive.google.com/file/d/1PxpIGRy9oenpQs_0rUyDWKej155jAYmd/view?usp=drivesdk'
-            }
-        ];
-
-        window.currentAppId = null; // Exposing globally for Firebase Module
-        let currentScreenshots = [];
-        let currentScreenshotIndex = 0;
-
-        // Render Apps to Grid
-        function renderApps(apps) {
-            const grid = document.getElementById('appGrid');
-            grid.innerHTML = '';
-            
-            apps.forEach(app => {
-                const card = document.createElement('div');
-                card.className = 'app-card';
-                card.onclick = () => openModal(app.id); 
-                card.innerHTML = `
-                    <img src="${app.icon}" class="app-icon" alt="${app.name}">
-                    <div class="app-info">
-                        <h3>${app.name}</h3>
-                        <div class="rating">${app.rating} <i class="fas fa-star"></i></div>
-                        <p>${app.shortDesc}</p>
-                    </div>
-                    <button class="btn" onclick="event.stopPropagation(); window.open('${app.downloadLink}', '_blank')">Install</button>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        // Search Functionality
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
-            const filtered = appsData.filter(app => app.name.toLowerCase().includes(term));
-            renderApps(filtered);
-        });
-
-        // Open App Modal
-        function openModal(appId) {
-            const app = appsData.find(a => a.id === appId);
-            if (!app) return;
-            
-            window.currentAppId = appId;
-            
-            document.getElementById('modalIcon').src = app.icon;
-            document.getElementById('modalName').innerText = app.name;
-            document.getElementById('modalDev').innerText = app.dev;
-            document.getElementById('modalRating').innerHTML = `${app.rating} <i class="fas fa-star" style="color:#ffd700"></i>`;
-            document.getElementById('modalSize').innerText = app.size;
-            document.getElementById('modalVersion').innerText = app.version;
-            document.getElementById('modalDate').innerText = app.date;
-            document.getElementById('modalFullDesc').innerText = app.fullDesc;
-            document.getElementById('modalWhatsNew').innerText = app.whatsNew;
-            document.getElementById('modalInstallBtn').onclick = function() {
-                window.open(app.downloadLink, '_blank');
-            };
-
-            const featuresList = document.getElementById('modalFeatures');
-            featuresList.innerHTML = '';
-            app.features.forEach(f => {
-                let li = document.createElement('li');
-                li.innerText = f;
-                featuresList.appendChild(li);
-            });
-
-            const screensContainer = document.getElementById('modalScreenshots');
-            screensContainer.innerHTML = '';
-            currentScreenshots = app.screenshots; 
-            app.screenshots.forEach((src, index) => {
-                let img = document.createElement('img');
-                img.src = src;
-                img.onclick = () => openScreenshotModal(index);
-                screensContainer.appendChild(img);
-            });
-
-            // Trigger Firebase to load live comments for this specific App
-            if(window.loadFirebaseReviews) {
-                window.loadFirebaseReviews(appId);
-            }
-            
-            document.getElementById('appModal').classList.add('active');
-            document.body.style.overflow = 'hidden'; 
-        }
-
-        function closeModal() {
-            document.getElementById('appModal').classList.remove('active');
-            document.body.style.overflow = 'auto';
-            window.currentAppId = null;
-        }
-
-        // Fullscreen Screenshot Functions with Sliding Animation
-        let isAnimating = false;
-
-        function updateNavButtons() {
-            const prevBtn = document.querySelector('.prev-btn');
-            const nextBtn = document.querySelector('.next-btn');
-            if(!prevBtn || !nextBtn) return;
-            if (currentScreenshotIndex <= 0) { prevBtn.style.display = 'none'; } else { prevBtn.style.display = 'flex'; }
-            if (currentScreenshotIndex >= currentScreenshots.length - 1) { nextBtn.style.display = 'none'; } else { nextBtn.style.display = 'flex'; }
-        }
-
-        function openScreenshotModal(index) {
-            currentScreenshotIndex = index;
-            const imgElement = document.getElementById('fullScreenshot');
-            imgElement.style.transition = 'none';
-            imgElement.classList.remove('swipe-left', 'swipe-right');
-            imgElement.src = currentScreenshots[currentScreenshotIndex];
-            void imgElement.offsetWidth; 
-            imgElement.style.transition = '';
-            updateNavButtons();
-            document.getElementById('screenshotModal').classList.add('active');
-        }
-
-        function closeScreenshotModal() {
-            document.getElementById('screenshotModal').classList.remove('active');
-            if (!document.getElementById('appModal').classList.contains('active') && 
-                !document.getElementById('teamModal').classList.contains('active') && 
-                !document.getElementById('contactModal').classList.contains('active')) {
-                document.body.style.overflow = 'auto';
-            }
-        }
-
-        function changeScreenshot(direction) {
-            if (isAnimating || currentScreenshots.length <= 1) return;
-            if (direction === 'next' && currentScreenshotIndex >= currentScreenshots.length - 1) return;
-            if (direction === 'prev' && currentScreenshotIndex <= 0) return;
-
-            isAnimating = true;
-            const imgElement = document.getElementById('fullScreenshot');
-            
-            if (direction === 'next') { imgElement.classList.add('swipe-left'); } else { imgElement.classList.add('swipe-right'); }
-
-            setTimeout(() => {
-                if (direction === 'next') { currentScreenshotIndex++; } else { currentScreenshotIndex--; }
-                imgElement.src = currentScreenshots[currentScreenshotIndex];
-                
-                imgElement.style.transition = 'none';
-                imgElement.classList.remove('swipe-left', 'swipe-right');
-                
-                if (direction === 'next') { imgElement.classList.add('swipe-right'); } else { imgElement.classList.add('swipe-left'); }
-                
-                void imgElement.offsetWidth; 
-                imgElement.style.transition = '';
-                imgElement.classList.remove('swipe-left', 'swipe-right');
-                updateNavButtons();
-                setTimeout(() => { isAnimating = false; }, 300);
-            }, 300); 
-        }
-
-        function nextScreenshot(e) { if(e) e.stopPropagation(); changeScreenshot('next'); }
-        function prevScreenshot(e) { if(e) e.stopPropagation(); changeScreenshot('prev'); }
-
-        // Touch Swipe Event Listeners
-        let touchStartX = 0; let touchEndX = 0;
-        const screenshotModalElement = document.getElementById('screenshotModal');
-
-        screenshotModalElement.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
-        screenshotModalElement.addEventListener('touchend', e => { touchEndX = e.changedTouches[0].screenX; handleSwipe(); }, {passive: true});
-
-        function handleSwipe() {
-            const threshold = 50;
-            if (!screenshotModalElement.classList.contains('active')) return;
-            if (touchStartX - touchEndX > threshold) { nextScreenshot(); } else if (touchEndX - touchStartX > threshold) { prevScreenshot(); }
-        }
-
-        // Team/Contact Modal Functions
-        function openTeamModal() { document.getElementById('teamModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
-        function closeTeamModal() { document.getElementById('teamModal').classList.remove('active'); if(!document.getElementById('contactModal').classList.contains('active')) { document.body.style.overflow = 'auto'; } }
-        function openContactModal() { closeTeamModal(); document.getElementById('contactModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
-        function closeContactModal() { document.getElementById('contactModal').classList.remove('active'); document.body.style.overflow = 'auto'; }
-
-        // Initialize App
-        window.onload = () => { renderApps(appsData); };
-
-        window.onclick = function(event) {
-            const appModalOverlay = document.getElementById('appModal');
-            const teamModalOverlay = document.getElementById('teamModal');
-            const contactModalOverlay = document.getElementById('contactModal');
-            const screenshotModalOverlay = document.getElementById('screenshotModal');
-            
-            if (event.target == appModalOverlay) { closeModal(); } 
-            else if (event.target == teamModalOverlay) { closeTeamModal(); } 
-            else if (event.target == contactModalOverlay) { closeContactModal(); } 
-            else if (event.target == screenshotModalOverlay) { closeScreenshotModal(); }
-        }
-    </script>
+    </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithRedirect, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAIkDUb_kKF2pDbONhIjlArvZqVWorDOro",
@@ -701,134 +576,338 @@
         const db = getDatabase(app);
         const provider = new GoogleAuthProvider();
 
-        window.currentUser = null;
+        let currentUser = null;
 
+        // Apps Database
+        const appsData = [
+            {
+                id: 'tiktoktue',
+                name: 'Tik Tok Tue',
+                shortDesc: 'A fun and smooth Tic Tac Toe game app with simple gameplay, two-player mode, clean interface, and fast result popup. Perfect for quick entertainment and brain challenge.',
+                fullDesc: 'A fun and smooth Tic Tac Toe game app with simple gameplay, two-player mode, clean interface, and fast result popup. Perfect for quick entertainment and brain challenge.',
+                rating: 4.8,
+                dev: 'OX Game',
+                version: '15.4.2',
+                size: '33.48 MB',
+                date: 'Dec 06, 2025',
+                icon: 'images/oxicon.png',
+                screenshots: [
+                    'images/oxs1.png', 'images/oxs2.png', 'images/oxs3.png', 'images/oxs4.png', 'images/oxs5.png', 'images/oxs6.png', 'images/oxs7.png'
+                ],
+                features: ['Smooth Tic Tac Toe gameplay', '2 player mode', 'AI vs player mode', 'level up mode', 'high level themes', 'clean game board', 'easy and fast controls'],
+                whatsNew: '- improved game speed\n- smoother touch response\n- bug fixes\n- better board design',
+                downloadLink: 'https://drive.google.com/file/d/1U3IMz-bF6fCqOZ7QcoV09qmMjskQHHIK/view?usp=drivesdk'
+            },
+            {
+                id: 'ultimatedrawpro',
+                name: 'Ultimate Draw Pro',
+                shortDesc: 'A creative and easy-to-use drawing app for sketching, painting, coloring, and making beautiful artwork with multiple tools and smooth canvas controls.',
+                fullDesc: 'A creative and easy-to-use drawing app for sketching, painting, coloring, and making beautiful artwork with multiple tools and smooth canvas controls.',
+                rating: 4.9,
+                dev: 'Creative App',
+                version: '5.2.0',
+                size: '33.92 MB',
+                date: 'Dec 24, 2025',
+                icon: 'images/udicon.png',
+                screenshots: [
+                    'images/uds1.png', 'images/uds2.png', 'images/uds3.png', 'images/uds4.png'
+                ],
+                features: ['drawing canvas', 'multiple brush tools', 'color palette', 'erase tool', 'save drawing option', 'smooth touch drawing', 'save & edit drawing'],
+                whatsNew: '- improved brush smoothness\n- new color options\n- better canvas controls\n- minor bug fixes',
+                downloadLink: 'https://drive.google.com/file/d/1MnPoXv0wfM9-IVXzKzrreT9MQA9ca6-6/view?usp=drivesdk'
+            },
+            {
+                id: 'learningsmart',
+                name: 'Learning Smart',
+                shortDesc: 'A smart educational learning app designed for kids and students with English learning, alphabet practice, math activities, and fun study features.',
+                fullDesc: 'A smart educational learning app designed for kids and students with English learning, alphabet practice, math activities, and fun study features.',
+                rating: 4.6,
+                dev: 'Educational app',
+                version: '3.1.1',
+                size: '33.26 MB',
+                date: 'Mar 28, 2026',
+                icon: 'images/lsicon.png',
+                screenshots: [
+                    'images/lss1.png', 'images/lss2.png', 'images/lss3.png', 'images/lss4.png', 'images/lss5.png', 'images/lss6.png', 'images/lss7.png'
+                ],
+                features: ['alphabet learning', 'English word practice', 'math activities', 'easy student interface', 'fun educational sections', 'learning dashboard', 'game mode questions'],
+                whatsNew: '- added new study content\n- improved learning sections\n- smoother navigation\n- performance improvements',
+                downloadLink: 'https://drive.google.com/file/d/1PxpIGRy9oenpQs_0rUyDWKej155jAYmd/view?usp=drivesdk'
+            }
+        ];
+
+        let currentAppId = null;
+        let currentScreenshots = [];
+        let currentScreenshotIndex = 0;
+
+        // Firebase Auth State
         onAuthStateChanged(auth, (user) => {
-          const loginScreen = document.getElementById("loginScreen");
-          const websiteContent = document.getElementById("websiteContent");
-
-          if (user) {
-            window.currentUser = user; // Keeping your variable assignment here
-            loginScreen.style.display = "none";
-            websiteContent.style.display = "block";
-          } else {
-            window.currentUser = null; // Keeping your variable assignment here
-            loginScreen.style.display = "flex";
-            websiteContent.style.display = "none";
-          }
+            if (user) {
+                currentUser = user;
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                renderApps(appsData);
+            } else {
+                currentUser = null;
+                document.getElementById('loginScreen').style.display = 'flex';
+                document.getElementById('mainContent').style.display = 'none';
+            }
         });
 
-        window.googleLogin = async function () {
-          try {
-            await signInWithRedirect(auth, provider);
-          } catch (error) {
-            alert("Login failed: " + error.message);
-          }
-        };
+        // Global functions mapped for inline HTML onclick attributes
+        window.loginWithGoogle = () => signInWithRedirect(auth, provider);
+        window.logoutUser = () => signOut(auth);
 
-        window.addEventListener("load", async () => {
-          try {
-            const result = await getRedirectResult(auth);
-            if (result && result.user) {
-              alert("Login successful");
-              location.reload();
-            }
-          } catch (error) {
-            console.log(error);
-          }
+        function renderApps(apps) {
+            const grid = document.getElementById('appGrid');
+            grid.innerHTML = '';
+            
+            apps.forEach(app => {
+                const card = document.createElement('div');
+                card.className = 'app-card';
+                card.onclick = () => window.openModal(app.id); 
+                card.innerHTML = `
+                    <img src="${app.icon}" class="app-icon" alt="${app.name}">
+                    <div class="app-info">
+                        <h3>${app.name}</h3>
+                        <div class="rating">${app.rating} <i class="fas fa-star"></i></div>
+                        <p>${app.shortDesc}</p>
+                    </div>
+                    <button class="btn" onclick="event.stopPropagation(); window.open('${app.downloadLink}', '_blank')">Install</button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = appsData.filter(app => app.name.toLowerCase().includes(term));
+            renderApps(filtered);
         });
 
-        // Trigger Logout 
-        window.doGoogleLogout = function () {
-            signOut(auth).catch(err => console.error(err));
+        window.openModal = (appId) => {
+            const app = appsData.find(a => a.id === appId);
+            if (!app) return;
+            
+            currentAppId = appId;
+            
+            document.getElementById('modalIcon').src = app.icon;
+            document.getElementById('modalName').innerText = app.name;
+            document.getElementById('modalDev').innerText = app.dev;
+            document.getElementById('modalRating').innerHTML = `${app.rating} <i class="fas fa-star" style="color:#ffd700"></i>`;
+            document.getElementById('modalSize').innerText = app.size;
+            document.getElementById('modalVersion').innerText = app.version;
+            document.getElementById('modalDate').innerText = app.date;
+            document.getElementById('modalFullDesc').innerText = app.fullDesc;
+            document.getElementById('modalWhatsNew').innerText = app.whatsNew;
+
+            document.getElementById('modalInstallBtn').onclick = function() {
+                window.open(app.downloadLink, '_blank');
+            };
+
+            const featuresList = document.getElementById('modalFeatures');
+            featuresList.innerHTML = '';
+            app.features.forEach(f => {
+                let li = document.createElement('li');
+                li.innerText = f;
+                featuresList.appendChild(li);
+            });
+
+            const screensContainer = document.getElementById('modalScreenshots');
+            screensContainer.innerHTML = '';
+            currentScreenshots = app.screenshots;
+            
+            app.screenshots.forEach((src, index) => {
+                let img = document.createElement('img');
+                img.src = src;
+                img.onclick = () => window.openScreenshotModal(index);
+                screensContainer.appendChild(img);
+            });
+
+            window.loadReviews(appId);
+            
+            document.getElementById('appModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
         };
 
-        // Live Review Submission Function
-        window.submitFirebaseReview = function () {
-            if (!window.currentUser) {
-                alert("You must be logged in to post a review.");
-                return;
-            }
+        window.closeModal = () => {
+            document.getElementById('appModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            currentAppId = null;
+        };
 
-            if (!window.currentAppId) return;
+        let isAnimating = false;
 
-            let rating = 0;
-            const radios = document.getElementsByName('rating');
-            for (let r of radios) {
-                if (r.checked) {
-                    rating = parseInt(r.value);
-                    break;
-                }
+        function updateNavButtons() {
+            const prevBtn = document.querySelector('.prev-btn');
+            const nextBtn = document.querySelector('.next-btn');
+            if(!prevBtn || !nextBtn) return;
+
+            prevBtn.style.display = currentScreenshotIndex <= 0 ? 'none' : 'flex';
+            nextBtn.style.display = currentScreenshotIndex >= currentScreenshots.length - 1 ? 'none' : 'flex';
+        }
+
+        window.openScreenshotModal = (index) => {
+            currentScreenshotIndex = index;
+            const imgElement = document.getElementById('fullScreenshot');
+            
+            imgElement.style.transition = 'none';
+            imgElement.classList.remove('swipe-left', 'swipe-right');
+            imgElement.src = currentScreenshots[currentScreenshotIndex];
+            
+            void imgElement.offsetWidth;
+            imgElement.style.transition = '';
+            
+            updateNavButtons();
+            document.getElementById('screenshotModal').classList.add('active');
+        };
+
+        window.closeScreenshotModal = () => {
+            document.getElementById('screenshotModal').classList.remove('active');
+            if (!document.getElementById('appModal').classList.contains('active') && 
+                !document.getElementById('teamModal').classList.contains('active') && 
+                !document.getElementById('contactModal').classList.contains('active')) {
+                document.body.style.overflow = 'auto';
             }
+        };
+
+        function changeScreenshot(direction) {
+            if (isAnimating || currentScreenshots.length <= 1) return;
+            if (direction === 'next' && currentScreenshotIndex >= currentScreenshots.length - 1) return;
+            if (direction === 'prev' && currentScreenshotIndex <= 0) return;
+
+            isAnimating = true;
+            const imgElement = document.getElementById('fullScreenshot');
+            
+            imgElement.classList.add(direction === 'next' ? 'swipe-left' : 'swipe-right');
+
+            setTimeout(() => {
+                currentScreenshotIndex += direction === 'next' ? 1 : -1;
+                imgElement.src = currentScreenshots[currentScreenshotIndex];
+                
+                imgElement.style.transition = 'none';
+                imgElement.classList.remove('swipe-left', 'swipe-right');
+                imgElement.classList.add(direction === 'next' ? 'swipe-right' : 'swipe-left');
+                
+                void imgElement.offsetWidth;
+                
+                imgElement.style.transition = '';
+                imgElement.classList.remove('swipe-left', 'swipe-right');
+                
+                updateNavButtons();
+                setTimeout(() => isAnimating = false, 300);
+            }, 300);
+        }
+
+        window.nextScreenshot = (e) => { if(e) e.stopPropagation(); changeScreenshot('next'); };
+        window.prevScreenshot = (e) => { if(e) e.stopPropagation(); changeScreenshot('prev'); };
+
+        // Modals
+        window.openTeamModal = () => { document.getElementById('teamModal').classList.add('active'); document.body.style.overflow = 'hidden'; };
+        window.closeTeamModal = () => { document.getElementById('teamModal').classList.remove('active'); if(!document.getElementById('contactModal').classList.contains('active')) document.body.style.overflow = 'auto'; };
+        window.openContactModal = () => { window.closeTeamModal(); document.getElementById('contactModal').classList.add('active'); document.body.style.overflow = 'hidden'; };
+        window.closeContactModal = () => { document.getElementById('contactModal').classList.remove('active'); document.body.style.overflow = 'auto'; };
+
+        // Firebase Review System
+        window.submitReview = () => {
+            if (!currentUser) return;
 
             const text = document.getElementById('reviewText').value.trim();
+            let rating = 0;
+            const radios = document.getElementsByName('rating');
+            for (let r of radios) { if (r.checked) { rating = parseInt(r.value); break; } }
 
-            if (rating === 0) {
-                alert('Please select a star rating before submitting.');
-                return;
-            }
-            if (text === '') {
-                alert('Please write a review comment.');
-                return;
-            }
+            if (rating === 0) return alert('Please select a star rating.');
+            if (text === '') return alert('Please write a review comment.');
 
-            // Save to Firebase Realtime Database
-            push(ref(db, `comments/${window.currentAppId}`), {
-                name: window.currentUser.displayName,
+            const newReview = {
+                name: currentUser.displayName || 'App User',
+                uid: currentUser.uid,
                 rating: rating,
                 text: text,
-                time: new Date().toLocaleDateString()
-            }).then(() => {
-                // Clear inputs on success
+                timestamp: Date.now()
+            };
+
+            const commentsRef = ref(db, 'comments/' + currentAppId);
+            push(commentsRef, newReview).then(() => {
                 document.getElementById('reviewText').value = '';
                 for (let r of radios) r.checked = false;
             }).catch(err => {
-                alert("Failed to submit review: " + err.message);
+                console.error("Review Error: ", err);
+                alert("Failed to submit review. Try again.");
             });
         };
 
-        // Real-Time Review Fetcher
-        window.loadFirebaseReviews = function(appId) {
+        window.loadReviews = (appId) => {
             const reviewList = document.getElementById('reviewList');
-            reviewList.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">Fetching reviews...</div>';
+            reviewList.innerHTML = '<p style="color: var(--text-muted);">Loading reviews...</p>';
 
-            onValue(ref(db, `comments/${appId}`), (snapshot) => {
-                // Ignore updates if modal swapped to another app in between fetches
-                if (window.currentAppId !== appId) return;
-
+            const commentsRef = ref(db, 'comments/' + appId);
+            onValue(commentsRef, (snapshot) => {
                 reviewList.innerHTML = '';
+                const data = snapshot.val();
                 
-                if (!snapshot.exists()) {
-                    reviewList.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">No reviews yet. Be the first to share your thoughts!</div>';
-                    return;
+                if (data) {
+                    const reviewsArray = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+                    
+                    reviewsArray.forEach(rev => {
+                        let starsHTML = '';
+                        for(let i=1; i<=5; i++) {
+                            starsHTML += i <= rev.rating ? '<i class="fas fa-star" style="color:#ffd700;"></i>' : '<i class="far fa-star" style="color:var(--text-muted);"></i>';
+                        }
+                        
+                        const dateObj = new Date(rev.timestamp);
+                        const timeStr = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+                        const card = document.createElement('div');
+                        card.className = 'review-card';
+                        card.innerHTML = `
+                            <div class="review-header">
+                                <span class="review-user">${rev.name}</span>
+                                <span class="review-time">${timeStr}</span>
+                            </div>
+                            <div style="margin-bottom: 5px;">${starsHTML}</div>
+                            <p style="font-size: 0.9rem; color: var(--text-muted);">${rev.text}</p>
+                        `;
+                        reviewList.appendChild(card);
+                    });
+                } else {
+                    reviewList.innerHTML = '<p style="color: var(--text-muted);">No reviews yet. Be the first to review!</p>';
                 }
-
-                // Gather and reverse reviews to display newest on top
-                const reviews = [];
-                snapshot.forEach(child => { reviews.push(child.val()); });
-                reviews.reverse();
-
-                reviews.forEach(rev => {
-                    let starsHTML = '';
-                    for(let i=1; i<=5; i++) {
-                        if(i <= rev.rating) starsHTML += '<i class="fas fa-star" style="color:#ffd700;"></i>';
-                        else starsHTML += '<i class="far fa-star" style="color:var(--text-muted);"></i>';
-                    }
-
-                    const card = document.createElement('div');
-                    card.className = 'review-card';
-                    card.innerHTML = `
-                        <div class="review-header">
-                            <span class="review-user">${rev.name}</span>
-                            <span class="review-time">${rev.time || ''}</span>
-                        </div>
-                        <div style="margin-bottom: 5px;">${starsHTML}</div>
-                        <p style="font-size: 0.9rem; color: var(--text-muted);">${rev.text}</p>
-                    `;
-                    reviewList.appendChild(card);
-                });
             });
         };
+
+        // Window Clicks
+        window.onclick = function(event) {
+            const appModalOverlay = document.getElementById('appModal');
+            const teamModalOverlay = document.getElementById('teamModal');
+            const contactModalOverlay = document.getElementById('contactModal');
+            const screenshotModalOverlay = document.getElementById('screenshotModal');
+            
+            if (event.target == appModalOverlay) window.closeModal();
+            else if (event.target == teamModalOverlay) window.closeTeamModal();
+            else if (event.target == contactModalOverlay) window.closeContactModal();
+            else if (event.target == screenshotModalOverlay) window.closeScreenshotModal();
+        }
+
+        // Swipes
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const screenshotModalElement = document.getElementById('screenshotModal');
+
+        screenshotModalElement.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+
+        screenshotModalElement.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            const threshold = 50;
+            if (!screenshotModalElement.classList.contains('active')) return;
+
+            if (touchStartX - touchEndX > threshold) window.nextScreenshot();
+            else if (touchEndX - touchStartX > threshold) window.prevScreenshot();
+        }, {passive: true});
+
     </script>
 </body>
 </html>
