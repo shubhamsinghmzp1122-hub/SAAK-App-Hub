@@ -300,7 +300,7 @@
         </button>
     </div>
 
-    <div id="mainContent" style="display:none;">
+    <div id="websiteContent" style="display: none;">
         <header>
             <div class="logo">
                 <i class="fa-brands fa-google-play"></i>
@@ -444,7 +444,7 @@
             <img id="fullScreenshot" src="" alt="Full Screen Preview">
         </div>
     </div> 
-
+    
     <script>
         // Database of Apps
         const appsData = [
@@ -703,21 +703,19 @@
 
         window.currentUser = null;
 
-        // Screen protection logic via Firebase Auth State
         onAuthStateChanged(auth, (user) => {
-            const loginScreen = document.getElementById("loginScreen");
-            const mainContent = document.getElementById("mainContent");
+          const loginScreen = document.getElementById("loginScreen");
+          const websiteContent = document.getElementById("websiteContent");
 
-            // Store user for real-time review submission functionality
-            window.currentUser = user; 
-
-            if (user) {
-                loginScreen.style.display = "none";
-                mainContent.style.display = "block";
-            } else {
-                loginScreen.style.display = "flex";
-                mainContent.style.display = "none";
-            }
+          if (user) {
+            window.currentUser = user; // Keeping your variable assignment here
+            loginScreen.style.display = "none";
+            websiteContent.style.display = "block";
+          } else {
+            window.currentUser = null; // Keeping your variable assignment here
+            loginScreen.style.display = "flex";
+            websiteContent.style.display = "none";
+          }
         });
 
         window.googleLogin = async function () {
@@ -832,5 +830,5 @@
             });
         };
     </script>
-    </body>
+</body>
 </html>
