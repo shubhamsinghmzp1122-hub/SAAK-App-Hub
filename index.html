@@ -812,7 +812,7 @@
         let currentAppId = null;
         let currentScreenshots = [];
         let currentScreenshotIndex = 0;
-        let unsubscribeReviews = null; // To manage active Firebase listener
+        let unsubscribeReviews = null; // To manage active Firebase listener for the modal
 
         // Render Grid
         function renderApps(apps) {
@@ -850,7 +850,7 @@
             document.getElementById('modalName').innerText = app.name;
             document.getElementById('modalDev').innerText = app.dev;
             
-            // Set loading state for rating initially
+            // Initial load state for modal
             document.getElementById('modalRating').innerHTML = `... <i class="fas fa-star" style="color:#ffd700"></i>`;
             document.getElementById('modalReviewCount').innerText = `Loading`;
 
@@ -879,7 +879,7 @@
                 screensContainer.appendChild(img);
             });
 
-            // FETCH REAL-TIME REVIEWS
+            // FETCH REAL-TIME REVIEWS TEXT FOR MODAL
             window.loadLiveReviews(appId);
             
             document.getElementById('appModal').classList.add('active');
@@ -915,7 +915,6 @@
                     totalStars += data.rating;
                 });
 
-                // UPDATE AVERAGE RATING (Modal & Home Screen Card)
                 let avg = "0.0";
                 let reviewCount = 0;
                 
@@ -927,18 +926,6 @@
                 // Update Modal UI
                 document.getElementById('modalRating').innerHTML = `${avg} <i class="fas fa-star" style="color:#ffd700"></i>`;
                 document.getElementById('modalReviewCount').innerText = `${reviewCount} ${reviewCount === 1 ? 'Review' : 'Reviews'}`;
-
-                // Update Home Screen Grid UI Silently
-                const appIndex = appsData.findIndex(a => a.id === appId);
-                if(appIndex !== -1) {
-                    appsData[appIndex].rating = avg;
-                    const term = document.getElementById('searchInput').value.toLowerCase();
-                    if (term) {
-                        renderApps(appsData.filter(app => app.name.toLowerCase().includes(term)));
-                    } else {
-                        renderApps(appsData);
-                    }
-                }
 
                 // Sort Reviews: Newest first
                 appReviews.sort((a, b) => b.timestamp - a.timestamp);
@@ -1097,13 +1084,41 @@
         window.openContactModal = () => { window.closeTeamModal(); document.getElementById('contactModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
         window.closeContactModal = () => { document.getElementById('contactModal').classList.remove('active'); document.body.style.overflow = 'auto'; }
 
-        // Fetch initial ratings across all apps to populate the grid properly on load
+        // --- FETCH REAL RATINGS FOR ALL APPS ON PAGE LOAD ---
         async function fetchInitialRatings() {
             try {
-                // To keep it simple and optimized, apps start at 0.0
-                // We'll let the user see the real rating when they click the app (as requested).
-                // If you wanted all to load instantly, you'd fetch all reviews here.
+                // Pehle grid load kardo default (0.0) ke sath taaki wait na karna pade
                 renderApps(appsData); 
+                
+                // Fir background mein saare apps ki real rating fetch karo
+                appsData.forEach((app, index) => {
+                    const q = query(collection(db, "reviews"), where("appId", "==", app.id));
+                    onSnapshot(q, (querySnapshot) => {
+                        let totalStars = 0;
+                        let reviewCount = 0;
+                        
+                        querySnapshot.forEach((doc) => {
+                            totalStars += doc.data().rating;
+                            reviewCount++;
+                        });
+
+                        let avg = "0.0";
+                        if (reviewCount > 0) {
+                            avg = (totalStars / reviewCount).toFixed(1);
+                        }
+
+                        // Array mein real rating update karo
+                        appsData[index].rating = avg;
+
+                        // Agar user search nahi kar raha, toh grid ko update kardo taaki real rating 1 baar me hi dikh jaye
+                        const term = document.getElementById('searchInput').value.toLowerCase();
+                        if (term) {
+                            renderApps(appsData.filter(a => a.name.toLowerCase().includes(term)));
+                        } else {
+                            renderApps(appsData);
+                        }
+                    });
+                });
             } catch(e) {
                 console.error(e);
             }
