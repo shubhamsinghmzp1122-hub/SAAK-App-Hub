@@ -1104,9 +1104,9 @@
     </script>
 
     <script type="module">
-        // Import Firebase CDN Modules
+        // Import Firebase CDN Modules (signInWithRedirect added)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getAuth, signInWithRedirect, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
         // Your Firebase config
         const firebaseConfig = {
@@ -1129,15 +1129,9 @@
         const userName = document.getElementById('userName');
         const logoutBtn = document.getElementById('logoutBtn');
 
-        // Login Function
+        // Login Function (Changed to Redirect)
         loginBtn.addEventListener('click', () => {
-            signInWithPopup(auth, provider)
-                .then((result) => {
-                    console.log("Logged in successfully!");
-                }).catch((error) => {
-                    console.error("Login Error:", error);
-                    alert("Login failed! Please try again.");
-                });
+            signInWithRedirect(auth, provider);
         });
 
         // Logout Function
