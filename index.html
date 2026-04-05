@@ -594,7 +594,7 @@
             
             <button id="googleLoginBtn" class="google-style-btn">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" style="width: 20px; height: 20px;">
-                Continue with Google
+                <span>Continue with Google</span>
             </button>
         </div>
     </div>
@@ -628,7 +628,9 @@
             <br>
             <button id="logoutBtn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
         </div>
-    </div> <div class="modal-overlay" id="appModal">
+    </div> 
+
+    <div class="modal-overlay" id="appModal">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
             
@@ -842,7 +844,6 @@
         let currentScreenshots = [];
         let currentScreenshotIndex = 0;
 
-        // Render Apps to Grid
         function renderApps(apps) {
             const grid = document.getElementById('appGrid');
             grid.innerHTML = '';
@@ -864,14 +865,12 @@
             });
         }
 
-        // Search Functionality
         document.getElementById('searchInput').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
             const filtered = appsData.filter(app => app.name.toLowerCase().includes(term));
             renderApps(filtered);
         });
 
-        // Open App Modal
         function openModal(appId) {
             const app = appsData.find(a => a.id === appId);
             if (!app) return;
@@ -892,7 +891,6 @@
                 window.open(app.downloadLink, '_blank');
             };
 
-            // Load Features
             const featuresList = document.getElementById('modalFeatures');
             featuresList.innerHTML = '';
             app.features.forEach(f => {
@@ -901,7 +899,6 @@
                 featuresList.appendChild(li);
             });
 
-            // Load Screenshots 
             const screensContainer = document.getElementById('modalScreenshots');
             screensContainer.innerHTML = '';
             currentScreenshots = app.screenshots; 
@@ -1176,8 +1173,9 @@
     </script>
 
     <script type="module">
+        // Switched back to signInWithPopup because domain is now authorized
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, signInWithRedirect, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAbOtjHeldbPRC29tX-i5tbUeySQlTzWUU",
@@ -1192,16 +1190,27 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
-        // UI Elements for Auth Display Logic
         const loginScreen = document.getElementById('loginScreen');
         const mainAppContent = document.getElementById('mainAppContent');
         const loginBtn = document.getElementById('googleLoginBtn');
         const userName = document.getElementById('userName');
         const logoutBtn = document.getElementById('logoutBtn');
 
-        // Login Function 
+        // Login Function (Using Popup again)
         loginBtn.addEventListener('click', () => {
-            signInWithRedirect(auth, provider);
+            // Button Loading Effect
+            loginBtn.innerHTML = '<span>Please wait...</span>';
+            
+            signInWithPopup(auth, provider).then(() => {
+                // Success, state listener will handle UI change
+                loginBtn.innerHTML = '<img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" style="width: 20px; height: 20px;"> <span>Continue with Google</span>';
+            }).catch((error) => {
+                console.error("Login Error:", error);
+                loginBtn.innerHTML = '<img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" style="width: 20px; height: 20px;"> <span>Continue with Google</span>';
+                if (error.code !== 'auth/popup-closed-by-user') {
+                    alert("Login failed! Please try again.");
+                }
+            });
         });
 
         // Logout Function with Confirmation
