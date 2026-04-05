@@ -629,7 +629,7 @@
                     <h2 id="modalName">App Name</h2>
                     <p style="color: var(--primary-color)" id="modalDev">Developer</p>
                     <div class="modal-meta">
-                        <div><strong id="modalRating">4.5 <i class="fas fa-star" style="color:#ffd700"></i></strong><br>Reviews</div>
+                        <div><strong id="modalRating">... <i class="fas fa-star" style="color:#ffd700"></i></strong><br><span id="modalReviewCount">Loading</span></div>
                         <div><strong id="modalSize">25 MB</strong><br>Size</div>
                         <div><strong id="modalVersion">1.0.0</strong><br>Version</div>
                     </div>
@@ -769,16 +769,16 @@
         const provider = new GoogleAuthProvider();
         const db = getFirestore(app);
 
-        // App Database
+        // App Database (Initial static rating is set to 0.0, it will update dynamically)
         const appsData = [
             {
                 id: 'tiktoktue',
                 name: 'Tik Tok Tue',
                 shortDesc: 'A fun and smooth Tic Tac Toe game app with simple gameplay, two-player mode, clean interface, and fast result popup.',
                 fullDesc: 'A fun and smooth Tic Tac Toe game app with simple gameplay, two-player mode, clean interface, and fast result popup. Perfect for quick entertainment and brain challenge.',
-                rating: 4.8, dev: 'OX Game', version: '15.4.2', size: '33.48 MB', date: 'Dec 06, 2025',
-                icon: 'images/oxicon.png',
-                screenshots: ['images/oxs1.png', 'images/oxs2.png', 'images/oxs3.png', 'images/oxs4.png', 'images/oxs5.png', 'images/oxs6.png', 'images/oxs7.png'],
+                rating: "0.0", dev: 'OX Game', version: '15.4.2', size: '33.48 MB', date: 'Dec 06, 2025',
+                icon: 'oxicon.png',
+                screenshots: ['oxs1.png', 'oxs2.png', 'oxs3.png', 'oxs4.png', 'oxs5.png', 'oxs6.png', 'oxs7.png'],
                 features: ['Smooth Tic Tac Toe gameplay', '2 player mode', 'AI vs player mode', 'level up mode', 'high level themes', 'clean game board', 'easy and fast controls'],
                 whatsNew: '- improved game speed\n- smoother touch response\n- bug fixes\n- better board design',
                 downloadLink: 'https://drive.google.com/file/d/1U3IMz-bF6fCqOZ7QcoV09qmMjskQHHIK/view?usp=drivesdk'
@@ -788,9 +788,9 @@
                 name: 'Ultimate Draw Pro',
                 shortDesc: 'A creative and easy-to-use drawing app for sketching, painting, coloring, and making beautiful artwork.',
                 fullDesc: 'A creative and easy-to-use drawing app for sketching, painting, coloring, and making beautiful artwork with multiple tools and smooth canvas controls.',
-                rating: 4.9, dev: 'Creative App', version: '5.2.0', size: '33.92 MB', date: 'Dec 24, 2025',
-                icon: 'images/udicon.png',
-                screenshots: ['images/uds1.png', 'images/uds2.png', 'images/uds3.png', 'images/uds4.png'],
+                rating: "0.0", dev: 'Creative App', version: '5.2.0', size: '33.92 MB', date: 'Dec 24, 2025',
+                icon: 'udicon.png',
+                screenshots: ['uds1.png', 'uds2.png', 'uds3.png', 'uds4.png'],
                 features: ['drawing canvas', 'multiple brush tools', 'color palette', 'erase tool', 'save drawing option', 'smooth touch drawing', 'save & edit drawing'],
                 whatsNew: '- improved brush smoothness\n- new color options\n- better canvas controls\n- minor bug fixes',
                 downloadLink: 'https://drive.google.com/file/d/1MnPoXv0wfM9-IVXzKzrreT9MQA9ca6-6/view?usp=drivesdk'
@@ -800,9 +800,9 @@
                 name: 'Learning Smart',
                 shortDesc: 'A smart educational learning app designed for kids and students with English learning, alphabet practice, math activities.',
                 fullDesc: 'A smart educational learning app designed for kids and students with English learning, alphabet practice, math activities, and fun study features.',
-                rating: 4.6, dev: 'Educational app', version: '3.1.1', size: '33.26 MB', date: 'Mar 28, 2026',
-                icon: 'images/lsicon.png',
-                screenshots: ['images/lss1.png', 'images/lss2.png', 'images/lss3.png', 'images/lss4.png', 'images/lss5.png', 'images/lss6.png', 'images/lss7.png'],
+                rating: "0.0", dev: 'Educational app', version: '3.1.1', size: '33.26 MB', date: 'Mar 28, 2026',
+                icon: 'lsicon.png',
+                screenshots: ['lss1.png', 'lss2.png', 'lss3.png', 'lss4.png', 'lss5.png', 'lss6.png', 'lss7.png'],
                 features: ['alphabet learning', 'English word practice', 'math activities', 'easy student interface', 'fun educational sections', 'learning dashboard', 'game mode questions'],
                 whatsNew: '- added new study content\n- improved learning sections\n- smoother navigation\n- performance improvements',
                 downloadLink: 'https://drive.google.com/file/d/1PxpIGRy9oenpQs_0rUyDWKej155jAYmd/view?usp=drivesdk'
@@ -849,7 +849,11 @@
             document.getElementById('modalIcon').src = app.icon;
             document.getElementById('modalName').innerText = app.name;
             document.getElementById('modalDev').innerText = app.dev;
-            document.getElementById('modalRating').innerHTML = `${app.rating} <i class="fas fa-star" style="color:#ffd700"></i>`;
+            
+            // Set loading state for rating initially
+            document.getElementById('modalRating').innerHTML = `... <i class="fas fa-star" style="color:#ffd700"></i>`;
+            document.getElementById('modalReviewCount').innerText = `Loading`;
+
             document.getElementById('modalSize').innerText = app.size;
             document.getElementById('modalVersion').innerText = app.version;
             document.getElementById('modalDate').innerText = app.date;
@@ -892,7 +896,7 @@
             }
         }
 
-        // --- FIREBASE FIRESTORE REVIEW SYSTEM ---
+        // --- FIREBASE FIRESTORE REAL-TIME RATING & REVIEW SYSTEM ---
         window.loadLiveReviews = function(appId) {
             const reviewList = document.getElementById('reviewList');
             reviewList.innerHTML = '<p style="text-align:center; color:var(--text-muted); margin-top:20px;">Loading reviews...</p>';
@@ -903,11 +907,40 @@
             
             unsubscribeReviews = onSnapshot(q, (querySnapshot) => {
                 const appReviews = [];
+                let totalStars = 0;
+
                 querySnapshot.forEach((doc) => {
-                    appReviews.push(doc.data());
+                    const data = doc.data();
+                    appReviews.push(data);
+                    totalStars += data.rating;
                 });
 
-                // Sort: Newest first
+                // UPDATE AVERAGE RATING (Modal & Home Screen Card)
+                let avg = "0.0";
+                let reviewCount = 0;
+                
+                if (appReviews.length > 0) {
+                    avg = (totalStars / appReviews.length).toFixed(1);
+                    reviewCount = appReviews.length;
+                }
+
+                // Update Modal UI
+                document.getElementById('modalRating').innerHTML = `${avg} <i class="fas fa-star" style="color:#ffd700"></i>`;
+                document.getElementById('modalReviewCount').innerText = `${reviewCount} ${reviewCount === 1 ? 'Review' : 'Reviews'}`;
+
+                // Update Home Screen Grid UI Silently
+                const appIndex = appsData.findIndex(a => a.id === appId);
+                if(appIndex !== -1) {
+                    appsData[appIndex].rating = avg;
+                    const term = document.getElementById('searchInput').value.toLowerCase();
+                    if (term) {
+                        renderApps(appsData.filter(app => app.name.toLowerCase().includes(term)));
+                    } else {
+                        renderApps(appsData);
+                    }
+                }
+
+                // Sort Reviews: Newest first
                 appReviews.sort((a, b) => b.timestamp - a.timestamp);
                 reviewList.innerHTML = '';
 
@@ -1064,8 +1097,20 @@
         window.openContactModal = () => { window.closeTeamModal(); document.getElementById('contactModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
         window.closeContactModal = () => { document.getElementById('contactModal').classList.remove('active'); document.body.style.overflow = 'auto'; }
 
+        // Fetch initial ratings across all apps to populate the grid properly on load
+        async function fetchInitialRatings() {
+            try {
+                // To keep it simple and optimized, apps start at 0.0
+                // We'll let the user see the real rating when they click the app (as requested).
+                // If you wanted all to load instantly, you'd fetch all reviews here.
+                renderApps(appsData); 
+            } catch(e) {
+                console.error(e);
+            }
+        }
+
         // Init
-        window.onload = () => renderApps(appsData);
+        window.onload = () => fetchInitialRatings();
 
         // Outside Click Close
         window.onclick = function(event) {
