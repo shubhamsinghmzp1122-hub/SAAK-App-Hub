@@ -41,6 +41,74 @@
         ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
         ::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 4px; }
 
+        /* NEW: Full Screen Login Overlay Styles */
+        #loginScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--bg-gradient);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .login-box {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--card-shadow);
+            width: 90%;
+            max-width: 400px;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .login-box i {
+            font-size: 3.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .login-box h2 {
+            color: white;
+            margin-bottom: 10px;
+            font-size: 1.6rem;
+        }
+
+        .login-box p {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        /* Custom Professional Google Button Style */
+        .google-style-btn {
+            background: #ffffff !important;
+            color: #3c4043 !important;
+            border: 1px solid #dadce0 !important;
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+            font-weight: 500;
+            font-family: 'Roboto', 'Poppins', sans-serif;
+            border-radius: 25px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 25px;
+            width: 100%;
+            font-size: 1.05rem;
+        }
+
+        .google-style-btn:hover {
+            background: #f8f9fa !important;
+            box-shadow: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
+        }
+
         /* Header */
         header {
             display: flex;
@@ -93,17 +161,10 @@
             color: var(--text-muted);
         }
 
-        /* NEW: Auth Section Styles */
+        /* Auth Section Styles */
         .auth-section {
             display: flex;
             align-items: center;
-        }
-        
-        .auth-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 20px;
         }
 
         .user-info {
@@ -120,15 +181,19 @@
 
         .logout-btn {
             padding: 8px 15px;
-            background: rgba(225, 48, 108, 0.8); /* Redish color for logout */
+            background: rgba(225, 48, 108, 0.8); 
             color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s;
         }
 
         .logout-btn:hover {
             background: rgba(225, 48, 108, 1);
         }
 
-        /* Featured Banner - Removed internal items to serve as button container */
+        /* Featured Banner */
         .featured-banner {
             margin: 30px 5%;
             padding: 40px;
@@ -136,7 +201,7 @@
             background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80') center/cover;
             display: flex;
             flex-direction: column;
-            align-items: center; /* Centered content for button */
+            align-items: center; 
             justify-content: center;
             box-shadow: var(--card-shadow);
             border: 1px solid var(--glass-border);
@@ -192,7 +257,7 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             display: flex;
             flex-direction: column;
-            cursor: pointer; /* Indication for clickable cards */
+            cursor: pointer; 
         }
 
         .app-card:hover {
@@ -508,35 +573,47 @@
 </head>
 <body>
 
-    <header>
-        <div class="logo">
+    <div id="loginScreen" style="display: flex;">
+        <div class="login-box">
             <i class="fa-brands fa-google-play"></i>
-            SAAK App Hub
+            <h2>SAAK App Hub</h2>
+            <p>Please securely login to explore and download amazing applications.</p>
+            
+            <button id="googleLoginBtn" class="btn google-style-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo">
+                Continue with Google
+            </button>
         </div>
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Search for apps...">
-            <i class="fas fa-search"></i>
-        </div>
-        <div class="auth-section">
-            <button id="googleLoginBtn" class="btn auth-btn"><i class="fab fa-google"></i> Login</button>
-            <div id="userInfo" class="user-info" style="display: none;">
-                <span id="userName" class="user-name"></span>
-                <button id="logoutBtn" class="btn logout-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
-            </div>
-        </div>
-    </header>
-
-    <main class="container">
-        <h2 class="section-title">Recommended for You</h2>
-        <div class="app-grid" id="appGrid">
-            </div>
-    </main>
-
-    <div style="text-align: center; margin: 40px auto; padding-bottom: 20px;">
-        <button class="btn" onclick="openTeamModal()" style="font-size: 1.1rem; padding: 12px 30px;">Team Information</button>
     </div>
 
-    <div class="modal-overlay" id="appModal">
+    <div id="mainAppContent" style="display: none;">
+        <header>
+            <div class="logo">
+                <i class="fa-brands fa-google-play"></i>
+                SAAK App Hub
+            </div>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search for apps...">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="auth-section">
+                <div id="userInfo" class="user-info">
+                    <span id="userName" class="user-name"></span>
+                    <button id="logoutBtn" class="logout-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </div>
+        </header>
+
+        <main class="container">
+            <h2 class="section-title">Recommended for You</h2>
+            <div class="app-grid" id="appGrid">
+                </div>
+        </main>
+
+        <div style="text-align: center; margin: 40px auto; padding-bottom: 20px;">
+            <button class="btn" onclick="openTeamModal()" style="font-size: 1.1rem; padding: 12px 30px;">Team Information</button>
+        </div>
+    </div> <div class="modal-overlay" id="appModal">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
             
@@ -685,15 +762,15 @@
                 version: '15.4.2',
                 size: '33.48 MB',
                 date: 'Dec 06, 2025',
-                icon: 'oxicon.png',
+                icon: 'images/oxicon.png',
                 screenshots: [
-                    'oxs1.png',
-                    'oxs2.png',
-                    'oxs3.png',
-                    'oxs4.png',
-                    'oxs5.png',
-                    'oxs6.png',
-                    'oxs7.png'
+                    'images/oxs1.png',
+                    'images/oxs2.png',
+                    'images/oxs3.png',
+                    'images/oxs4.png',
+                    'images/oxs5.png',
+                    'images/oxs6.png',
+                    'images/oxs7.png'
                 ],
                 features: ['Smooth Tic Tac Toe gameplay', '2 player mode', 'AI vs player mode', 'level up mode', 'high level themes', 'clean game board', 'easy and fast controls'],
                 whatsNew: '- improved game speed\n- smoother touch response\n- bug fixes\n- better board design',
@@ -709,12 +786,12 @@
                 version: '5.2.0',
                 size: '33.92 MB',
                 date: 'Dec 24, 2025',
-                icon: 'udicon.png',
+                icon: 'images/udicon.png',
                 screenshots: [
-                    'uds1.png',
-                    'uds2.png',
-                    'uds3.png',
-                    'uds4.png'
+                    'images/uds1.png',
+                    'images/uds2.png',
+                    'images/uds3.png',
+                    'images/uds4.png'
                 ],
                 features: ['drawing canvas', 'multiple brush tools', 'color palette', 'erase tool', 'save drawing option', 'smooth touch drawing', 'save & edit drawing'],
                 whatsNew: '- improved brush smoothness\n- new color options\n- better canvas controls\n- minor bug fixes',
@@ -730,15 +807,15 @@
                 version: '3.1.1',
                 size: '33.26 MB',
                 date: 'Mar 28, 2026',
-                icon: 'lsicon.png',
+                icon: 'images/lsicon.png',
                 screenshots: [
-                    'lss1.png',
-                    'lss2.png',
-                    'lss3.png',
-                    'lss4.png',
-                    'lss5.png',
-                    'lss6.png',
-                    'lss7.png'
+                    'images/lss1.png',
+                    'images/lss2.png',
+                    'images/lss3.png',
+                    'images/lss4.png',
+                    'images/lss5.png',
+                    'images/lss6.png',
+                    'images/lss7.png'
                 ],
                 features: ['alphabet learning', 'English word practice', 'math activities', 'easy student interface', 'fun educational sections', 'learning dashboard', 'game mode questions'],
                 whatsNew: '- added new study content\n- improved learning sections\n- smoother navigation\n- performance improvements',
@@ -758,7 +835,7 @@
             apps.forEach(app => {
                 const card = document.createElement('div');
                 card.className = 'app-card';
-                card.onclick = () => openModal(app.id); // Triggers app details modal
+                card.onclick = () => openModal(app.id); 
                 card.innerHTML = `
                     <img src="${app.icon}" class="app-icon" alt="${app.name}">
                     <div class="app-info">
@@ -796,7 +873,6 @@
             document.getElementById('modalFullDesc').innerText = app.fullDesc;
             document.getElementById('modalWhatsNew').innerText = app.whatsNew;
 
-            // Set dynamic download link for the modal install button
             document.getElementById('modalInstallBtn').onclick = function() {
                 window.open(app.downloadLink, '_blank');
             };
@@ -810,10 +886,10 @@
                 featuresList.appendChild(li);
             });
 
-            // Load Screenshots with Click to Preview Function
+            // Load Screenshots 
             const screensContainer = document.getElementById('modalScreenshots');
             screensContainer.innerHTML = '';
-            currentScreenshots = app.screenshots; // Store globally for slider
+            currentScreenshots = app.screenshots; 
             
             app.screenshots.forEach((src, index) => {
                 let img = document.createElement('img');
@@ -824,19 +900,16 @@
 
             loadReviews(appId);
             
-            // Show modal
             document.getElementById('appModal').classList.add('active');
-            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            document.body.style.overflow = 'hidden'; 
         }
 
-        // Close App Modal
         function closeModal() {
             document.getElementById('appModal').classList.remove('active');
             document.body.style.overflow = 'auto';
             currentAppId = null;
         }
 
-        // Fullscreen Screenshot Functions with Sliding Animation
         let isAnimating = false;
 
         function updateNavButtons() {
@@ -861,12 +934,12 @@
             currentScreenshotIndex = index;
             const imgElement = document.getElementById('fullScreenshot');
             
-            imgElement.style.transition = 'none'; // reset transition state
+            imgElement.style.transition = 'none'; 
             imgElement.classList.remove('swipe-left', 'swipe-right');
             imgElement.src = currentScreenshots[currentScreenshotIndex];
             
-            void imgElement.offsetWidth; // Force reflow
-            imgElement.style.transition = ''; // restore css transitions
+            void imgElement.offsetWidth; 
+            imgElement.style.transition = ''; 
             
             updateNavButtons();
             document.getElementById('screenshotModal').classList.add('active');
@@ -874,7 +947,6 @@
 
         function closeScreenshotModal() {
             document.getElementById('screenshotModal').classList.remove('active');
-            // Keep body overflow hidden if app modal is still active underneath
             if (!document.getElementById('appModal').classList.contains('active') && 
                 !document.getElementById('teamModal').classList.contains('active') && 
                 !document.getElementById('contactModal').classList.contains('active')) {
@@ -885,7 +957,6 @@
         function changeScreenshot(direction) {
             if (isAnimating || currentScreenshots.length <= 1) return;
 
-            // Prevent blank sliding past first or last images
             if (direction === 'next' && currentScreenshotIndex >= currentScreenshots.length - 1) return;
             if (direction === 'prev' && currentScreenshotIndex <= 0) return;
 
@@ -893,14 +964,12 @@
 
             const imgElement = document.getElementById('fullScreenshot');
             
-            // Add slide out animation class based on direction
             if (direction === 'next') {
                 imgElement.classList.add('swipe-left');
             } else {
                 imgElement.classList.add('swipe-right');
             }
 
-            // Wait for slide out animation, then swap and slide in
             setTimeout(() => {
                 if (direction === 'next') {
                     currentScreenshotIndex++;
@@ -910,7 +979,6 @@
                 
                 imgElement.src = currentScreenshots[currentScreenshotIndex];
                 
-                // Teleport to the opposite side instantly
                 imgElement.style.transition = 'none';
                 imgElement.classList.remove('swipe-left', 'swipe-right');
                 
@@ -920,9 +988,8 @@
                     imgElement.classList.add('swipe-left');
                 }
                 
-                void imgElement.offsetWidth; // Force reflow
+                void imgElement.offsetWidth; 
                 
-                // Animate sliding back into the center
                 imgElement.style.transition = '';
                 imgElement.classList.remove('swipe-left', 'swipe-right');
                 
@@ -930,9 +997,9 @@
 
                 setTimeout(() => {
                     isAnimating = false;
-                }, 300); // Time to finish slide in
+                }, 300); 
 
-            }, 300); // Time to finish slide out (Matches CSS transition)
+            }, 300); 
         }
 
         function nextScreenshot(e) {
@@ -945,7 +1012,6 @@
             changeScreenshot('prev');
         }
 
-        // Touch Swipe Event Listeners
         let touchStartX = 0;
         let touchEndX = 0;
         const screenshotModalElement = document.getElementById('screenshotModal');
@@ -964,13 +1030,12 @@
             if (!screenshotModalElement.classList.contains('active')) return;
 
             if (touchStartX - touchEndX > threshold) {
-                nextScreenshot(); // Swiped left
+                nextScreenshot(); 
             } else if (touchEndX - touchStartX > threshold) {
-                prevScreenshot(); // Swiped right
+                prevScreenshot(); 
             }
         }
 
-        // Team/Contact Modal Functions
         function openTeamModal() {
             document.getElementById('teamModal').classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -994,12 +1059,10 @@
             document.body.style.overflow = 'auto';
         }
 
-        // Review System (LocalStorage)
         function submitReview() {
             const name = document.getElementById('reviewerName').value.trim() || 'Anonymous User';
             const text = document.getElementById('reviewText').value.trim();
             
-            // Get selected stars
             let rating = 0;
             const radios = document.getElementsByName('rating');
             for (let r of radios) {
@@ -1025,17 +1088,14 @@
                 time: new Date().toLocaleDateString()
             };
 
-            // Fetch existing reviews from local storage
             let allReviews = JSON.parse(localStorage.getItem('shubham_reviews')) || {};
             if (!allReviews[currentAppId]) {
                 allReviews[currentAppId] = [];
             }
             
-            // Prepend so newest is on top
             allReviews[currentAppId].unshift(newReview);
             localStorage.setItem('shubham_reviews', JSON.stringify(allReviews));
 
-            // Reset form
             document.getElementById('reviewerName').value = '';
             document.getElementById('reviewText').value = '';
             for (let r of radios) r.checked = false;
@@ -1050,7 +1110,6 @@
             let allReviews = JSON.parse(localStorage.getItem('shubham_reviews')) || {};
             let appReviews = allReviews[appId] || [];
 
-            // Add some mock reviews if empty to demonstrate functionality
             if (appReviews.length === 0) {
                 appReviews = [
                     { name: 'John Doe', rating: 5, text: 'Amazing app! The UI is flawless and no bugs so far.', time: 'Just now' },
@@ -1079,12 +1138,10 @@
             });
         }
 
-        // Initialize App
         window.onload = () => {
             renderApps(appsData);
         };
 
-        // Close modal when clicking outside of it
         window.onclick = function(event) {
             const appModalOverlay = document.getElementById('appModal');
             const teamModalOverlay = document.getElementById('teamModal');
@@ -1104,11 +1161,9 @@
     </script>
 
     <script type="module">
-        // Import Firebase CDN Modules (signInWithRedirect added)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithRedirect, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
-        // Your Firebase config
         const firebaseConfig = {
             apiKey: "AIzaSyAbOtjHeldbPRC29tX-i5tbUeySQlTzWUU",
             authDomain: "saak-app-hub-2ee63.firebaseapp.com",
@@ -1118,46 +1173,47 @@
             appId: "1:233444896443:web:1fec78599d657162e1039e"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
-        // UI Elements
+        // UI Elements for Auth Display Logic
+        const loginScreen = document.getElementById('loginScreen');
+        const mainAppContent = document.getElementById('mainAppContent');
         const loginBtn = document.getElementById('googleLoginBtn');
-        const userInfo = document.getElementById('userInfo');
         const userName = document.getElementById('userName');
         const logoutBtn = document.getElementById('logoutBtn');
 
-        // Login Function (Changed to Redirect)
+        // Login Function 
         loginBtn.addEventListener('click', () => {
             signInWithRedirect(auth, provider);
         });
 
-        // Logout Function
+        // Logout Function with Confirmation
         logoutBtn.addEventListener('click', () => {
-            signOut(auth).then(() => {
-                console.log("Logged out successfully!");
-            });
+            const isConfirmed = confirm("Are you sure you want to logout?");
+            if (isConfirmed) {
+                signOut(auth).then(() => {
+                    console.log("Logged out successfully!");
+                });
+            }
         });
 
-        // Auth State Listener (Checks if user is logged in or not)
+        // Auth State Listener (Hides/Shows Content based on Login)
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // User is logged in
-                loginBtn.style.display = 'none';
-                userInfo.style.display = 'flex';
-                userName.innerText = "Hi, " + user.displayName.split(" ")[0]; // Sirf First Name dikhayega
+                // User is LOGGED IN -> Hide Full Screen Login, Show Main Content
+                loginScreen.style.display = 'none';
+                mainAppContent.style.display = 'block';
+                userName.innerText = "Hi, " + user.displayName.split(" ")[0]; 
 
-                // Optional: Auto-fill reviewer name in review form
                 const reviewerInput = document.getElementById('reviewerName');
                 if(reviewerInput) reviewerInput.value = user.displayName;
             } else {
-                // User is logged out
-                loginBtn.style.display = 'flex';
-                userInfo.style.display = 'none';
+                // User is LOGGED OUT -> Show Full Screen Login, Hide Main Content
+                loginScreen.style.display = 'flex';
+                mainAppContent.style.display = 'none';
                 
-                // Reset reviewer name
                 const reviewerInput = document.getElementById('reviewerName');
                 if(reviewerInput) reviewerInput.value = '';
             }
