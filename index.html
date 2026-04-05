@@ -405,7 +405,6 @@
             outline: none;
         }
 
-        /* Make reviewer name uneditable since it's from Google */
         .review-form input[type="text"]:read-only {
             background: rgba(255,255,255,0.01);
             color: var(--text-muted);
@@ -429,6 +428,20 @@
         .review-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
         .review-user { font-weight: 600; }
         .review-time { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* Action Buttons for User's own review */
+        .review-actions { margin-top: 10px; display: flex; gap: 15px; }
+        .review-actions button {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: opacity 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+        .review-actions button:hover { opacity: 0.7; }
+        .btn-edit { color: var(--primary-color); }
+        .btn-delete { color: #E1306C; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -460,104 +473,44 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
         }
 
-        .contact-card i {
-            font-size: 2.2rem;
-            color: #E1306C; /* Instagram Brand Color */
-        }
-
-        .contact-card .contact-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .contact-info h4 {
-            margin: 0;
-            font-size: 1.1rem;
-            color: white;
-        }
-
-        .contact-info p {
-            margin: 0;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
+        .contact-card i { font-size: 2.2rem; color: #E1306C; }
+        .contact-card .contact-info { display: flex; flex-direction: column; }
+        .contact-info h4 { margin: 0; font-size: 1.1rem; color: white; }
+        .contact-info p { margin: 0; font-size: 0.9rem; color: var(--text-muted); }
 
         /* Screenshot Full Preview Modal */
-        #screenshotModal {
-            z-index: 2000;
-        }
-        
+        #screenshotModal { z-index: 2000; }
         #screenshotModal img {
-            max-width: 95vw;
-            max-height: 90vh;
-            border-radius: 10px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-            object-fit: contain;
-            transform: scale(0.9);
-            opacity: 0;
-            transition: transform 0.3s ease, opacity 0.3s ease;
+            max-width: 95vw; max-height: 90vh; border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6); object-fit: contain;
+            transform: scale(0.9); opacity: 0; transition: transform 0.3s ease, opacity 0.3s ease;
         }
-
-        #screenshotModal.active img {
-            transform: scale(1);
-            opacity: 1;
-        }
-
-        #screenshotModal img.swipe-left {
-            transform: translateX(-100px) scale(0.9) !important;
-            opacity: 0 !important;
-        }
-
-        #screenshotModal img.swipe-right {
-            transform: translateX(100px) scale(0.9) !important;
-            opacity: 0 !important;
-        }
+        #screenshotModal.active img { transform: scale(1); opacity: 1; }
+        #screenshotModal img.swipe-left { transform: translateX(-100px) scale(0.9) !important; opacity: 0 !important; }
+        #screenshotModal img.swipe-right { transform: translateX(100px) scale(0.9) !important; opacity: 0 !important; }
 
         .nav-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(5px);
-            border: none;
-            color: white;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 2010;
-            transition: background 0.3s, transform 0.2s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2rem;
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(5px);
+            border: none; color: white; width: 45px; height: 45px; border-radius: 50%;
+            cursor: pointer; z-index: 2010; transition: background 0.3s, transform 0.2s;
+            display: flex; justify-content: center; align-items: center; font-size: 1.2rem;
         }
-
-        .nav-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        .prev-btn { left: 20px; }
-        .next-btn { right: 20px; }
+        .nav-btn:hover { background: rgba(255, 255, 255, 0.3); transform: translateY(-50%) scale(1.1); }
+        .prev-btn { left: 20px; } .next-btn { right: 20px; }
 
         .btn {
-            padding: 10px 25px;
-            background: var(--primary-color);
-            color: #000;
-            border: none;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
+            padding: 10px 25px; background: var(--primary-color); color: #000;
+            border: none; border-radius: 25px; font-weight: 600; cursor: pointer;
+            transition: all 0.3s ease; text-decoration: none; display: inline-block;
         }
+        .btn:hover { background: var(--primary-hover); transform: scale(1.05); }
 
-        .btn:hover {
-            background: var(--primary-hover);
-            transform: scale(1.05);
+        /* Cancel Edit Button */
+        #cancelEditBtn {
+            background: rgba(255, 255, 255, 0.1); color: white; margin-left: 10px;
         }
+        #cancelEditBtn:hover { background: rgba(255, 255, 255, 0.2); }
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -568,8 +521,7 @@
             .modal-meta { justify-content: center; flex-wrap: wrap; gap: 10px; }
             .modal-meta div { border: none; padding: 0; width: 45%; }
             .nav-btn { width: 40px; height: 40px; font-size: 1.1rem; }
-            .prev-btn { left: 10px; }
-            .next-btn { right: 10px; }
+            .prev-btn { left: 10px; } .next-btn { right: 10px; }
         }
     </style>
 </head>
@@ -660,8 +612,8 @@
             <div class="modal-section">
                 <h4>Ratings and Reviews</h4>
                 
-                <div class="review-form">
-                    <p style="margin-bottom: 10px;">Rate this app:</p>
+                <div class="review-form" id="reviewFormSection">
+                    <p style="margin-bottom: 10px;" id="reviewFormTitle">Rate this app:</p>
                     <div class="star-rating-input">
                         <input type="radio" id="star5" name="rating" value="5"><label for="star5" class="fas fa-star"></label>
                         <input type="radio" id="star4" name="rating" value="4"><label for="star4" class="fas fa-star"></label>
@@ -671,7 +623,9 @@
                     </div>
                     <input type="text" id="reviewerName" placeholder="Posting as..." readonly>
                     <textarea id="reviewText" rows="3" placeholder="Describe your experience (what's good, bad, bugs, suggestions...)"></textarea>
-                    <button class="btn" onclick="window.submitReview()">Submit Review</button>
+                    
+                    <button id="submitReviewBtn" class="btn" onclick="window.submitReview()">Submit Review</button>
+                    <button id="cancelEditBtn" class="btn" style="display: none;" onclick="window.cancelEdit()">Cancel Edit</button>
                 </div>
 
                 <div class="review-list" id="reviewList">
@@ -747,13 +701,33 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="deleteConfirmModal">
+        <div class="login-box" style="padding: 30px;">
+            <i class="fas fa-trash logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #E1306C;"></i>
+            <h2 style="font-size: 1.3rem;">Delete Review</h2>
+            <p style="margin-bottom: 25px;">Are you sure you want to delete your review permanently?</p>
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button onclick="document.getElementById('deleteConfirmModal').classList.remove('active')" class="btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">Cancel</button>
+                <button id="confirmDeleteBtn" class="logout-btn" style="margin: 0;">Yes, Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="customAlertModal">
+        <div class="login-box" style="padding: 30px;">
+            <i class="fas fa-exclamation-circle logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #f39c12;"></i>
+            <h2 style="font-size: 1.3rem;" id="customAlertTitle">Alert</h2>
+            <p style="margin-bottom: 25px;" id="customAlertText">Message goes here.</p>
+            <button class="btn" onclick="document.getElementById('customAlertModal').classList.remove('active')" style="width: 100%;">OK</button>
+        </div>
+    </div>
+
     <script type="module">
-        // Import Firebase Modules (Auth + Firestore)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        // Added deleteDoc, doc, updateDoc for editing and deleting reviews
+        import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAbOtjHeldbPRC29tX-i5tbUeySQlTzWUU",
             authDomain: "saak-app-hub-2ee63.firebaseapp.com",
@@ -763,46 +737,45 @@
             appId: "1:233444896443:web:1fec78599d657162e1039e"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
         const db = getFirestore(app);
 
-        // App Database (Initial static rating is set to 0.0, it will update dynamically)
+        // Custom Alert Function (Replaces browser default alerts)
+        window.showCustomAlert = function(msg, title="Notice") {
+            document.getElementById('customAlertTitle').innerText = title;
+            document.getElementById('customAlertText').innerText = msg;
+            document.getElementById('customAlertModal').classList.add('active');
+        }
+
         const appsData = [
             {
-                id: 'tiktoktue',
-                name: 'Tik Tok Tue',
+                id: 'tiktoktue', name: 'Tik Tok Tue',
                 shortDesc: 'A fun and smooth Tic Tac Toe game app with simple gameplay, two-player mode, clean interface, and fast result popup.',
                 fullDesc: 'A fun and smooth Tic Tac Toe game app with simple gameplay, two-player mode, clean interface, and fast result popup. Perfect for quick entertainment and brain challenge.',
                 rating: "0.0", dev: 'OX Game', version: '15.4.2', size: '33.48 MB', date: 'Dec 06, 2025',
-                icon: 'oxicon.png',
-                screenshots: ['oxs1.png', 'oxs2.png', 'oxs3.png', 'oxs4.png', 'oxs5.png', 'oxs6.png', 'oxs7.png'],
+                icon: 'oxicon.png', screenshots: ['oxs1.png', 'oxs2.png', 'oxs3.png', 'oxs4.png', 'oxs5.png', 'oxs6.png', 'oxs7.png', 'oxs8.png'],
                 features: ['Smooth Tic Tac Toe gameplay', '2 player mode', 'AI vs player mode', 'level up mode', 'high level themes', 'clean game board', 'easy and fast controls'],
                 whatsNew: '- improved game speed\n- smoother touch response\n- bug fixes\n- better board design',
                 downloadLink: 'https://drive.google.com/file/d/1U3IMz-bF6fCqOZ7QcoV09qmMjskQHHIK/view?usp=drivesdk'
             },
             {
-                id: 'ultimatedrawpro',
-                name: 'Ultimate Draw Pro',
+                id: 'ultimatedrawpro', name: 'Ultimate Draw Pro',
                 shortDesc: 'A creative and easy-to-use drawing app for sketching, painting, coloring, and making beautiful artwork.',
                 fullDesc: 'A creative and easy-to-use drawing app for sketching, painting, coloring, and making beautiful artwork with multiple tools and smooth canvas controls.',
                 rating: "0.0", dev: 'Creative App', version: '5.2.0', size: '33.92 MB', date: 'Dec 24, 2025',
-                icon: 'udicon.png',
-                screenshots: ['uds1.png', 'uds2.png', 'uds3.png', 'uds4.png'],
+                icon: 'udicon.png', screenshots: ['uds1.png', 'uds2.png', 'uds3.png', 'uds4.png'],
                 features: ['drawing canvas', 'multiple brush tools', 'color palette', 'erase tool', 'save drawing option', 'smooth touch drawing', 'save & edit drawing'],
                 whatsNew: '- improved brush smoothness\n- new color options\n- better canvas controls\n- minor bug fixes',
                 downloadLink: 'https://drive.google.com/file/d/1MnPoXv0wfM9-IVXzKzrreT9MQA9ca6-6/view?usp=drivesdk'
             },
             {
-                id: 'learningsmart',
-                name: 'Learning Smart',
+                id: 'learningsmart', name: 'Learning Smart',
                 shortDesc: 'A smart educational learning app designed for kids and students with English learning, alphabet practice, math activities.',
                 fullDesc: 'A smart educational learning app designed for kids and students with English learning, alphabet practice, math activities, and fun study features.',
                 rating: "0.0", dev: 'Educational app', version: '3.1.1', size: '33.26 MB', date: 'Mar 28, 2026',
-                icon: 'lsicon.png',
-                screenshots: ['lss1.png', 'lss2.png', 'lss3.png', 'lss4.png', 'lss5.png', 'lss6.png', 'lss7.png'],
+                icon: 'lsicon.png', screenshots: ['lss1.png', 'lss2.png', 'lss3.png', 'lss4.png', 'lss5.png', 'lss6.png', 'lss7.png'],
                 features: ['alphabet learning', 'English word practice', 'math activities', 'easy student interface', 'fun educational sections', 'learning dashboard', 'game mode questions'],
                 whatsNew: '- added new study content\n- improved learning sections\n- smoother navigation\n- performance improvements',
                 downloadLink: 'https://drive.google.com/file/d/1PxpIGRy9oenpQs_0rUyDWKej155jAYmd/view?usp=drivesdk'
@@ -812,9 +785,13 @@
         let currentAppId = null;
         let currentScreenshots = [];
         let currentScreenshotIndex = 0;
-        let unsubscribeReviews = null; // To manage active Firebase listener for the modal
+        let unsubscribeReviews = null; 
+        
+        // Edit/Delete Logic Variables
+        window.currentReviewsMap = {}; 
+        let editingReviewId = null;
+        let reviewToDeleteId = null;
 
-        // Render Grid
         function renderApps(apps) {
             const grid = document.getElementById('appGrid');
             grid.innerHTML = '';
@@ -840,20 +817,17 @@
             renderApps(appsData.filter(app => app.name.toLowerCase().includes(term)));
         });
 
-        // App Details Modal
         window.openModal = function(appId) {
             const app = appsData.find(a => a.id === appId);
             if (!app) return;
             currentAppId = appId;
+            window.cancelEdit(); // Reset form just in case
             
             document.getElementById('modalIcon').src = app.icon;
             document.getElementById('modalName').innerText = app.name;
             document.getElementById('modalDev').innerText = app.dev;
-            
-            // Initial load state for modal
             document.getElementById('modalRating').innerHTML = `... <i class="fas fa-star" style="color:#ffd700"></i>`;
             document.getElementById('modalReviewCount').innerText = `Loading`;
-
             document.getElementById('modalSize').innerText = app.size;
             document.getElementById('modalVersion').innerText = app.version;
             document.getElementById('modalDate').innerText = app.date;
@@ -879,9 +853,7 @@
                 screensContainer.appendChild(img);
             });
 
-            // FETCH REAL-TIME REVIEWS TEXT FOR MODAL
             window.loadLiveReviews(appId);
-            
             document.getElementById('appModal').classList.add('active');
             document.body.style.overflow = 'hidden'; 
         }
@@ -890,13 +862,11 @@
             document.getElementById('appModal').classList.remove('active');
             document.body.style.overflow = 'auto';
             currentAppId = null;
-            if(unsubscribeReviews) {
-                unsubscribeReviews();
-                unsubscribeReviews = null;
-            }
+            window.cancelEdit();
+            if(unsubscribeReviews) { unsubscribeReviews(); unsubscribeReviews = null; }
         }
 
-        // --- FIREBASE FIRESTORE REAL-TIME RATING & REVIEW SYSTEM ---
+        // --- FETCH & DISPLAY REVIEWS (WITH EDIT/DELETE) ---
         window.loadLiveReviews = function(appId) {
             const reviewList = document.getElementById('reviewList');
             reviewList.innerHTML = '<p style="text-align:center; color:var(--text-muted); margin-top:20px;">Loading reviews...</p>';
@@ -908,10 +878,13 @@
             unsubscribeReviews = onSnapshot(q, (querySnapshot) => {
                 const appReviews = [];
                 let totalStars = 0;
+                window.currentReviewsMap = {}; 
 
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
+                    data.id = doc.id; // Save doc ID for editing/deleting
                     appReviews.push(data);
+                    window.currentReviewsMap[doc.id] = data; 
                     totalStars += data.rating;
                 });
 
@@ -923,11 +896,17 @@
                     reviewCount = appReviews.length;
                 }
 
-                // Update Modal UI
                 document.getElementById('modalRating').innerHTML = `${avg} <i class="fas fa-star" style="color:#ffd700"></i>`;
                 document.getElementById('modalReviewCount').innerText = `${reviewCount} ${reviewCount === 1 ? 'Review' : 'Reviews'}`;
 
-                // Sort Reviews: Newest first
+                const appIndex = appsData.findIndex(a => a.id === appId);
+                if(appIndex !== -1) {
+                    appsData[appIndex].rating = avg;
+                    const term = document.getElementById('searchInput').value.toLowerCase();
+                    if (term) renderApps(appsData.filter(app => app.name.toLowerCase().includes(term)));
+                    else renderApps(appsData);
+                }
+
                 appReviews.sort((a, b) => b.timestamp - a.timestamp);
                 reviewList.innerHTML = '';
 
@@ -949,6 +928,17 @@
                         dateStr = d.toLocaleDateString();
                     }
 
+                    // Check if this review belongs to the logged-in user
+                    let actionBtns = '';
+                    if (auth.currentUser && rev.userId === auth.currentUser.uid) {
+                        actionBtns = `
+                            <div class="review-actions">
+                                <button class="btn-edit" onclick="window.editReview('${rev.id}')"><i class="fas fa-edit"></i> Edit</button>
+                                <button class="btn-delete" onclick="window.confirmDeleteReview('${rev.id}')"><i class="fas fa-trash"></i> Delete</button>
+                            </div>
+                        `;
+                    }
+
                     const card = document.createElement('div');
                     card.className = 'review-card';
                     card.innerHTML = `
@@ -957,7 +947,8 @@
                             <span class="review-time">${dateStr}</span>
                         </div>
                         <div style="margin-bottom: 5px;">${starsHTML}</div>
-                        <p style="font-size: 0.9rem; color: var(--text-muted);">${rev.text}</p>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); white-space: pre-wrap;">${rev.text}</p>
+                        ${actionBtns}
                     `;
                     reviewList.appendChild(card);
                 });
@@ -967,9 +958,66 @@
             });
         }
 
+        // --- EDIT & DELETE REVIEW FUNCTIONS ---
+
+        window.editReview = function(id) {
+            const rev = window.currentReviewsMap[id];
+            if (!rev) return;
+
+            editingReviewId = id;
+            document.getElementById('reviewText').value = rev.text;
+            
+            const radios = document.getElementsByName('rating');
+            for (let r of radios) {
+                if (parseInt(r.value) === rev.rating) r.checked = true;
+                else r.checked = false;
+            }
+
+            document.getElementById('reviewFormTitle').innerText = "Edit your review:";
+            document.getElementById('submitReviewBtn').innerText = "Update Review";
+            document.getElementById('cancelEditBtn').style.display = "inline-block";
+
+            // Scroll to form smoothly
+            document.getElementById('reviewFormSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        window.cancelEdit = function() {
+            editingReviewId = null;
+            document.getElementById('reviewText').value = '';
+            const radios = document.getElementsByName('rating');
+            for (let r of radios) r.checked = false;
+            
+            document.getElementById('reviewFormTitle').innerText = "Rate this app:";
+            document.getElementById('submitReviewBtn').innerText = "Submit Review";
+            document.getElementById('cancelEditBtn').style.display = "none";
+        }
+
+        window.confirmDeleteReview = function(id) {
+            reviewToDeleteId = id;
+            document.getElementById('deleteConfirmModal').classList.add('active');
+        }
+
+        document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+            if (reviewToDeleteId) {
+                const btn = document.getElementById('confirmDeleteBtn');
+                btn.innerText = "Deleting...";
+                try {
+                    await deleteDoc(doc(db, "reviews", reviewToDeleteId));
+                    if (editingReviewId === reviewToDeleteId) window.cancelEdit();
+                } catch(e) {
+                    console.error(e);
+                    window.showCustomAlert("Error deleting review. Please try again.", "Error");
+                }
+                btn.innerText = "Yes, Delete";
+                document.getElementById('deleteConfirmModal').classList.remove('active');
+                reviewToDeleteId = null;
+            }
+        });
+
+        // --- SUBMIT / UPDATE REVIEW ---
         window.submitReview = async function() {
             if (!auth.currentUser) {
-                alert("Please login first to submit a review!");
+                window.showCustomAlert("Please login first to submit a review!", "Login Required");
                 return;
             }
 
@@ -979,36 +1027,43 @@
             
             const radios = document.getElementsByName('rating');
             for (let r of radios) {
-                if (r.checked) {
-                    rating = r.value;
-                    break;
-                }
+                if (r.checked) { rating = r.value; break; }
             }
 
-            if (rating === 0) { alert('Please select a star rating.'); return; }
-            if (text === '') { alert('Please write a review comment.'); return; }
+            if (rating === 0) { window.showCustomAlert("Please select a star rating.", "Missing Rating"); return; }
+            if (text === '') { window.showCustomAlert("Please write a review comment.", "Missing Comment"); return; }
 
-            const submitBtn = document.querySelector('.review-form .btn');
-            submitBtn.innerText = "Submitting...";
+            const submitBtn = document.getElementById('submitReviewBtn');
+            submitBtn.innerText = editingReviewId ? "Updating..." : "Submitting...";
             submitBtn.disabled = true;
 
             try {
-                await addDoc(collection(db, "reviews"), {
-                    appId: currentAppId,
-                    name: name,
-                    rating: Number(rating),
-                    text: text,
-                    timestamp: Date.now(),
-                    userId: auth.currentUser.uid
-                });
-                
-                document.getElementById('reviewText').value = '';
-                for (let r of radios) r.checked = false;
+                if (editingReviewId) {
+                    // Update existing review
+                    await updateDoc(doc(db, "reviews", editingReviewId), {
+                        rating: Number(rating),
+                        text: text,
+                        timestamp: Date.now() // Optional: Update timestamp so it shows at top
+                    });
+                    window.showCustomAlert("Your review has been successfully updated!", "Success");
+                } else {
+                    // Create new review
+                    await addDoc(collection(db, "reviews"), {
+                        appId: currentAppId,
+                        name: name,
+                        rating: Number(rating),
+                        text: text,
+                        timestamp: Date.now(),
+                        userId: auth.currentUser.uid
+                    });
+                    window.showCustomAlert("Thank you! Your review has been posted.", "Success");
+                }
+                window.cancelEdit(); // Reset form
             } catch (error) {
-                console.error("Error adding review: ", error);
-                alert("Error submitting review. Please check your connection.");
+                console.error("Error saving review: ", error);
+                window.showCustomAlert("Error saving review. Please check your connection.", "Error");
             } finally {
-                submitBtn.innerText = "Submit Review";
+                submitBtn.innerText = editingReviewId ? "Update Review" : "Submit Review";
                 submitBtn.disabled = false;
             }
         }
@@ -1084,52 +1139,34 @@
         window.openContactModal = () => { window.closeTeamModal(); document.getElementById('contactModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
         window.closeContactModal = () => { document.getElementById('contactModal').classList.remove('active'); document.body.style.overflow = 'auto'; }
 
-        // --- FETCH REAL RATINGS FOR ALL APPS ON PAGE LOAD ---
         async function fetchInitialRatings() {
             try {
-                // Pehle grid load kardo default (0.0) ke sath taaki wait na karna pade
                 renderApps(appsData); 
-                
-                // Fir background mein saare apps ki real rating fetch karo
                 appsData.forEach((app, index) => {
                     const q = query(collection(db, "reviews"), where("appId", "==", app.id));
                     onSnapshot(q, (querySnapshot) => {
                         let totalStars = 0;
                         let reviewCount = 0;
-                        
                         querySnapshot.forEach((doc) => {
                             totalStars += doc.data().rating;
                             reviewCount++;
                         });
-
                         let avg = "0.0";
-                        if (reviewCount > 0) {
-                            avg = (totalStars / reviewCount).toFixed(1);
-                        }
-
-                        // Array mein real rating update karo
+                        if (reviewCount > 0) avg = (totalStars / reviewCount).toFixed(1);
                         appsData[index].rating = avg;
 
-                        // Agar user search nahi kar raha, toh grid ko update kardo taaki real rating 1 baar me hi dikh jaye
                         const term = document.getElementById('searchInput').value.toLowerCase();
-                        if (term) {
-                            renderApps(appsData.filter(a => a.name.toLowerCase().includes(term)));
-                        } else {
-                            renderApps(appsData);
-                        }
+                        if (term) renderApps(appsData.filter(a => a.name.toLowerCase().includes(term)));
+                        else renderApps(appsData);
                     });
                 });
-            } catch(e) {
-                console.error(e);
-            }
+            } catch(e) { console.error(e); }
         }
 
-        // Init
         window.onload = () => fetchInitialRatings();
 
-        // Outside Click Close
         window.onclick = function(event) {
-            const modals = ['appModal', 'teamModal', 'contactModal', 'screenshotModal', 'logoutConfirmModal'];
+            const modals = ['appModal', 'teamModal', 'contactModal', 'screenshotModal', 'logoutConfirmModal', 'customAlertModal', 'deleteConfirmModal'];
             modals.forEach(id => {
                 const m = document.getElementById(id);
                 if (event.target == m) {
@@ -1137,7 +1174,7 @@
                     else if (id === 'teamModal') window.closeTeamModal();
                     else if (id === 'contactModal') window.closeContactModal();
                     else if (id === 'screenshotModal') window.closeScreenshotModal();
-                    else if (id === 'logoutConfirmModal') m.classList.remove('active');
+                    else m.classList.remove('active'); // Close alerts/confirms on outside click
                 }
             });
         }
@@ -1152,7 +1189,6 @@
         const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
         const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
 
-        // Login Action
         loginBtn.addEventListener('click', () => {
             loginBtn.innerHTML = '<span>Please wait...</span>';
             signInWithPopup(auth, provider).then(() => {
@@ -1160,11 +1196,10 @@
             }).catch((error) => {
                 console.error("Login Error:", error);
                 loginBtn.innerHTML = '<img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" style="width: 20px; height: 20px;"> <span>Continue with Google</span>';
-                if (error.code !== 'auth/popup-closed-by-user') alert("Login failed! Please try again.");
+                if (error.code !== 'auth/popup-closed-by-user') window.showCustomAlert("Login failed! Please try again.", "Error");
             });
         });
 
-        // Logout Actions
         logoutBtn.addEventListener('click', () => logoutConfirmModal.classList.add('active'));
         cancelLogoutBtn.addEventListener('click', () => logoutConfirmModal.classList.remove('active'));
         confirmLogoutBtn.addEventListener('click', () => {
@@ -1175,23 +1210,24 @@
             });
         });
 
-        // Auth State Tracker
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // Logged In
                 loginScreen.style.display = 'none';
                 mainAppContent.style.display = 'block';
                 userName.innerText = "Hi, " + user.displayName.split(" ")[0]; 
                 
                 const reviewerInput = document.getElementById('reviewerName');
                 if(reviewerInput) reviewerInput.value = "Posting as: " + user.displayName;
+                
+                // If a modal is already open, reload reviews to show Edit/Delete buttons for this user
+                if (currentAppId) window.loadLiveReviews(currentAppId);
             } else {
-                // Logged Out
                 loginScreen.style.display = 'flex';
                 mainAppContent.style.display = 'none';
                 
                 const reviewerInput = document.getElementById('reviewerName');
                 if(reviewerInput) reviewerInput.value = '';
+                window.cancelEdit();
             }
         });
     </script>
