@@ -185,7 +185,7 @@
             font-size: 0.95rem;
         }
 
-        /* Logout Button - Specifically designed for bottom placement */
+        /* Logout Button */
         .logout-btn {
             padding: 10px 30px;
             background: rgba(225, 48, 108, 0.8); 
@@ -203,40 +203,6 @@
 
         .logout-btn:hover {
             background: rgba(225, 48, 108, 1);
-            transform: scale(1.05);
-        }
-
-        /* Featured Banner */
-        .featured-banner {
-            margin: 30px 5%;
-            padding: 40px;
-            border-radius: 20px;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80') center/cover;
-            display: flex;
-            flex-direction: column;
-            align-items: center; 
-            justify-content: center;
-            box-shadow: var(--card-shadow);
-            border: 1px solid var(--glass-border);
-            animation: fadeIn 1s ease-in;
-            text-align: center;
-        }
-        
-        .btn {
-            padding: 10px 25px;
-            background: var(--primary-color);
-            color: #000;
-            border: none;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn:hover {
-            background: var(--primary-hover);
             transform: scale(1.05);
         }
 
@@ -439,6 +405,16 @@
             outline: none;
         }
 
+        /* Make reviewer name uneditable since it's from Google */
+        .review-form input[type="text"]:read-only {
+            background: rgba(255,255,255,0.01);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            border-color: transparent;
+            padding-left: 0;
+            font-weight: 500;
+        }
+
         .review-form input:focus, .review-form textarea:focus { border-color: var(--primary-color); }
 
         .review-list { display: flex; flex-direction: column; gap: 15px; }
@@ -447,6 +423,7 @@
             padding: 15px;
             border-radius: 8px;
             border-left: 3px solid var(--primary-color);
+            animation: fadeIn 0.5s ease;
         }
 
         .review-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
@@ -505,7 +482,7 @@
             color: var(--text-muted);
         }
 
-        /* Screenshot Full Preview Modal & Swipe Transitions */
+        /* Screenshot Full Preview Modal */
         #screenshotModal {
             z-index: 2000;
         }
@@ -564,21 +541,33 @@
         .prev-btn { left: 20px; }
         .next-btn { right: 20px; }
 
+        .btn {
+            padding: 10px 25px;
+            background: var(--primary-color);
+            color: #000;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: var(--primary-hover);
+            transform: scale(1.05);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 15px; }
             .search-bar { width: 100%; }
             .auth-section { margin-top: 5px; width: 100%; justify-content: center; }
-            .featured-banner { margin: 15px 5%; padding: 20px; }
             .modal-header-info { flex-direction: column; text-align: center; }
             .modal-meta { justify-content: center; flex-wrap: wrap; gap: 10px; }
             .modal-meta div { border: none; padding: 0; width: 45%; }
-            
-            .nav-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 1.1rem;
-            }
+            .nav-btn { width: 40px; height: 40px; font-size: 1.1rem; }
             .prev-btn { left: 10px; }
             .next-btn { right: 10px; }
         }
@@ -620,11 +609,11 @@
         <main class="container">
             <h2 class="section-title">Recommended for You</h2>
             <div class="app-grid" id="appGrid">
-                </div>
+            </div>
         </main>
 
         <div style="text-align: center; margin: 40px auto; padding-bottom: 40px;">
-            <button class="btn" onclick="openTeamModal()" style="font-size: 1.1rem; padding: 12px 30px; margin-bottom: 20px;">Team Information</button>
+            <button class="btn" onclick="window.openTeamModal()" style="font-size: 1.1rem; padding: 12px 30px; margin-bottom: 20px;">Team Information</button>
             <br>
             <button id="logoutBtn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
         </div>
@@ -632,7 +621,7 @@
 
     <div class="modal-overlay" id="appModal">
         <div class="modal-content">
-            <button class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            <button class="close-btn" onclick="window.closeModal()"><i class="fas fa-times"></i></button>
             
             <div class="modal-header-info">
                 <img id="modalIcon" src="" alt="App Icon">
@@ -649,7 +638,7 @@
             </div>
 
             <div class="screenshots" id="modalScreenshots">
-                </div>
+            </div>
 
             <div class="modal-section">
                 <h4>About this app</h4>
@@ -680,24 +669,22 @@
                         <input type="radio" id="star2" name="rating" value="2"><label for="star2" class="fas fa-star"></label>
                         <input type="radio" id="star1" name="rating" value="1"><label for="star1" class="fas fa-star"></label>
                     </div>
-                    <input type="text" id="reviewerName" placeholder="Your Name">
+                    <input type="text" id="reviewerName" placeholder="Posting as..." readonly>
                     <textarea id="reviewText" rows="3" placeholder="Describe your experience (what's good, bad, bugs, suggestions...)"></textarea>
-                    <button class="btn" onclick="submitReview()">Submit Review</button>
+                    <button class="btn" onclick="window.submitReview()">Submit Review</button>
                 </div>
 
                 <div class="review-list" id="reviewList">
-                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="modal-overlay" id="teamModal">
         <div class="modal-content" style="max-width: 600px;">
-            <button class="close-btn" onclick="closeTeamModal()"><i class="fas fa-times"></i></button>
-            
+            <button class="close-btn" onclick="window.closeTeamModal()"><i class="fas fa-times"></i></button>
             <div class="modal-section" style="border-top: none; padding-top: 30px;">
                 <h2 style="color: var(--primary-color); text-align: center; margin-bottom: 15px;">Team Information</h2>
-                
                 <div style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 30px; text-align: center;">
                     <p style="margin-bottom: 10px;"><strong>About the Developer Team</strong></p>
                     <p style="margin-bottom: 10px;">This application has been proudly developed and published by Shubham, who leads the overall app development, coding, and project execution.</p>
@@ -706,9 +693,8 @@
                     <p style="margin-bottom: 10px;">Kartik has been the Full Supporter, providing continuous support, feedback throughout the complete development process.</p>
                     <p>Together, this team focuses on creating simple, useful, and enjoyable applications for users.</p>
                 </div>
-
                 <div style="text-align: center; margin-top: 20px;">
-                    <button class="btn" onclick="openContactModal()" style="font-size: 1.1rem; padding: 10px 30px;">Contact Us</button>
+                    <button class="btn" onclick="window.openContactModal()" style="font-size: 1.1rem; padding: 10px 30px;">Contact Us</button>
                 </div>
             </div>
         </div>
@@ -716,43 +702,26 @@
 
     <div class="modal-overlay" id="contactModal">
         <div class="modal-content" style="max-width: 600px;">
-            <button class="close-btn" onclick="closeContactModal()"><i class="fas fa-times"></i></button>
-            
+            <button class="close-btn" onclick="window.closeContactModal()"><i class="fas fa-times"></i></button>
             <div class="modal-section" style="border-top: none; padding-top: 30px;">
                 <h3 style="color: var(--primary-color); text-align: center; margin-bottom: 10px;">Contact Our Team</h3>
                 <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem;">Get in touch with the creators on Instagram.</p>
-                
                 <div class="contact-grid">
                     <a href="https://www.instagram.com/i_am_shubham_singh_0001?igsh=MWduMDRnY2RlZm1ldQ==" target="_blank" class="contact-card">
                         <i class="fab fa-instagram"></i>
-                        <div class="contact-info">
-                            <h4>Shubham</h4>
-                            <p>Lead Developer</p>
-                        </div>
+                        <div class="contact-info"><h4>Shubham</h4><p>Lead Developer</p></div>
                     </a>
-
                     <a href="https://www.instagram.com/arpittt__06?igsh=a29hbWZhaGRqZ3Fi" target="_blank" class="contact-card">
                         <i class="fab fa-instagram"></i>
-                        <div class="contact-info">
-                            <h4>Arpit</h4>
-                            <p>Idea Finder</p>
-                        </div>
+                        <div class="contact-info"><h4>Arpit</h4><p>Idea Finder</p></div>
                     </a>
-
                     <a href="https://www.instagram.com/_mr_abhishek_patel00?igsh=aHhmMmttajd3OHhv" target="_blank" class="contact-card">
                         <i class="fab fa-instagram"></i>
-                        <div class="contact-info">
-                            <h4>Abhishek</h4>
-                            <p>Design Finder</p>
-                        </div>
+                        <div class="contact-info"><h4>Abhishek</h4><p>Design Finder</p></div>
                     </a>
-
                     <a href="https://www.instagram.com/kartik_o707?igsh=MTcxaXcyd21qeXMxYQ==" target="_blank" class="contact-card">
                         <i class="fab fa-instagram"></i>
-                        <div class="contact-info">
-                            <h4>Kartik</h4>
-                            <p>Full Supporter</p>
-                        </div>
+                        <div class="contact-info"><h4>Kartik</h4><p>Full Supporter</p></div>
                     </a>
                 </div>
             </div>
@@ -760,9 +729,9 @@
     </div>
 
     <div class="modal-overlay" id="screenshotModal">
-        <button class="close-btn" style="position: absolute; top: 20px; right: 20px; z-index: 2010;" onclick="closeScreenshotModal()"><i class="fas fa-times"></i></button>
-        <button class="nav-btn prev-btn" onclick="prevScreenshot(event)"><i class="fas fa-chevron-left"></i></button>
-        <button class="nav-btn next-btn" onclick="nextScreenshot(event)"><i class="fas fa-chevron-right"></i></button>
+        <button class="close-btn" style="position: absolute; top: 20px; right: 20px; z-index: 2010;" onclick="window.closeScreenshotModal()"><i class="fas fa-times"></i></button>
+        <button class="nav-btn prev-btn" onclick="window.prevScreenshot(event)"><i class="fas fa-chevron-left"></i></button>
+        <button class="nav-btn next-btn" onclick="window.nextScreenshot(event)"><i class="fas fa-chevron-right"></i></button>
         <img id="fullScreenshot" src="" alt="Full Screen Preview">
     </div>
 
@@ -778,29 +747,38 @@
         </div>
     </div>
 
-    <script>
-        // Database of Apps
+    <script type="module">
+        // Import Firebase Modules (Auth + Firestore)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAbOtjHeldbPRC29tX-i5tbUeySQlTzWUU",
+            authDomain: "saak-app-hub-2ee63.firebaseapp.com",
+            projectId: "saak-app-hub-2ee63",
+            storageBucket: "saak-app-hub-2ee63.firebasestorage.app",
+            messagingSenderId: "233444896443",
+            appId: "1:233444896443:web:1fec78599d657162e1039e"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+        const db = getFirestore(app);
+
+        // App Database
         const appsData = [
             {
                 id: 'tiktoktue',
                 name: 'Tik Tok Tue',
-                shortDesc: 'A fun and smooth Tic Tac Toe game app with simple gameplay, two-player mode, clean interface, and fast result popup. Perfect for quick entertainment and brain challenge.',
+                shortDesc: 'A fun and smooth Tic Tac Toe game app with simple gameplay, two-player mode, clean interface, and fast result popup.',
                 fullDesc: 'A fun and smooth Tic Tac Toe game app with simple gameplay, two-player mode, clean interface, and fast result popup. Perfect for quick entertainment and brain challenge.',
-                rating: 4.8,
-                dev: 'OX Game',
-                version: '15.4.2',
-                size: '33.48 MB',
-                date: 'Dec 06, 2025',
-                icon: 'oxicon.png',
-                screenshots: [
-                    'oxs1.png',
-                    'oxs2.png',
-                    'oxs3.png',
-                    'oxs4.png',
-                    'oxs5.png',
-                    'oxs6.png',
-                    'oxs7.png'
-                ],
+                rating: 4.8, dev: 'OX Game', version: '15.4.2', size: '33.48 MB', date: 'Dec 06, 2025',
+                icon: 'images/oxicon.png',
+                screenshots: ['images/oxs1.png', 'images/oxs2.png', 'images/oxs3.png', 'images/oxs4.png', 'images/oxs5.png', 'images/oxs6.png', 'images/oxs7.png'],
                 features: ['Smooth Tic Tac Toe gameplay', '2 player mode', 'AI vs player mode', 'level up mode', 'high level themes', 'clean game board', 'easy and fast controls'],
                 whatsNew: '- improved game speed\n- smoother touch response\n- bug fixes\n- better board design',
                 downloadLink: 'https://drive.google.com/file/d/1U3IMz-bF6fCqOZ7QcoV09qmMjskQHHIK/view?usp=drivesdk'
@@ -808,20 +786,11 @@
             {
                 id: 'ultimatedrawpro',
                 name: 'Ultimate Draw Pro',
-                shortDesc: 'A creative and easy-to-use drawing app for sketching, painting, coloring, and making beautiful artwork with multiple tools and smooth canvas controls.',
+                shortDesc: 'A creative and easy-to-use drawing app for sketching, painting, coloring, and making beautiful artwork.',
                 fullDesc: 'A creative and easy-to-use drawing app for sketching, painting, coloring, and making beautiful artwork with multiple tools and smooth canvas controls.',
-                rating: 4.9,
-                dev: 'Creative App',
-                version: '5.2.0',
-                size: '33.92 MB',
-                date: 'Dec 24, 2025',
-                icon: 'udicon.png',
-                screenshots: [
-                    'uds1.png',
-                    'uds2.png',
-                    'uds3.png',
-                    'uds4.png'
-                ],
+                rating: 4.9, dev: 'Creative App', version: '5.2.0', size: '33.92 MB', date: 'Dec 24, 2025',
+                icon: 'images/udicon.png',
+                screenshots: ['images/uds1.png', 'images/uds2.png', 'images/uds3.png', 'images/uds4.png'],
                 features: ['drawing canvas', 'multiple brush tools', 'color palette', 'erase tool', 'save drawing option', 'smooth touch drawing', 'save & edit drawing'],
                 whatsNew: '- improved brush smoothness\n- new color options\n- better canvas controls\n- minor bug fixes',
                 downloadLink: 'https://drive.google.com/file/d/1MnPoXv0wfM9-IVXzKzrreT9MQA9ca6-6/view?usp=drivesdk'
@@ -829,23 +798,11 @@
             {
                 id: 'learningsmart',
                 name: 'Learning Smart',
-                shortDesc: 'A smart educational learning app designed for kids and students with English learning, alphabet practice, math activities, and fun study features.',
+                shortDesc: 'A smart educational learning app designed for kids and students with English learning, alphabet practice, math activities.',
                 fullDesc: 'A smart educational learning app designed for kids and students with English learning, alphabet practice, math activities, and fun study features.',
-                rating: 4.6,
-                dev: 'Educational app',
-                version: '3.1.1',
-                size: '33.26 MB',
-                date: 'Mar 28, 2026',
-                icon: 'lsicon.png',
-                screenshots: [
-                    'lss1.png',
-                    'lss2.png',
-                    'lss3.png',
-                    'lss4.png',
-                    'lss5.png',
-                    'lss6.png',
-                    'lss7.png'
-                ],
+                rating: 4.6, dev: 'Educational app', version: '3.1.1', size: '33.26 MB', date: 'Mar 28, 2026',
+                icon: 'images/lsicon.png',
+                screenshots: ['images/lss1.png', 'images/lss2.png', 'images/lss3.png', 'images/lss4.png', 'images/lss5.png', 'images/lss6.png', 'images/lss7.png'],
                 features: ['alphabet learning', 'English word practice', 'math activities', 'easy student interface', 'fun educational sections', 'learning dashboard', 'game mode questions'],
                 whatsNew: '- added new study content\n- improved learning sections\n- smoother navigation\n- performance improvements',
                 downloadLink: 'https://drive.google.com/file/d/1PxpIGRy9oenpQs_0rUyDWKej155jAYmd/view?usp=drivesdk'
@@ -855,15 +812,16 @@
         let currentAppId = null;
         let currentScreenshots = [];
         let currentScreenshotIndex = 0;
+        let unsubscribeReviews = null; // To manage active Firebase listener
 
+        // Render Grid
         function renderApps(apps) {
             const grid = document.getElementById('appGrid');
             grid.innerHTML = '';
-            
             apps.forEach(app => {
                 const card = document.createElement('div');
                 card.className = 'app-card';
-                card.onclick = () => openModal(app.id); 
+                card.onclick = () => window.openModal(app.id); 
                 card.innerHTML = `
                     <img src="${app.icon}" class="app-icon" alt="${app.name}">
                     <div class="app-info">
@@ -879,14 +837,13 @@
 
         document.getElementById('searchInput').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
-            const filtered = appsData.filter(app => app.name.toLowerCase().includes(term));
-            renderApps(filtered);
+            renderApps(appsData.filter(app => app.name.toLowerCase().includes(term)));
         });
 
-        function openModal(appId) {
+        // App Details Modal
+        window.openModal = function(appId) {
             const app = appsData.find(a => a.id === appId);
             if (!app) return;
-            
             currentAppId = appId;
             
             document.getElementById('modalIcon').src = app.icon;
@@ -898,10 +855,7 @@
             document.getElementById('modalDate').innerText = app.date;
             document.getElementById('modalFullDesc').innerText = app.fullDesc;
             document.getElementById('modalWhatsNew').innerText = app.whatsNew;
-
-            document.getElementById('modalInstallBtn').onclick = function() {
-                window.open(app.downloadLink, '_blank');
-            };
+            document.getElementById('modalInstallBtn').onclick = () => window.open(app.downloadLink, '_blank');
 
             const featuresList = document.getElementById('modalFeatures');
             featuresList.innerHTML = '';
@@ -914,62 +868,154 @@
             const screensContainer = document.getElementById('modalScreenshots');
             screensContainer.innerHTML = '';
             currentScreenshots = app.screenshots; 
-            
             app.screenshots.forEach((src, index) => {
                 let img = document.createElement('img');
                 img.src = src;
-                img.onclick = () => openScreenshotModal(index);
+                img.onclick = () => window.openScreenshotModal(index);
                 screensContainer.appendChild(img);
             });
 
-            loadReviews(appId);
+            // FETCH REAL-TIME REVIEWS
+            window.loadLiveReviews(appId);
             
             document.getElementById('appModal').classList.add('active');
             document.body.style.overflow = 'hidden'; 
         }
 
-        function closeModal() {
+        window.closeModal = function() {
             document.getElementById('appModal').classList.remove('active');
             document.body.style.overflow = 'auto';
             currentAppId = null;
+            if(unsubscribeReviews) {
+                unsubscribeReviews();
+                unsubscribeReviews = null;
+            }
         }
 
-        let isAnimating = false;
+        // --- FIREBASE FIRESTORE REVIEW SYSTEM ---
+        window.loadLiveReviews = function(appId) {
+            const reviewList = document.getElementById('reviewList');
+            reviewList.innerHTML = '<p style="text-align:center; color:var(--text-muted); margin-top:20px;">Loading reviews...</p>';
 
+            if (unsubscribeReviews) unsubscribeReviews();
+
+            const q = query(collection(db, "reviews"), where("appId", "==", appId));
+            
+            unsubscribeReviews = onSnapshot(q, (querySnapshot) => {
+                const appReviews = [];
+                querySnapshot.forEach((doc) => {
+                    appReviews.push(doc.data());
+                });
+
+                // Sort: Newest first
+                appReviews.sort((a, b) => b.timestamp - a.timestamp);
+                reviewList.innerHTML = '';
+
+                if (appReviews.length === 0) {
+                    reviewList.innerHTML = '<p style="text-align:center; color:var(--text-muted); margin-top:20px;">No reviews yet. Be the first to review!</p>';
+                    return;
+                }
+
+                appReviews.forEach(rev => {
+                    let starsHTML = '';
+                    for(let i=1; i<=5; i++) {
+                        if(i <= rev.rating) starsHTML += '<i class="fas fa-star" style="color:#ffd700;"></i>';
+                        else starsHTML += '<i class="far fa-star" style="color:var(--text-muted);"></i>';
+                    }
+
+                    let dateStr = "Just now";
+                    if(rev.timestamp) {
+                        const d = new Date(rev.timestamp);
+                        dateStr = d.toLocaleDateString();
+                    }
+
+                    const card = document.createElement('div');
+                    card.className = 'review-card';
+                    card.innerHTML = `
+                        <div class="review-header">
+                            <span class="review-user"><i class="fas fa-user-circle" style="color:var(--primary-color);"></i> ${rev.name}</span>
+                            <span class="review-time">${dateStr}</span>
+                        </div>
+                        <div style="margin-bottom: 5px;">${starsHTML}</div>
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">${rev.text}</p>
+                    `;
+                    reviewList.appendChild(card);
+                });
+            }, (error) => {
+                console.error("Error fetching reviews:", error);
+                reviewList.innerHTML = '<p style="text-align:center; color:var(--text-muted); margin-top:20px;">Unable to load reviews.</p>';
+            });
+        }
+
+        window.submitReview = async function() {
+            if (!auth.currentUser) {
+                alert("Please login first to submit a review!");
+                return;
+            }
+
+            const name = auth.currentUser.displayName || "Anonymous User";
+            const text = document.getElementById('reviewText').value.trim();
+            let rating = 0;
+            
+            const radios = document.getElementsByName('rating');
+            for (let r of radios) {
+                if (r.checked) {
+                    rating = r.value;
+                    break;
+                }
+            }
+
+            if (rating === 0) { alert('Please select a star rating.'); return; }
+            if (text === '') { alert('Please write a review comment.'); return; }
+
+            const submitBtn = document.querySelector('.review-form .btn');
+            submitBtn.innerText = "Submitting...";
+            submitBtn.disabled = true;
+
+            try {
+                await addDoc(collection(db, "reviews"), {
+                    appId: currentAppId,
+                    name: name,
+                    rating: Number(rating),
+                    text: text,
+                    timestamp: Date.now(),
+                    userId: auth.currentUser.uid
+                });
+                
+                document.getElementById('reviewText').value = '';
+                for (let r of radios) r.checked = false;
+            } catch (error) {
+                console.error("Error adding review: ", error);
+                alert("Error submitting review. Please check your connection.");
+            } finally {
+                submitBtn.innerText = "Submit Review";
+                submitBtn.disabled = false;
+            }
+        }
+
+        // Screenshots Logic
+        let isAnimating = false;
         function updateNavButtons() {
             const prevBtn = document.querySelector('.prev-btn');
             const nextBtn = document.querySelector('.next-btn');
             if(!prevBtn || !nextBtn) return;
-
-            if (currentScreenshotIndex <= 0) {
-                prevBtn.style.display = 'none';
-            } else {
-                prevBtn.style.display = 'flex';
-            }
-
-            if (currentScreenshotIndex >= currentScreenshots.length - 1) {
-                nextBtn.style.display = 'none';
-            } else {
-                nextBtn.style.display = 'flex';
-            }
+            prevBtn.style.display = currentScreenshotIndex <= 0 ? 'none' : 'flex';
+            nextBtn.style.display = currentScreenshotIndex >= currentScreenshots.length - 1 ? 'none' : 'flex';
         }
 
-        function openScreenshotModal(index) {
+        window.openScreenshotModal = function(index) {
             currentScreenshotIndex = index;
             const imgElement = document.getElementById('fullScreenshot');
-            
             imgElement.style.transition = 'none'; 
             imgElement.classList.remove('swipe-left', 'swipe-right');
             imgElement.src = currentScreenshots[currentScreenshotIndex];
-            
             void imgElement.offsetWidth; 
             imgElement.style.transition = ''; 
-            
             updateNavButtons();
             document.getElementById('screenshotModal').classList.add('active');
         }
 
-        function closeScreenshotModal() {
+        window.closeScreenshotModal = function() {
             document.getElementById('screenshotModal').classList.remove('active');
             if (!document.getElementById('appModal').classList.contains('active') && 
                 !document.getElementById('teamModal').classList.contains('active') && 
@@ -980,284 +1026,107 @@
 
         function changeScreenshot(direction) {
             if (isAnimating || currentScreenshots.length <= 1) return;
-
             if (direction === 'next' && currentScreenshotIndex >= currentScreenshots.length - 1) return;
             if (direction === 'prev' && currentScreenshotIndex <= 0) return;
-
             isAnimating = true;
-
             const imgElement = document.getElementById('fullScreenshot');
+            imgElement.classList.add(direction === 'next' ? 'swipe-left' : 'swipe-right');
             
-            if (direction === 'next') {
-                imgElement.classList.add('swipe-left');
-            } else {
-                imgElement.classList.add('swipe-right');
-            }
-
             setTimeout(() => {
-                if (direction === 'next') {
-                    currentScreenshotIndex++;
-                } else {
-                    currentScreenshotIndex--;
-                }
-                
+                currentScreenshotIndex += direction === 'next' ? 1 : -1;
                 imgElement.src = currentScreenshots[currentScreenshotIndex];
-                
                 imgElement.style.transition = 'none';
                 imgElement.classList.remove('swipe-left', 'swipe-right');
-                
-                if (direction === 'next') {
-                    imgElement.classList.add('swipe-right');
-                } else {
-                    imgElement.classList.add('swipe-left');
-                }
-                
+                imgElement.classList.add(direction === 'next' ? 'swipe-right' : 'swipe-left');
                 void imgElement.offsetWidth; 
-                
                 imgElement.style.transition = '';
                 imgElement.classList.remove('swipe-left', 'swipe-right');
-                
                 updateNavButtons();
-
-                setTimeout(() => {
-                    isAnimating = false;
-                }, 300); 
-
+                setTimeout(() => { isAnimating = false; }, 300); 
             }, 300); 
         }
 
-        function nextScreenshot(e) {
-            if(e) e.stopPropagation();
-            changeScreenshot('next');
-        }
+        window.nextScreenshot = function(e) { if(e) e.stopPropagation(); changeScreenshot('next'); }
+        window.prevScreenshot = function(e) { if(e) e.stopPropagation(); changeScreenshot('prev'); }
 
-        function prevScreenshot(e) {
-            if(e) e.stopPropagation();
-            changeScreenshot('prev');
-        }
-
-        let touchStartX = 0;
-        let touchEndX = 0;
+        let touchStartX = 0, touchEndX = 0;
         const screenshotModalElement = document.getElementById('screenshotModal');
-
-        screenshotModalElement.addEventListener('touchstart', e => {
-            touchStartX = e.changedTouches[0].screenX;
-        }, {passive: true});
-
-        screenshotModalElement.addEventListener('touchend', e => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        }, {passive: true});
-
+        screenshotModalElement.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
+        screenshotModalElement.addEventListener('touchend', e => { touchEndX = e.changedTouches[0].screenX; handleSwipe(); }, {passive: true});
         function handleSwipe() {
-            const threshold = 50;
             if (!screenshotModalElement.classList.contains('active')) return;
-
-            if (touchStartX - touchEndX > threshold) {
-                nextScreenshot(); 
-            } else if (touchEndX - touchStartX > threshold) {
-                prevScreenshot(); 
-            }
+            if (touchStartX - touchEndX > 50) window.nextScreenshot(); 
+            else if (touchEndX - touchStartX > 50) window.prevScreenshot(); 
         }
 
-        function openTeamModal() {
-            document.getElementById('teamModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
+        window.openTeamModal = () => { document.getElementById('teamModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
+        window.closeTeamModal = () => { document.getElementById('teamModal').classList.remove('active'); if(!document.getElementById('contactModal').classList.contains('active')) document.body.style.overflow = 'auto'; }
+        window.openContactModal = () => { window.closeTeamModal(); document.getElementById('contactModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
+        window.closeContactModal = () => { document.getElementById('contactModal').classList.remove('active'); document.body.style.overflow = 'auto'; }
 
-        function closeTeamModal() {
-            document.getElementById('teamModal').classList.remove('active');
-            if(!document.getElementById('contactModal').classList.contains('active')) {
-                document.body.style.overflow = 'auto';
-            }
-        }
+        // Init
+        window.onload = () => renderApps(appsData);
 
-        function openContactModal() {
-            closeTeamModal();
-            document.getElementById('contactModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeContactModal() {
-            document.getElementById('contactModal').classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
-        function submitReview() {
-            const name = document.getElementById('reviewerName').value.trim() || 'Anonymous User';
-            const text = document.getElementById('reviewText').value.trim();
-            
-            let rating = 0;
-            const radios = document.getElementsByName('rating');
-            for (let r of radios) {
-                if (r.checked) {
-                    rating = r.value;
-                    break;
+        // Outside Click Close
+        window.onclick = function(event) {
+            const modals = ['appModal', 'teamModal', 'contactModal', 'screenshotModal', 'logoutConfirmModal'];
+            modals.forEach(id => {
+                const m = document.getElementById(id);
+                if (event.target == m) {
+                    if (id === 'appModal') window.closeModal();
+                    else if (id === 'teamModal') window.closeTeamModal();
+                    else if (id === 'contactModal') window.closeContactModal();
+                    else if (id === 'screenshotModal') window.closeScreenshotModal();
+                    else if (id === 'logoutConfirmModal') m.classList.remove('active');
                 }
-            }
-
-            if (rating === 0) {
-                alert('Please select a star rating.');
-                return;
-            }
-            if (text === '') {
-                alert('Please write a review comment.');
-                return;
-            }
-
-            const newReview = {
-                name: name,
-                rating: rating,
-                text: text,
-                time: new Date().toLocaleDateString()
-            };
-
-            let allReviews = JSON.parse(localStorage.getItem('shubham_reviews')) || {};
-            if (!allReviews[currentAppId]) {
-                allReviews[currentAppId] = [];
-            }
-            
-            allReviews[currentAppId].unshift(newReview);
-            localStorage.setItem('shubham_reviews', JSON.stringify(allReviews));
-
-            document.getElementById('reviewerName').value = '';
-            document.getElementById('reviewText').value = '';
-            for (let r of radios) r.checked = false;
-
-            loadReviews(currentAppId);
-        }
-
-        function loadReviews(appId) {
-            const reviewList = document.getElementById('reviewList');
-            reviewList.innerHTML = '';
-
-            let allReviews = JSON.parse(localStorage.getItem('shubham_reviews')) || {};
-            let appReviews = allReviews[appId] || [];
-
-            if (appReviews.length === 0) {
-                appReviews = [
-                    { name: 'John Doe', rating: 5, text: 'Amazing app! The UI is flawless and no bugs so far.', time: 'Just now' },
-                    { name: 'Sarah Smith', rating: 4, text: 'Great features, but it drains battery a bit faster. Still highly recommended.', time: 'Yesterday' }
-                ];
-            }
-
-            appReviews.forEach(rev => {
-                let starsHTML = '';
-                for(let i=1; i<=5; i++) {
-                    if(i <= rev.rating) starsHTML += '<i class="fas fa-star" style="color:#ffd700;"></i>';
-                    else starsHTML += '<i class="far fa-star" style="color:var(--text-muted);"></i>';
-                }
-
-                const card = document.createElement('div');
-                card.className = 'review-card';
-                card.innerHTML = `
-                    <div class="review-header">
-                        <span class="review-user">${rev.name}</span>
-                        <span class="review-time">${rev.time}</span>
-                    </div>
-                    <div style="margin-bottom: 5px;">${starsHTML}</div>
-                    <p style="font-size: 0.9rem; color: var(--text-muted);">${rev.text}</p>
-                `;
-                reviewList.appendChild(card);
             });
         }
 
-        window.onload = () => {
-            renderApps(appsData);
-        };
-
-        window.onclick = function(event) {
-            const appModalOverlay = document.getElementById('appModal');
-            const teamModalOverlay = document.getElementById('teamModal');
-            const contactModalOverlay = document.getElementById('contactModal');
-            const screenshotModalOverlay = document.getElementById('screenshotModal');
-            const logoutConfirmModalOverlay = document.getElementById('logoutConfirmModal'); // Added this
-            
-            if (event.target == appModalOverlay) {
-                closeModal();
-            } else if (event.target == teamModalOverlay) {
-                closeTeamModal();
-            } else if (event.target == contactModalOverlay) {
-                closeContactModal();
-            } else if (event.target == screenshotModalOverlay) {
-                closeScreenshotModal();
-            } else if (event.target == logoutConfirmModalOverlay) {
-                logoutConfirmModalOverlay.classList.remove('active'); // Close custom logout popup on outside click
-            }
-        }
-    </script>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyAbOtjHeldbPRC29tX-i5tbUeySQlTzWUU",
-            authDomain: "saak-app-hub-2ee63.firebaseapp.com",
-            projectId: "saak-app-hub-2ee63",
-            storageBucket: "saak-app-hub-2ee63.firebasestorage.app",
-            messagingSenderId: "233444896443",
-            appId: "1:233444896443:web:1fec78599d657162e1039e"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const provider = new GoogleAuthProvider();
-
+        // --- AUTH UI LOGIC ---
         const loginScreen = document.getElementById('loginScreen');
         const mainAppContent = document.getElementById('mainAppContent');
         const loginBtn = document.getElementById('googleLoginBtn');
         const userName = document.getElementById('userName');
-        
-        // Custom Logout Modal Elements
         const logoutBtn = document.getElementById('logoutBtn');
         const logoutConfirmModal = document.getElementById('logoutConfirmModal');
         const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
         const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
 
-        // Login Function
+        // Login Action
         loginBtn.addEventListener('click', () => {
             loginBtn.innerHTML = '<span>Please wait...</span>';
-            
             signInWithPopup(auth, provider).then(() => {
                 loginBtn.innerHTML = '<img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" style="width: 20px; height: 20px;"> <span>Continue with Google</span>';
             }).catch((error) => {
                 console.error("Login Error:", error);
                 loginBtn.innerHTML = '<img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" style="width: 20px; height: 20px;"> <span>Continue with Google</span>';
-                if (error.code !== 'auth/popup-closed-by-user') {
-                    alert("Login failed! Please try again.");
-                }
+                if (error.code !== 'auth/popup-closed-by-user') alert("Login failed! Please try again.");
             });
         });
 
-        // Show Custom Logout Modal
-        logoutBtn.addEventListener('click', () => {
-            logoutConfirmModal.classList.add('active');
-        });
-
-        // Close Custom Logout Modal (Cancel)
-        cancelLogoutBtn.addEventListener('click', () => {
-            logoutConfirmModal.classList.remove('active');
-        });
-
-        // Confirm Logout
+        // Logout Actions
+        logoutBtn.addEventListener('click', () => logoutConfirmModal.classList.add('active'));
+        cancelLogoutBtn.addEventListener('click', () => logoutConfirmModal.classList.remove('active'));
         confirmLogoutBtn.addEventListener('click', () => {
+            confirmLogoutBtn.innerText = "Logging out...";
             signOut(auth).then(() => {
-                console.log("Logged out successfully!");
                 logoutConfirmModal.classList.remove('active');
+                confirmLogoutBtn.innerText = "Yes, Logout";
             });
         });
 
-        // Auth State Listener
+        // Auth State Tracker
         onAuthStateChanged(auth, (user) => {
             if (user) {
+                // Logged In
                 loginScreen.style.display = 'none';
                 mainAppContent.style.display = 'block';
                 userName.innerText = "Hi, " + user.displayName.split(" ")[0]; 
-
+                
                 const reviewerInput = document.getElementById('reviewerName');
-                if(reviewerInput) reviewerInput.value = user.displayName;
+                if(reviewerInput) reviewerInput.value = "Posting as: " + user.displayName;
             } else {
+                // Logged Out
                 loginScreen.style.display = 'flex';
                 mainAppContent.style.display = 'none';
                 
