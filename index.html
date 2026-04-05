@@ -41,7 +41,7 @@
         ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
         ::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 4px; }
 
-        /* NEW: Full Screen Login Overlay Styles */
+        /* Full Screen Login Overlay Styles */
         #loginScreen {
             position: fixed;
             top: 0;
@@ -68,7 +68,7 @@
             animation: fadeIn 0.8s ease;
         }
 
-        .login-box i {
+        .login-box i.logo-icon {
             font-size: 3.5rem;
             color: var(--primary-color);
             margin-bottom: 15px;
@@ -102,6 +102,8 @@
             padding: 12px 25px;
             width: 100%;
             font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
         .google-style-btn:hover {
@@ -153,7 +155,7 @@
             box-shadow: 0 0 10px rgba(0, 230, 118, 0.2);
         }
 
-        .search-bar i {
+        .search-bar i.search-icon {
             position: absolute;
             right: 15px;
             top: 50%;
@@ -170,7 +172,11 @@
         .user-info {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 5px 15px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
         }
 
         .user-name {
@@ -179,18 +185,25 @@
             font-size: 0.95rem;
         }
 
+        /* Logout Button - Specifically designed for bottom placement */
         .logout-btn {
-            padding: 8px 15px;
+            padding: 10px 30px;
             background: rgba(225, 48, 108, 0.8); 
             color: white;
             border: none;
-            border-radius: 20px;
+            border-radius: 25px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .logout-btn:hover {
             background: rgba(225, 48, 108, 1);
+            transform: scale(1.05);
         }
 
         /* Featured Banner */
@@ -575,12 +588,12 @@
 
     <div id="loginScreen" style="display: flex;">
         <div class="login-box">
-            <i class="fa-brands fa-google-play"></i>
+            <i class="fa-brands fa-google-play logo-icon"></i>
             <h2>SAAK App Hub</h2>
             <p>Please securely login to explore and download amazing applications.</p>
             
-            <button id="googleLoginBtn" class="btn google-style-btn">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo">
+            <button id="googleLoginBtn" class="google-style-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" style="width: 20px; height: 20px;">
                 Continue with Google
             </button>
         </div>
@@ -594,12 +607,12 @@
             </div>
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="Search for apps...">
-                <i class="fas fa-search"></i>
+                <i class="fas fa-search search-icon"></i>
             </div>
             <div class="auth-section">
                 <div id="userInfo" class="user-info">
+                    <i class="fas fa-user-circle" style="font-size: 1.2rem; color: var(--primary-color);"></i>
                     <span id="userName" class="user-name"></span>
-                    <button id="logoutBtn" class="logout-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
                 </div>
             </div>
         </header>
@@ -610,8 +623,10 @@
                 </div>
         </main>
 
-        <div style="text-align: center; margin: 40px auto; padding-bottom: 20px;">
-            <button class="btn" onclick="openTeamModal()" style="font-size: 1.1rem; padding: 12px 30px;">Team Information</button>
+        <div style="text-align: center; margin: 40px auto; padding-bottom: 40px;">
+            <button class="btn" onclick="openTeamModal()" style="font-size: 1.1rem; padding: 12px 30px; margin-bottom: 20px;">Team Information</button>
+            <br>
+            <button id="logoutBtn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
         </div>
     </div> <div class="modal-overlay" id="appModal">
         <div class="modal-content">
