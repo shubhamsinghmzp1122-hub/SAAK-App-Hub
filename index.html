@@ -766,6 +766,18 @@
         <img id="fullScreenshot" src="" alt="Full Screen Preview">
     </div>
 
+    <div class="modal-overlay" id="logoutConfirmModal">
+        <div class="login-box" style="padding: 30px;">
+            <i class="fas fa-sign-out-alt logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #E1306C;"></i>
+            <h2 style="font-size: 1.3rem;">Logout</h2>
+            <p style="margin-bottom: 25px;">Are you sure you want to logout from SAAK App Hub?</p>
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button id="cancelLogoutBtn" class="btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">Cancel</button>
+                <button id="confirmLogoutBtn" class="logout-btn" style="margin: 0;">Yes, Logout</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Database of Apps
         const appsData = [
@@ -779,15 +791,15 @@
                 version: '15.4.2',
                 size: '33.48 MB',
                 date: 'Dec 06, 2025',
-                icon: 'images/oxicon.png',
+                icon: 'oxicon.png',
                 screenshots: [
-                    'images/oxs1.png',
-                    'images/oxs2.png',
-                    'images/oxs3.png',
-                    'images/oxs4.png',
-                    'images/oxs5.png',
-                    'images/oxs6.png',
-                    'images/oxs7.png'
+                    'oxs1.png',
+                    'oxs2.png',
+                    'oxs3.png',
+                    'oxs4.png',
+                    'oxs5.png',
+                    'oxs6.png',
+                    'oxs7.png'
                 ],
                 features: ['Smooth Tic Tac Toe gameplay', '2 player mode', 'AI vs player mode', 'level up mode', 'high level themes', 'clean game board', 'easy and fast controls'],
                 whatsNew: '- improved game speed\n- smoother touch response\n- bug fixes\n- better board design',
@@ -803,12 +815,12 @@
                 version: '5.2.0',
                 size: '33.92 MB',
                 date: 'Dec 24, 2025',
-                icon: 'images/udicon.png',
+                icon: 'udicon.png',
                 screenshots: [
-                    'images/uds1.png',
-                    'images/uds2.png',
-                    'images/uds3.png',
-                    'images/uds4.png'
+                    'uds1.png',
+                    'uds2.png',
+                    'uds3.png',
+                    'uds4.png'
                 ],
                 features: ['drawing canvas', 'multiple brush tools', 'color palette', 'erase tool', 'save drawing option', 'smooth touch drawing', 'save & edit drawing'],
                 whatsNew: '- improved brush smoothness\n- new color options\n- better canvas controls\n- minor bug fixes',
@@ -824,15 +836,15 @@
                 version: '3.1.1',
                 size: '33.26 MB',
                 date: 'Mar 28, 2026',
-                icon: 'images/lsicon.png',
+                icon: 'lsicon.png',
                 screenshots: [
-                    'images/lss1.png',
-                    'images/lss2.png',
-                    'images/lss3.png',
-                    'images/lss4.png',
-                    'images/lss5.png',
-                    'images/lss6.png',
-                    'images/lss7.png'
+                    'lss1.png',
+                    'lss2.png',
+                    'lss3.png',
+                    'lss4.png',
+                    'lss5.png',
+                    'lss6.png',
+                    'lss7.png'
                 ],
                 features: ['alphabet learning', 'English word practice', 'math activities', 'easy student interface', 'fun educational sections', 'learning dashboard', 'game mode questions'],
                 whatsNew: '- added new study content\n- improved learning sections\n- smoother navigation\n- performance improvements',
@@ -1159,6 +1171,7 @@
             const teamModalOverlay = document.getElementById('teamModal');
             const contactModalOverlay = document.getElementById('contactModal');
             const screenshotModalOverlay = document.getElementById('screenshotModal');
+            const logoutConfirmModalOverlay = document.getElementById('logoutConfirmModal'); // Added this
             
             if (event.target == appModalOverlay) {
                 closeModal();
@@ -1168,12 +1181,13 @@
                 closeContactModal();
             } else if (event.target == screenshotModalOverlay) {
                 closeScreenshotModal();
+            } else if (event.target == logoutConfirmModalOverlay) {
+                logoutConfirmModalOverlay.classList.remove('active'); // Close custom logout popup on outside click
             }
         }
     </script>
 
     <script type="module">
-        // Switched back to signInWithPopup because domain is now authorized
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
@@ -1194,15 +1208,18 @@
         const mainAppContent = document.getElementById('mainAppContent');
         const loginBtn = document.getElementById('googleLoginBtn');
         const userName = document.getElementById('userName');
+        
+        // Custom Logout Modal Elements
         const logoutBtn = document.getElementById('logoutBtn');
+        const logoutConfirmModal = document.getElementById('logoutConfirmModal');
+        const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
+        const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
 
-        // Login Function (Using Popup again)
+        // Login Function
         loginBtn.addEventListener('click', () => {
-            // Button Loading Effect
             loginBtn.innerHTML = '<span>Please wait...</span>';
             
             signInWithPopup(auth, provider).then(() => {
-                // Success, state listener will handle UI change
                 loginBtn.innerHTML = '<img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" style="width: 20px; height: 20px;"> <span>Continue with Google</span>';
             }).catch((error) => {
                 console.error("Login Error:", error);
@@ -1213,20 +1230,27 @@
             });
         });
 
-        // Logout Function with Confirmation
+        // Show Custom Logout Modal
         logoutBtn.addEventListener('click', () => {
-            const isConfirmed = confirm("Are you sure you want to logout?");
-            if (isConfirmed) {
-                signOut(auth).then(() => {
-                    console.log("Logged out successfully!");
-                });
-            }
+            logoutConfirmModal.classList.add('active');
         });
 
-        // Auth State Listener (Hides/Shows Content based on Login)
+        // Close Custom Logout Modal (Cancel)
+        cancelLogoutBtn.addEventListener('click', () => {
+            logoutConfirmModal.classList.remove('active');
+        });
+
+        // Confirm Logout
+        confirmLogoutBtn.addEventListener('click', () => {
+            signOut(auth).then(() => {
+                console.log("Logged out successfully!");
+                logoutConfirmModal.classList.remove('active');
+            });
+        });
+
+        // Auth State Listener
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // User is LOGGED IN -> Hide Full Screen Login, Show Main Content
                 loginScreen.style.display = 'none';
                 mainAppContent.style.display = 'block';
                 userName.innerText = "Hi, " + user.displayName.split(" ")[0]; 
@@ -1234,7 +1258,6 @@
                 const reviewerInput = document.getElementById('reviewerName');
                 if(reviewerInput) reviewerInput.value = user.displayName;
             } else {
-                // User is LOGGED OUT -> Show Full Screen Login, Hide Main Content
                 loginScreen.style.display = 'flex';
                 mainAppContent.style.display = 'none';
                 
