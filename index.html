@@ -93,6 +93,41 @@
             color: var(--text-muted);
         }
 
+        /* NEW: Auth Section Styles */
+        .auth-section {
+            display: flex;
+            align-items: center;
+        }
+        
+        .auth-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-name {
+            font-weight: 500;
+            color: var(--primary-color);
+            font-size: 0.95rem;
+        }
+
+        .logout-btn {
+            padding: 8px 15px;
+            background: rgba(225, 48, 108, 0.8); /* Redish color for logout */
+            color: white;
+        }
+
+        .logout-btn:hover {
+            background: rgba(225, 48, 108, 1);
+        }
+
         /* Featured Banner - Removed internal items to serve as button container */
         .featured-banner {
             margin: 30px 5%;
@@ -455,6 +490,7 @@
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 15px; }
             .search-bar { width: 100%; }
+            .auth-section { margin-top: 5px; width: 100%; justify-content: center; }
             .featured-banner { margin: 15px 5%; padding: 20px; }
             .modal-header-info { flex-direction: column; text-align: center; }
             .modal-meta { justify-content: center; flex-wrap: wrap; gap: 10px; }
@@ -480,6 +516,13 @@
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search for apps...">
             <i class="fas fa-search"></i>
+        </div>
+        <div class="auth-section">
+            <button id="googleLoginBtn" class="btn auth-btn"><i class="fab fa-google"></i> Login</button>
+            <div id="userInfo" class="user-info" style="display: none;">
+                <span id="userName" class="user-name"></span>
+                <button id="logoutBtn" class="btn logout-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
         </div>
     </header>
 
@@ -650,8 +693,7 @@
                     'oxs4.png',
                     'oxs5.png',
                     'oxs6.png',
-                    'oxs7.png',
-                    'oxs8.png'
+                    'oxs7.png'
                 ],
                 features: ['Smooth Tic Tac Toe gameplay', '2 player mode', 'AI vs player mode', 'level up mode', 'high level themes', 'clean game board', 'easy and fast controls'],
                 whatsNew: '- improved game speed\n- smoother touch response\n- bug fixes\n- better board design',
@@ -1059,6 +1101,73 @@
                 closeScreenshotModal();
             }
         }
+    </script>
+
+    <script type="module">
+        // Import Firebase CDN Modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+        // Your Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyAbOtjHeldbPRC29tX-i5tbUeySQlTzWUU",
+            authDomain: "saak-app-hub-2ee63.firebaseapp.com",
+            projectId: "saak-app-hub-2ee63",
+            storageBucket: "saak-app-hub-2ee63.firebasestorage.app",
+            messagingSenderId: "233444896443",
+            appId: "1:233444896443:web:1fec78599d657162e1039e"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        // UI Elements
+        const loginBtn = document.getElementById('googleLoginBtn');
+        const userInfo = document.getElementById('userInfo');
+        const userName = document.getElementById('userName');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        // Login Function
+        loginBtn.addEventListener('click', () => {
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    console.log("Logged in successfully!");
+                }).catch((error) => {
+                    console.error("Login Error:", error);
+                    alert("Login failed! Please try again.");
+                });
+        });
+
+        // Logout Function
+        logoutBtn.addEventListener('click', () => {
+            signOut(auth).then(() => {
+                console.log("Logged out successfully!");
+            });
+        });
+
+        // Auth State Listener (Checks if user is logged in or not)
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is logged in
+                loginBtn.style.display = 'none';
+                userInfo.style.display = 'flex';
+                userName.innerText = "Hi, " + user.displayName.split(" ")[0]; // Sirf First Name dikhayega
+
+                // Optional: Auto-fill reviewer name in review form
+                const reviewerInput = document.getElementById('reviewerName');
+                if(reviewerInput) reviewerInput.value = user.displayName;
+            } else {
+                // User is logged out
+                loginBtn.style.display = 'flex';
+                userInfo.style.display = 'none';
+                
+                // Reset reviewer name
+                const reviewerInput = document.getElementById('reviewerName');
+                if(reviewerInput) reviewerInput.value = '';
+            }
+        });
     </script>
 </body>
 </html>
