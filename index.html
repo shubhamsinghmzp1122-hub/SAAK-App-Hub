@@ -429,7 +429,7 @@
         .review-user { font-weight: 600; }
         .review-time { font-size: 0.8rem; color: var(--text-muted); }
 
-        /* Action Buttons for User's own review */
+        /* Action Buttons */
         .review-actions { margin-top: 10px; display: flex; gap: 15px; }
         .review-actions button {
             background: transparent;
@@ -705,7 +705,7 @@
         <div class="login-box" style="padding: 30px;">
             <i class="fas fa-trash logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #E1306C;"></i>
             <h2 style="font-size: 1.3rem;">Delete Review</h2>
-            <p style="margin-bottom: 25px;">Are you sure you want to delete your review permanently?</p>
+            <p style="margin-bottom: 25px;">Are you sure you want to delete this review permanently?</p>
             <div style="display: flex; gap: 15px; justify-content: center;">
                 <button onclick="document.getElementById('deleteConfirmModal').classList.remove('active')" class="btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">Cancel</button>
                 <button id="confirmDeleteBtn" class="logout-btn" style="margin: 0;">Yes, Delete</button>
@@ -725,7 +725,6 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        // Added deleteDoc, doc, updateDoc for editing and deleting reviews
         import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -742,7 +741,9 @@
         const provider = new GoogleAuthProvider();
         const db = getFirestore(app);
 
-        // Custom Alert Function (Replaces browser default alerts)
+        // ADMIN EMAIL CONSTANT
+        const ADMIN_EMAIL = "shubhamsinghmzp1122@gmail.com";
+
         window.showCustomAlert = function(msg, title="Notice") {
             document.getElementById('customAlertTitle').innerText = title;
             document.getElementById('customAlertText').innerText = msg;
@@ -755,7 +756,7 @@
                 shortDesc: 'A fun and smooth Tic Tac Toe game app with simple gameplay, two-player mode, clean interface, and fast result popup.',
                 fullDesc: 'A fun and smooth Tic Tac Toe game app with simple gameplay, two-player mode, clean interface, and fast result popup. Perfect for quick entertainment and brain challenge.',
                 rating: "0.0", dev: 'OX Game', version: '15.4.2', size: '33.48 MB', date: 'Dec 06, 2025',
-                icon: 'oxicon.png', screenshots: ['oxs1.png', 'oxs2.png', 'oxs3.png', 'oxs4.png', 'oxs5.png', 'oxs6.png', 'oxs7.png', 'oxs8.png'],
+                icon: 'images/oxicon.png', screenshots: ['images/oxs1.png', 'images/oxs2.png', 'images/oxs3.png', 'images/oxs4.png', 'images/oxs5.png', 'images/oxs6.png', 'images/oxs7.png'],
                 features: ['Smooth Tic Tac Toe gameplay', '2 player mode', 'AI vs player mode', 'level up mode', 'high level themes', 'clean game board', 'easy and fast controls'],
                 whatsNew: '- improved game speed\n- smoother touch response\n- bug fixes\n- better board design',
                 downloadLink: 'https://drive.google.com/file/d/1U3IMz-bF6fCqOZ7QcoV09qmMjskQHHIK/view?usp=drivesdk'
@@ -765,7 +766,7 @@
                 shortDesc: 'A creative and easy-to-use drawing app for sketching, painting, coloring, and making beautiful artwork.',
                 fullDesc: 'A creative and easy-to-use drawing app for sketching, painting, coloring, and making beautiful artwork with multiple tools and smooth canvas controls.',
                 rating: "0.0", dev: 'Creative App', version: '5.2.0', size: '33.92 MB', date: 'Dec 24, 2025',
-                icon: 'udicon.png', screenshots: ['uds1.png', 'uds2.png', 'uds3.png', 'uds4.png'],
+                icon: 'images/udicon.png', screenshots: ['images/uds1.png', 'images/uds2.png', 'images/uds3.png', 'images/uds4.png'],
                 features: ['drawing canvas', 'multiple brush tools', 'color palette', 'erase tool', 'save drawing option', 'smooth touch drawing', 'save & edit drawing'],
                 whatsNew: '- improved brush smoothness\n- new color options\n- better canvas controls\n- minor bug fixes',
                 downloadLink: 'https://drive.google.com/file/d/1MnPoXv0wfM9-IVXzKzrreT9MQA9ca6-6/view?usp=drivesdk'
@@ -775,7 +776,7 @@
                 shortDesc: 'A smart educational learning app designed for kids and students with English learning, alphabet practice, math activities.',
                 fullDesc: 'A smart educational learning app designed for kids and students with English learning, alphabet practice, math activities, and fun study features.',
                 rating: "0.0", dev: 'Educational app', version: '3.1.1', size: '33.26 MB', date: 'Mar 28, 2026',
-                icon: 'lsicon.png', screenshots: ['lss1.png', 'lss2.png', 'lss3.png', 'lss4.png', 'lss5.png', 'lss6.png', 'lss7.png'],
+                icon: 'images/lsicon.png', screenshots: ['images/lss1.png', 'images/lss2.png', 'images/lss3.png', 'images/lss4.png', 'images/lss5.png', 'images/lss6.png', 'images/lss7.png'],
                 features: ['alphabet learning', 'English word practice', 'math activities', 'easy student interface', 'fun educational sections', 'learning dashboard', 'game mode questions'],
                 whatsNew: '- added new study content\n- improved learning sections\n- smoother navigation\n- performance improvements',
                 downloadLink: 'https://drive.google.com/file/d/1PxpIGRy9oenpQs_0rUyDWKej155jAYmd/view?usp=drivesdk'
@@ -787,7 +788,6 @@
         let currentScreenshotIndex = 0;
         let unsubscribeReviews = null; 
         
-        // Edit/Delete Logic Variables
         window.currentReviewsMap = {}; 
         let editingReviewId = null;
         let reviewToDeleteId = null;
@@ -821,7 +821,7 @@
             const app = appsData.find(a => a.id === appId);
             if (!app) return;
             currentAppId = appId;
-            window.cancelEdit(); // Reset form just in case
+            window.cancelEdit();
             
             document.getElementById('modalIcon').src = app.icon;
             document.getElementById('modalName').innerText = app.name;
@@ -866,7 +866,6 @@
             if(unsubscribeReviews) { unsubscribeReviews(); unsubscribeReviews = null; }
         }
 
-        // --- FETCH & DISPLAY REVIEWS (WITH EDIT/DELETE) ---
         window.loadLiveReviews = function(appId) {
             const reviewList = document.getElementById('reviewList');
             reviewList.innerHTML = '<p style="text-align:center; color:var(--text-muted); margin-top:20px;">Loading reviews...</p>';
@@ -882,7 +881,7 @@
 
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    data.id = doc.id; // Save doc ID for editing/deleting
+                    data.id = doc.id; 
                     appReviews.push(data);
                     window.currentReviewsMap[doc.id] = data; 
                     totalStars += data.rating;
@@ -928,15 +927,22 @@
                         dateStr = d.toLocaleDateString();
                     }
 
-                    // Check if this review belongs to the logged-in user
+                    // --- ADMIN LOGIC UPDATE YAHAN HUA HAI ---
                     let actionBtns = '';
-                    if (auth.currentUser && rev.userId === auth.currentUser.uid) {
-                        actionBtns = `
-                            <div class="review-actions">
-                                <button class="btn-edit" onclick="window.editReview('${rev.id}')"><i class="fas fa-edit"></i> Edit</button>
-                                <button class="btn-delete" onclick="window.confirmDeleteReview('${rev.id}')"><i class="fas fa-trash"></i> Delete</button>
-                            </div>
-                        `;
+                    if (auth.currentUser) {
+                        const isOwner = rev.userId === auth.currentUser.uid;
+                        const isAdmin = auth.currentUser.email === ADMIN_EMAIL;
+
+                        if (isOwner || isAdmin) {
+                            actionBtns += '<div class="review-actions">';
+                            // Edit button sirf khud ke comments ke liye
+                            if (isOwner) {
+                                actionBtns += `<button class="btn-edit" onclick="window.editReview('${rev.id}')"><i class="fas fa-edit"></i> Edit</button>`;
+                            }
+                            // Delete button owner aur admin dono ke liye
+                            actionBtns += `<button class="btn-delete" onclick="window.confirmDeleteReview('${rev.id}')"><i class="fas fa-trash"></i> Delete</button>`;
+                            actionBtns += '</div>';
+                        }
                     }
 
                     const card = document.createElement('div');
@@ -958,8 +964,6 @@
             });
         }
 
-        // --- EDIT & DELETE REVIEW FUNCTIONS ---
-
         window.editReview = function(id) {
             const rev = window.currentReviewsMap[id];
             if (!rev) return;
@@ -977,7 +981,6 @@
             document.getElementById('submitReviewBtn').innerText = "Update Review";
             document.getElementById('cancelEditBtn').style.display = "inline-block";
 
-            // Scroll to form smoothly
             document.getElementById('reviewFormSection').scrollIntoView({ behavior: 'smooth' });
         }
 
@@ -1014,7 +1017,6 @@
             }
         });
 
-        // --- SUBMIT / UPDATE REVIEW ---
         window.submitReview = async function() {
             if (!auth.currentUser) {
                 window.showCustomAlert("Please login first to submit a review!", "Login Required");
@@ -1039,15 +1041,13 @@
 
             try {
                 if (editingReviewId) {
-                    // Update existing review
                     await updateDoc(doc(db, "reviews", editingReviewId), {
                         rating: Number(rating),
                         text: text,
-                        timestamp: Date.now() // Optional: Update timestamp so it shows at top
+                        timestamp: Date.now() 
                     });
                     window.showCustomAlert("Your review has been successfully updated!", "Success");
                 } else {
-                    // Create new review
                     await addDoc(collection(db, "reviews"), {
                         appId: currentAppId,
                         name: name,
@@ -1058,7 +1058,7 @@
                     });
                     window.showCustomAlert("Thank you! Your review has been posted.", "Success");
                 }
-                window.cancelEdit(); // Reset form
+                window.cancelEdit(); 
             } catch (error) {
                 console.error("Error saving review: ", error);
                 window.showCustomAlert("Error saving review. Please check your connection.", "Error");
@@ -1068,7 +1068,6 @@
             }
         }
 
-        // Screenshots Logic
         let isAnimating = false;
         function updateNavButtons() {
             const prevBtn = document.querySelector('.prev-btn');
@@ -1174,12 +1173,11 @@
                     else if (id === 'teamModal') window.closeTeamModal();
                     else if (id === 'contactModal') window.closeContactModal();
                     else if (id === 'screenshotModal') window.closeScreenshotModal();
-                    else m.classList.remove('active'); // Close alerts/confirms on outside click
+                    else m.classList.remove('active'); 
                 }
             });
         }
 
-        // --- AUTH UI LOGIC ---
         const loginScreen = document.getElementById('loginScreen');
         const mainAppContent = document.getElementById('mainAppContent');
         const loginBtn = document.getElementById('googleLoginBtn');
@@ -1219,7 +1217,6 @@
                 const reviewerInput = document.getElementById('reviewerName');
                 if(reviewerInput) reviewerInput.value = "Posting as: " + user.displayName;
                 
-                // If a modal is already open, reload reviews to show Edit/Delete buttons for this user
                 if (currentAppId) window.loadLiveReviews(currentAppId);
             } else {
                 loginScreen.style.display = 'flex';
