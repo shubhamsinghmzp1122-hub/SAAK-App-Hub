@@ -1,0 +1,20 @@
+{
+  "name": "SAAK App Hub",
+  "short_name": "SAAK Hub",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f2027",
+  "theme_color": "#00e676",
+  "icons": [
+    {
+      "src": "https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
