@@ -726,7 +726,6 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        // 🔥 Naye Firebase Firestore tools add kiye hain counter aur array union ke liye
         import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc, updateDoc, setDoc, getDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -743,7 +742,6 @@
         const provider = new GoogleAuthProvider();
         const db = getFirestore(app);
 
-        // ADMIN EMAIL CONSTANT
         const ADMIN_EMAIL = "shubhamsinghmzp1122@gmail.com";
 
         window.showCustomAlert = function(msg, title="Notice") {
@@ -789,7 +787,7 @@
         let currentScreenshots = [];
         let currentScreenshotIndex = 0;
         let unsubscribeReviews = null; 
-        let unsubscribeDownloads = null; // 🔥 Download tracker ke liye
+        let unsubscribeDownloads = null; 
         
         window.currentReviewsMap = {}; 
         let editingReviewId = null;
@@ -806,7 +804,10 @@
                     <img src="${app.icon}" class="app-icon" alt="${app.name}">
                     <div class="app-info">
                         <h3>${app.name}</h3>
-                        <div class="rating">${app.rating} <i class="fas fa-star"></i></div>
+                        <div class="rating">
+                            <span style="color: #ffd700;">${app.rating} <i class="fas fa-star"></i></span>
+                            <span style="color: var(--text-muted); font-size: 0.85rem; margin-left: 15px;"><i class="fas fa-download"></i> ${app.downloads !== undefined ? app.downloads : '0'}+</span>
+                        </div>
                         <p>${app.shortDesc}</p>
                     </div>
                     <button class="btn" onclick="event.stopPropagation(); window.handleInstall('${app.id}', '${app.downloadLink}')">Install</button>
@@ -820,12 +821,8 @@
             renderApps(appsData.filter(app => app.name.toLowerCase().includes(term)));
         });
 
-        // 🔥 Naya function Install click handle karne aur count badhane ke liye
         window.handleInstall = async function(appId, link) {
-            // Turant link khol do taaki user ko wait na karna pade
             window.open(link, '_blank');
-            
-            // Background me Firebase me download count badhao
             if (auth.currentUser) {
                 const uid = auth.currentUser.uid;
                 const statRef = doc(db, "app_stats", appId);
@@ -833,7 +830,7 @@
                     const snap = await getDoc(statRef);
                     if (snap.exists()) {
                         await updateDoc(statRef, {
-                            downloadedBy: arrayUnion(uid) // Sirf unique UID add hogi (Anti-Spam)
+                            downloadedBy: arrayUnion(uid) 
                         });
                     } else {
                         await setDoc(statRef, {
@@ -857,14 +854,13 @@
             document.getElementById('modalDev').innerText = app.dev;
             document.getElementById('modalRating').innerHTML = `... <i class="fas fa-star" style="color:#ffd700"></i>`;
             document.getElementById('modalReviewCount').innerText = `Loading`;
-            document.getElementById('modalDownloads').innerText = "..."; // Reset download count
+            document.getElementById('modalDownloads').innerText = "..."; 
             document.getElementById('modalSize').innerText = app.size;
             document.getElementById('modalVersion').innerText = app.version;
             document.getElementById('modalDate').innerText = app.date;
             document.getElementById('modalFullDesc').innerText = app.fullDesc;
             document.getElementById('modalWhatsNew').innerText = app.whatsNew;
             
-            // 🔥 Modal ka install button click bhi update kar diya
             document.getElementById('modalInstallBtn').onclick = () => window.handleInstall(appId, app.downloadLink);
 
             const featuresList = document.getElementById('modalFeatures');
@@ -887,7 +883,6 @@
 
             window.loadLiveReviews(appId);
 
-            // 🔥 Real-time download counter listener
             if(unsubscribeDownloads) unsubscribeDownloads();
             unsubscribeDownloads = onSnapshot(doc(db, "app_stats", appId), (docSnap) => {
                 if(docSnap.exists()) {
@@ -909,7 +904,7 @@
             currentAppId = null;
             window.cancelEdit();
             if(unsubscribeReviews) { unsubscribeReviews(); unsubscribeReviews = null; }
-            if(unsubscribeDownloads) { unsubscribeDownloads(); unsubscribeDownloads = null; } // 🔥 Stop listening to downloads when modal closes
+            if(unsubscribeDownloads) { unsubscribeDownloads(); unsubscribeDownloads = null; } 
         }
 
         window.loadLiveReviews = function(appId) {
@@ -1176,15 +1171,11 @@
             else if (touchEndX - touchStartX > 50) window.prevScreenshot(); 
         }
 
-        window.openTeamModal = () => { document.getElementById('teamModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
-        window.closeTeamModal = () => { document.getElementById('teamModal').classList.remove('active'); if(!document.getElementById('contactModal').classList.contains('active')) document.body.style.overflow = 'auto'; }
-        window.openContactModal = () => { window.closeTeamModal(); document.getElementById('contactModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
-        window.closeContactModal = () => { document.getElementById('contactModal').classList.remove('active'); document.body.style.overflow = 'auto'; }
-
         async function fetchInitialRatings() {
             try {
                 renderApps(appsData); 
                 appsData.forEach((app, index) => {
+                    // Rating Listener
                     const q = query(collection(db, "reviews"), where("appId", "==", app.id));
                     onSnapshot(q, (querySnapshot) => {
                         let totalStars = 0;
@@ -1196,6 +1187,19 @@
                         let avg = "0.0";
                         if (reviewCount > 0) avg = (totalStars / reviewCount).toFixed(1);
                         appsData[index].rating = avg;
+
+                        const term = document.getElementById('searchInput').value.toLowerCase();
+                        if (term) renderApps(appsData.filter(a => a.name.toLowerCase().includes(term)));
+                        else renderApps(appsData);
+                    });
+
+                    // Download Listener for the main card UI
+                    onSnapshot(doc(db, "app_stats", app.id), (docSnap) => {
+                        let count = 0;
+                        if(docSnap.exists() && docSnap.data().downloadedBy) {
+                            count = docSnap.data().downloadedBy.length;
+                        }
+                        appsData[index].downloads = count;
 
                         const term = document.getElementById('searchInput').value.toLowerCase();
                         if (term) renderApps(appsData.filter(a => a.name.toLowerCase().includes(term)));
