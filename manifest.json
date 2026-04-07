@@ -7,12 +7,12 @@
   "theme_color": "#00e676",
   "icons": [
     {
-      "src": "https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg",
+      "src": "sahicon.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg",
+      "src": "sahicon.png",
       "sizes": "512x512",
       "type": "image/png"
     }
