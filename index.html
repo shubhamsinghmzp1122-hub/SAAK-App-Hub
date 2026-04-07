@@ -329,13 +329,13 @@
 
         .modal-meta {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             margin-top: 10px;
             font-size: 0.85rem;
             color: var(--text-muted);
         }
 
-        .modal-meta div { text-align: center; border-right: 1px solid var(--glass-border); padding-right: 20px; }
+        .modal-meta div { text-align: center; border-right: 1px solid var(--glass-border); padding-right: 15px; }
         .modal-meta div:last-child { border-right: none; }
 
         /* Screenshots */
@@ -582,6 +582,7 @@
                     <p style="color: var(--primary-color)" id="modalDev">Developer</p>
                     <div class="modal-meta">
                         <div><strong id="modalRating">... <i class="fas fa-star" style="color:#ffd700"></i></strong><br><span id="modalReviewCount">Loading</span></div>
+                        <div><strong id="modalDownloads">...</strong><br>Downloads</div>
                         <div><strong id="modalSize">25 MB</strong><br>Size</div>
                         <div><strong id="modalVersion">1.0.0</strong><br>Version</div>
                     </div>
@@ -725,7 +726,8 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        // 🔥 Naye Firebase Firestore tools add kiye hain counter aur array union ke liye
+        import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc, updateDoc, setDoc, getDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAbOtjHeldbPRC29tX-i5tbUeySQlTzWUU",
@@ -787,6 +789,7 @@
         let currentScreenshots = [];
         let currentScreenshotIndex = 0;
         let unsubscribeReviews = null; 
+        let unsubscribeDownloads = null; // 🔥 Download tracker ke liye
         
         window.currentReviewsMap = {}; 
         let editingReviewId = null;
@@ -806,7 +809,7 @@
                         <div class="rating">${app.rating} <i class="fas fa-star"></i></div>
                         <p>${app.shortDesc}</p>
                     </div>
-                    <button class="btn" onclick="event.stopPropagation(); window.open('${app.downloadLink}', '_blank')">Install</button>
+                    <button class="btn" onclick="event.stopPropagation(); window.handleInstall('${app.id}', '${app.downloadLink}')">Install</button>
                 `;
                 grid.appendChild(card);
             });
@@ -816,6 +819,32 @@
             const term = e.target.value.toLowerCase();
             renderApps(appsData.filter(app => app.name.toLowerCase().includes(term)));
         });
+
+        // 🔥 Naya function Install click handle karne aur count badhane ke liye
+        window.handleInstall = async function(appId, link) {
+            // Turant link khol do taaki user ko wait na karna pade
+            window.open(link, '_blank');
+            
+            // Background me Firebase me download count badhao
+            if (auth.currentUser) {
+                const uid = auth.currentUser.uid;
+                const statRef = doc(db, "app_stats", appId);
+                try {
+                    const snap = await getDoc(statRef);
+                    if (snap.exists()) {
+                        await updateDoc(statRef, {
+                            downloadedBy: arrayUnion(uid) // Sirf unique UID add hogi (Anti-Spam)
+                        });
+                    } else {
+                        await setDoc(statRef, {
+                            downloadedBy: [uid]
+                        });
+                    }
+                } catch (e) {
+                    console.error("Error updating download count:", e);
+                }
+            }
+        }
 
         window.openModal = function(appId) {
             const app = appsData.find(a => a.id === appId);
@@ -828,12 +857,15 @@
             document.getElementById('modalDev').innerText = app.dev;
             document.getElementById('modalRating').innerHTML = `... <i class="fas fa-star" style="color:#ffd700"></i>`;
             document.getElementById('modalReviewCount').innerText = `Loading`;
+            document.getElementById('modalDownloads').innerText = "..."; // Reset download count
             document.getElementById('modalSize').innerText = app.size;
             document.getElementById('modalVersion').innerText = app.version;
             document.getElementById('modalDate').innerText = app.date;
             document.getElementById('modalFullDesc').innerText = app.fullDesc;
             document.getElementById('modalWhatsNew').innerText = app.whatsNew;
-            document.getElementById('modalInstallBtn').onclick = () => window.open(app.downloadLink, '_blank');
+            
+            // 🔥 Modal ka install button click bhi update kar diya
+            document.getElementById('modalInstallBtn').onclick = () => window.handleInstall(appId, app.downloadLink);
 
             const featuresList = document.getElementById('modalFeatures');
             featuresList.innerHTML = '';
@@ -854,6 +886,19 @@
             });
 
             window.loadLiveReviews(appId);
+
+            // 🔥 Real-time download counter listener
+            if(unsubscribeDownloads) unsubscribeDownloads();
+            unsubscribeDownloads = onSnapshot(doc(db, "app_stats", appId), (docSnap) => {
+                if(docSnap.exists()) {
+                    const data = docSnap.data();
+                    const count = data.downloadedBy ? data.downloadedBy.length : 0;
+                    document.getElementById('modalDownloads').innerText = count + "+";
+                } else {
+                    document.getElementById('modalDownloads').innerText = "0+";
+                }
+            });
+
             document.getElementById('appModal').classList.add('active');
             document.body.style.overflow = 'hidden'; 
         }
@@ -864,6 +909,7 @@
             currentAppId = null;
             window.cancelEdit();
             if(unsubscribeReviews) { unsubscribeReviews(); unsubscribeReviews = null; }
+            if(unsubscribeDownloads) { unsubscribeDownloads(); unsubscribeDownloads = null; } // 🔥 Stop listening to downloads when modal closes
         }
 
         window.loadLiveReviews = function(appId) {
@@ -927,7 +973,6 @@
                         dateStr = d.toLocaleDateString();
                     }
 
-                    // --- ADMIN LOGIC UPDATE YAHAN HUA HAI ---
                     let actionBtns = '';
                     if (auth.currentUser) {
                         const isOwner = rev.userId === auth.currentUser.uid;
@@ -935,11 +980,9 @@
 
                         if (isOwner || isAdmin) {
                             actionBtns += '<div class="review-actions">';
-                            // Edit button sirf khud ke comments ke liye
                             if (isOwner) {
                                 actionBtns += `<button class="btn-edit" onclick="window.editReview('${rev.id}')"><i class="fas fa-edit"></i> Edit</button>`;
                             }
-                            // Delete button owner aur admin dono ke liye
                             actionBtns += `<button class="btn-delete" onclick="window.confirmDeleteReview('${rev.id}')"><i class="fas fa-trash"></i> Delete</button>`;
                             actionBtns += '</div>';
                         }
@@ -1229,4 +1272,4 @@
         });
     </script>
 </body>
-    </html>
+</html>
