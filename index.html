@@ -586,7 +586,10 @@
                         <div><strong id="modalSize">25 MB</strong><br>Size</div>
                         <div><strong id="modalVersion">1.0.0</strong><br>Version</div>
                     </div>
-                    <button id="modalInstallBtn" class="btn" style="margin-top: 15px; width: 100%;"><i class="fas fa-download"></i> Install</button>
+                    <div style="display: flex; gap: 10px; margin-top: 15px; width: 100%;">
+                        <button id="modalInstallBtn" class="btn" style="flex: 1;"><i class="fas fa-download"></i> Install</button>
+                        <button id="modalShareBtn" class="btn" style="flex: 1; background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid var(--glass-border);"><i class="fas fa-share-nodes"></i> Share</button>
+                    </div>
                 </div>
             </div>
 
@@ -843,6 +846,30 @@
             }
         }
 
+        // 🔥 NAYA SHARE FUNCTION
+        window.handleShare = async function(appName, shortDesc) {
+            const shareData = {
+                title: appName + " - SAAK App Hub",
+                text: `Check out ${appName} on SAAK App Hub! 🚀\n${shortDesc}\n\nDownload here: `,
+                url: 'https://shubhamsinghmzp1122-hub.github.io/SAAK-App-Hub/' 
+            };
+
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                } catch (err) {
+                    console.error('Error sharing:', err);
+                }
+            } else {
+                const fallbackText = `${shareData.text} ${shareData.url}`;
+                navigator.clipboard.writeText(fallbackText).then(() => {
+                    window.showCustomAlert("Link copied to clipboard! Paste it anywhere to share.", "Copied!");
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+            }
+        }
+
         window.openModal = function(appId) {
             const app = appsData.find(a => a.id === appId);
             if (!app) return;
@@ -862,6 +889,8 @@
             document.getElementById('modalWhatsNew').innerText = app.whatsNew;
             
             document.getElementById('modalInstallBtn').onclick = () => window.handleInstall(appId, app.downloadLink);
+            // 🔥 SHARE BUTTON KO CLICK SE JOD DIYA
+            document.getElementById('modalShareBtn').onclick = () => window.handleShare(app.name, app.shortDesc);
 
             const featuresList = document.getElementById('modalFeatures');
             featuresList.innerHTML = '';
@@ -1170,6 +1199,11 @@
             if (touchStartX - touchEndX > 50) window.nextScreenshot(); 
             else if (touchEndX - touchStartX > 50) window.prevScreenshot(); 
         }
+
+        window.openTeamModal = () => { document.getElementById('teamModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
+        window.closeTeamModal = () => { document.getElementById('teamModal').classList.remove('active'); if(!document.getElementById('contactModal').classList.contains('active')) document.body.style.overflow = 'auto'; }
+        window.openContactModal = () => { window.closeTeamModal(); document.getElementById('contactModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
+        window.closeContactModal = () => { document.getElementById('contactModal').classList.remove('active'); document.body.style.overflow = 'auto'; }
 
         async function fetchInitialRatings() {
             try {
