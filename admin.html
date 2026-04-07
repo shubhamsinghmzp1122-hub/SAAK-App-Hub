@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAAK Admin Panel</title>
+    <title>SAAK VIP Admin</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -17,103 +17,171 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: var(--bg-gradient); color: var(--text-main); min-height: 100vh; padding: 20px; }
         
-        .container { max-width: 800px; margin: 0 auto; }
-        .box { background: var(--glass-bg); padding: 30px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); text-align: center; margin-top: 50px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .box { background: var(--glass-bg); padding: 30px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); text-align: center; margin-top: 30px; }
         
         h1 { color: var(--primary-color); margin-bottom: 20px; text-align: center; }
         
+        /* Form & Validation Styles */
         .form-group { margin-bottom: 20px; text-align: left; }
         label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 0.9rem; }
         input, textarea { width: 100%; padding: 12px; border-radius: 8px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: white; outline: none; transition: 0.3s; }
         input:focus, textarea:focus { border-color: var(--primary-color); }
         
+        /* 🔥 GALTI WALA LAL BORDER (Validation) */
+        input.error, textarea.error { border-color: #ff4757 !important; box-shadow: 0 0 8px rgba(255, 71, 87, 0.5); }
+
         .btn { background: var(--primary-color); color: #000; padding: 12px 30px; border: none; border-radius: 25px; font-weight: 600; cursor: pointer; width: 100%; font-size: 1.1rem; transition: 0.3s; }
         .btn:hover { transform: scale(1.02); box-shadow: 0 5px 15px rgba(0, 230, 118, 0.3); }
-        .google-btn { background: white; color: #333; display: inline-flex; align-items: center; gap: 10px; width: auto; }
+        .google-btn { background: white; color: #333; display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: auto; margin-top: 20px; }
 
-        #adminFormScreen, #accessDeniedScreen { display: none; }
+        #adminMainScreen, #accessDeniedScreen { display: none; }
+
+        /* Tabs Style */
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; }
+        .tab-btn { background: rgba(255,255,255,0.1); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
+        .tab-btn.active { background: var(--primary-color); color: black; font-weight: bold; }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Manage Apps Grid */
+        .manage-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; text-align: left; }
+        .manage-card { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; display: flex; flex-direction: column; gap: 10px; }
+        .manage-card img { width: 50px; height: 50px; border-radius: 10px; }
+        .action-btns { display: flex; gap: 10px; margin-top: auto; }
+        .btn-sm { padding: 8px 15px; border-radius: 15px; font-size: 0.85rem; border: none; cursor: pointer; color: white; width: 100%; font-weight: bold; }
+        .edit-btn { background: #f39c12; } .edit-btn:hover { background: #e67e22; }
+        .del-btn { background: #e74c3c; } .del-btn:hover { background: #c0392b; }
+
+        /* Custom Modal VIP */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 9999; opacity: 0; visibility: hidden; transition: 0.3s; }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-box { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 30px; border-radius: 20px; text-align: center; width: 90%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transform: scale(0.9); transition: 0.3s; }
+        .modal-overlay.active .modal-box { transform: scale(1); }
+        
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div id="loginScreen" class="box">
+        <div id="loginScreen" class="box" style="margin-top: 100px;">
             <i class="fas fa-user-shield" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 15px;"></i>
             <h2>Admin Login</h2>
-            <p style="color: var(--text-muted); margin-bottom: 25px;">Strictly restricted for SAAK App Hub Owner.</p>
+            <p style="color: var(--text-muted);">Strictly restricted for SAAK App Hub Owner.</p>
             <button id="loginBtn" class="btn google-btn">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" width="20"> Login to Access Control Room
             </button>
         </div>
 
-        <div id="accessDeniedScreen" class="box">
+        <div id="accessDeniedScreen" class="box" style="margin-top: 100px;">
             <i class="fas fa-lock" style="font-size: 3rem; color: #ff4757; margin-bottom: 15px;"></i>
             <h2 style="color: #ff4757;">Access Denied</h2>
             <p style="color: var(--text-muted); margin-bottom: 25px;">You are not authorized to view this page.</p>
             <button onclick="logoutAdmin()" class="btn" style="background: rgba(255,255,255,0.1); color: white; width: auto;">Go Back / Logout</button>
         </div>
 
-        <div id="adminFormScreen">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-                <h1><i class="fas fa-database"></i> Add New App</h1>
-                <button onclick="logoutAdmin()" class="btn" style="width: auto; padding: 8px 20px; font-size: 0.9rem; background: #ff4757; color: white;">Logout</button>
+        <div id="adminMainScreen">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h1 style="margin: 0;"><i class="fas fa-cogs"></i> SAAK Control Room</h1>
+                <div>
+                    <button class="btn" style="width: auto; padding: 8px 15px; font-size: 0.9rem; background: white; margin-right: 10px;" onclick="window.location.href='index.html'">View App</button>
+                    <button onclick="logoutAdmin()" class="btn" style="width: auto; padding: 8px 15px; font-size: 0.9rem; background: #ff4757; color: white;">Logout</button>
+                </div>
             </div>
 
-            <div class="box" style="margin-top: 0; text-align: left;">
-                <form id="addAppForm">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('manageTab')"><i class="fas fa-list"></i> Manage Apps</button>
+                <button class="tab-btn" onclick="switchTab('addTab')" id="addTabBtn"><i class="fas fa-plus-circle"></i> Add New App</button>
+            </div>
+
+            <div id="manageTab" class="tab-content active box" style="margin-top: 0;">
+                <h3 style="margin-bottom: 20px; color: var(--primary-color); text-align: left;">All Published Apps</h3>
+                <div class="manage-grid" id="manageAppsContainer">
+                    <p style="color: var(--text-muted);">Loading apps...</p>
+                </div>
+            </div>
+
+            <div id="addTab" class="tab-content box" style="margin-top: 0; text-align: left;">
+                <h3 style="margin-bottom: 20px; color: var(--primary-color);" id="formTitle">Add a New App</h3>
+                <form id="appForm">
                     <div class="form-group">
                         <label>App Name *</label>
-                        <input type="text" id="appName" placeholder="e.g., Tik Tok Tue" required>
+                        <input type="text" id="appName" placeholder="e.g., Tik Tok Tue">
                     </div>
                     <div class="form-group">
                         <label>Developer Name *</label>
-                        <input type="text" id="appDev" placeholder="e.g., OX Game" required>
+                        <input type="text" id="appDev" placeholder="e.g., OX Game">
                     </div>
                     <div style="display: flex; gap: 15px;">
                         <div class="form-group" style="flex: 1;">
                             <label>App Size *</label>
-                            <input type="text" id="appSize" placeholder="e.g., 33.4 MB" required>
+                            <input type="text" id="appSize" placeholder="e.g., 33.4 MB">
                         </div>
                         <div class="form-group" style="flex: 1;">
                             <label>Version *</label>
-                            <input type="text" id="appVersion" placeholder="e.g., 1.0.0" required>
+                            <input type="text" id="appVersion" placeholder="e.g., 1.0.0">
                         </div>
                     </div>
                     <div class="form-group">
                         <label>Release Date *</label>
-                        <input type="text" id="appDate" placeholder="e.g., Apr 10, 2026" required>
+                        <input type="text" id="appDate" placeholder="e.g., Apr 10, 2026">
                     </div>
                     <div class="form-group">
-                        <label>Short Description * (App card ke liye)</label>
-                        <input type="text" id="appShortDesc" required>
+                        <label>Short Description *</label>
+                        <input type="text" id="appShortDesc">
                     </div>
                     <div class="form-group">
-                        <label>Full Description * (Modal ke andar ke liye)</label>
-                        <textarea id="appFullDesc" rows="3" required></textarea>
+                        <label>Full Description *</label>
+                        <textarea id="appFullDesc" rows="3"></textarea>
                     </div>
                     <div class="form-group">
-                        <label>App Icon URL / Link * (Google Drive icon link)</label>
-                        <input type="text" id="appIcon" required>
+                        <label>App Icon URL * (Must start with http/https)</label>
+                        <input type="text" id="appIcon" placeholder="https://...">
                     </div>
                     <div class="form-group">
-                        <label>Download Link * (Google Drive link)</label>
-                        <input type="text" id="appLink" required>
+                        <label>Download Link * (Must start with http/https)</label>
+                        <input type="text" id="appLink" placeholder="https://...">
                     </div>
                     <div class="form-group">
-                        <label>Key Features (Comma se alag karein. e.g., Fast, Secure, Free)</label>
+                        <label>Key Features (Comma separated)</label>
                         <textarea id="appFeatures" rows="2"></textarea>
                     </div>
                     <div class="form-group">
-                        <label>What's New (Update details)</label>
-                        <textarea id="appWhatsNew" rows="2" placeholder="- Bug fixes&#10;- New UI"></textarea>
+                        <label>What's New</label>
+                        <textarea id="appWhatsNew" rows="2"></textarea>
                     </div>
                     <div class="form-group">
-                        <label>Screenshots URLs (Comma se alag karein)</label>
+                        <label>Screenshots URLs (Comma separated)</label>
                         <textarea id="appScreenshots" rows="3" placeholder="https://link1.png, https://link2.png"></textarea>
                     </div>
                     
-                    <button type="submit" id="submitBtn" class="btn">Publish App to SAAK Hub</button>
+                    <div style="display: flex; gap: 15px;">
+                        <button type="submit" id="submitBtn" class="btn">Publish App</button>
+                        <button type="button" id="cancelEditBtn" class="btn" style="display: none; background: rgba(255,255,255,0.1); color: white;" onclick="cancelEditing()">Cancel</button>
+                    </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="customAlertModal">
+        <div class="modal-box">
+            <i class="fas fa-info-circle" id="alertIcon" style="font-size: 3rem; margin-bottom: 15px;"></i>
+            <h2 id="alertTitle" style="font-size: 1.4rem; margin-bottom: 10px;">Alert</h2>
+            <p id="alertMsg" style="color: var(--text-muted); margin-bottom: 25px;">Message goes here.</p>
+            <button class="btn" onclick="document.getElementById('customAlertModal').classList.remove('active')">Got it!</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="confirmDeleteModal">
+        <div class="modal-box">
+            <i class="fas fa-trash-alt" style="font-size: 3rem; color: #ff4757; margin-bottom: 15px;"></i>
+            <h2 style="font-size: 1.4rem; margin-bottom: 10px;">Permanently Delete?</h2>
+            <p style="color: var(--text-muted); margin-bottom: 25px;">Are you sure you want to delete this app forever? This action cannot be undone.</p>
+            <div style="display: flex; gap: 15px;">
+                <button class="btn" style="background: rgba(255,255,255,0.1); color: white;" onclick="document.getElementById('confirmDeleteModal').classList.remove('active')">Cancel</button>
+                <button class="btn" id="finalDeleteBtn" style="background: #ff4757; color: white;">Yes, Delete</button>
             </div>
         </div>
     </div>
@@ -121,9 +189,8 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, doc, setDoc, onSnapshot, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // Firebase Config (Aapka purana wala)
         const firebaseConfig = {
             apiKey: "AIzaSyAbOtjHeldbPRC29tX-i5tbUeySQlTzWUU",
             authDomain: "saak-app-hub-2ee63.firebaseapp.com",
@@ -138,89 +205,219 @@
         const provider = new GoogleAuthProvider();
         const db = getFirestore(app);
 
-        // BOSS KI EMAIL ID YAHAN HAI
         const ADMIN_EMAIL = "shubhamsinghmzp1122@gmail.com";
+        let allAppsData = [];
+        let editingAppId = null;
+        let appToDelete = null;
 
-        const loginScreen = document.getElementById('loginScreen');
-        const accessDeniedScreen = document.getElementById('accessDeniedScreen');
-        const adminFormScreen = document.getElementById('adminFormScreen');
-
-        document.getElementById('loginBtn').addEventListener('click', () => {
-            signInWithPopup(auth, provider).catch(err => alert("Login failed!"));
-        });
-
-        window.logoutAdmin = function() {
-            signOut(auth).then(() => {
-                location.reload();
-            });
+        // --- Custom Alert System ---
+        window.showMsg = function(title, msg, type = 'info') {
+            document.getElementById('alertTitle').innerText = title;
+            document.getElementById('alertMsg').innerText = msg;
+            const icon = document.getElementById('alertIcon');
+            if(type === 'error') { icon.className = "fas fa-exclamation-triangle"; icon.style.color = "#ff4757"; }
+            else if(type === 'success') { icon.className = "fas fa-check-circle"; icon.style.color = "#00e676"; }
+            else { icon.className = "fas fa-info-circle"; icon.style.color = "#3498db"; }
+            document.getElementById('customAlertModal').classList.add('active');
         }
 
+        // --- Auth System ---
+        document.getElementById('loginBtn').addEventListener('click', () => signInWithPopup(auth, provider));
+        window.logoutAdmin = () => signOut(auth).then(() => location.reload());
+
         onAuthStateChanged(auth, (user) => {
-            if (user) {
-                if (user.email === ADMIN_EMAIL) {
-                    // Boss aagaye! Form khol do.
-                    loginScreen.style.display = 'none';
-                    accessDeniedScreen.style.display = 'none';
-                    adminFormScreen.style.display = 'block';
-                } else {
-                    // Koi aur hai! Bahar nikalo.
-                    loginScreen.style.display = 'none';
-                    adminFormScreen.style.display = 'none';
-                    accessDeniedScreen.style.display = 'block';
-                }
+            if (user && user.email === ADMIN_EMAIL) {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('adminMainScreen').style.display = 'block';
+                loadApps(); // Load data from Firebase
+            } else if (user) {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('accessDeniedScreen').style.display = 'block';
             } else {
-                loginScreen.style.display = 'block';
-                accessDeniedScreen.style.display = 'none';
-                adminFormScreen.style.display = 'none';
+                document.getElementById('loginScreen').style.display = 'block';
+                document.getElementById('adminMainScreen').style.display = 'none';
+                document.getElementById('accessDeniedScreen').style.display = 'none';
             }
         });
 
-        // FORM SUBMIT KARNE KA JAADU
-        document.getElementById('addAppForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); // Page refresh rokne ke liye
+        // --- Tabs System ---
+        window.switchTab = function(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // --- Fetch & Show Apps ---
+        function loadApps() {
+            onSnapshot(collection(db, "apps"), (snapshot) => {
+                allAppsData = [];
+                snapshot.forEach(doc => allAppsData.push(doc.data()));
+                renderManageApps();
+            });
+        }
+
+        function renderManageApps() {
+            const container = document.getElementById('manageAppsContainer');
+            container.innerHTML = '';
+            if(allAppsData.length === 0) {
+                container.innerHTML = "<p style='color: var(--text-muted);'>No apps found. Add your first app!</p>";
+                return;
+            }
+            allAppsData.sort((a, b) => b.timestamp - a.timestamp).forEach(app => {
+                container.innerHTML += `
+                    <div class="manage-card">
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <img src="${app.icon}">
+                            <div>
+                                <h4 style="margin:0; font-size:1.1rem;">${app.name}</h4>
+                                <small style="color:var(--text-muted)">v${app.version}</small>
+                            </div>
+                        </div>
+                        <div class="action-btns">
+                            <button class="btn-sm edit-btn" onclick="editApp('${app.id}')"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn-sm del-btn" onclick="confirmDelete('${app.id}')"><i class="fas fa-trash"></i> Delete</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // --- Delete App Logic ---
+        window.confirmDelete = function(appId) {
+            appToDelete = appId;
+            document.getElementById('confirmDeleteModal').classList.add('active');
+        }
+
+        document.getElementById('finalDeleteBtn').addEventListener('click', async () => {
+            if(!appToDelete) return;
+            document.getElementById('finalDeleteBtn').innerText = "Deleting...";
+            try {
+                await deleteDoc(doc(db, "apps", appToDelete));
+                document.getElementById('confirmDeleteModal').classList.remove('active');
+                showMsg("Deleted", "App permanently deleted from database.", "success");
+            } catch(e) {
+                showMsg("Error", "Could not delete app. Please try again.", "error");
+            }
+            document.getElementById('finalDeleteBtn').innerText = "Yes, Delete";
+            appToDelete = null;
+        });
+
+        // --- Edit (Update) App Logic ---
+        window.editApp = function(appId) {
+            const app = allAppsData.find(a => a.id === appId);
+            if(!app) return;
+            editingAppId = appId;
             
+            document.getElementById('appName').value = app.name;
+            document.getElementById('appDev').value = app.dev;
+            document.getElementById('appSize').value = app.size;
+            document.getElementById('appVersion').value = app.version;
+            document.getElementById('appDate').value = app.date;
+            document.getElementById('appShortDesc').value = app.shortDesc;
+            document.getElementById('appFullDesc').value = app.fullDesc;
+            document.getElementById('appIcon').value = app.icon;
+            document.getElementById('appLink').value = app.downloadLink;
+            document.getElementById('appFeatures').value = (app.features || []).join(', ');
+            document.getElementById('appWhatsNew').value = app.whatsNew || '';
+            document.getElementById('appScreenshots').value = (app.screenshots || []).join(', ');
+
+            document.getElementById('formTitle').innerText = "Update Existing App";
+            document.getElementById('submitBtn').innerText = "Update App Settings";
+            document.getElementById('cancelEditBtn').style.display = "inline-block";
+            
+            switchTab('addTab');
+            document.getElementById('addTabBtn').classList.add('active');
+            document.querySelectorAll('.tab-btn')[0].classList.remove('active');
+        }
+
+        window.cancelEditing = function() {
+            editingAppId = null;
+            document.getElementById('appForm').reset();
+            document.getElementById('formTitle').innerText = "Add a New App";
+            document.getElementById('submitBtn').innerText = "Publish App";
+            document.getElementById('cancelEditBtn').style.display = "none";
+            // Remove red borders
+            document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+        }
+
+        // Remove red border on typing
+        document.querySelectorAll('input, textarea').forEach(el => {
+            el.addEventListener('input', () => el.classList.remove('error'));
+        });
+
+        // --- Form Submit & Validation ---
+        document.getElementById('appForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            let hasError = false;
+            
+            // Validation Logic (Galat data rokna)
+            const requiredFields = ['appName', 'appDev', 'appSize', 'appVersion', 'appDate', 'appShortDesc', 'appFullDesc', 'appIcon', 'appLink'];
+            requiredFields.forEach(id => {
+                const el = document.getElementById(id);
+                if(el.value.trim() === '') {
+                    el.classList.add('error');
+                    hasError = true;
+                }
+            });
+
+            const iconLink = document.getElementById('appIcon');
+            if(iconLink.value && !iconLink.value.startsWith('http')) {
+                iconLink.classList.add('error');
+                showMsg("Invalid Link", "App Icon link must start with http or https.", "error");
+                return;
+            }
+
+            const downloadLink = document.getElementById('appLink');
+            if(downloadLink.value && !downloadLink.value.startsWith('http')) {
+                downloadLink.classList.add('error');
+                showMsg("Invalid Link", "Download link must start with http or https.", "error");
+                return;
+            }
+
+            if(hasError) {
+                showMsg("Incomplete Form", "Please fill all required fields correctly (highlighted in red).", "error");
+                return;
+            }
+
+            // Data Prepare
             const submitBtn = document.getElementById('submitBtn');
-            submitBtn.innerText = "Publishing... Please wait";
-            submitBtn.disabled = true;
+            submitBtn.innerText = "Processing..."; submitBtn.disabled = true;
 
-            const name = document.getElementById('appName').value;
-            // Naam se ID generate karna (e.g., "Tik Tok Tue" -> "tiktoktue")
-            const id = name.toLowerCase().replace(/\s+/g, '');
+            const name = document.getElementById('appName').value.trim();
+            const id = editingAppId ? editingAppId : name.toLowerCase().replace(/[^a-z0-9]/g, '');
 
-            // Data collect karna
-            const newAppData = {
-                id: id,
-                name: name,
-                dev: document.getElementById('appDev').value,
-                size: document.getElementById('appSize').value,
-                version: document.getElementById('appVersion').value,
-                date: document.getElementById('appDate').value,
-                shortDesc: document.getElementById('appShortDesc').value,
-                fullDesc: document.getElementById('appFullDesc').value,
-                icon: document.getElementById('appIcon').value,
-                downloadLink: document.getElementById('appLink').value,
-                whatsNew: document.getElementById('appWhatsNew').value,
-                rating: "0.0", // Naya app hai toh 0 rating
-                // Features aur screenshots ko comma hata kar list (array) banana
-                features: document.getElementById('appFeatures').value.split(',').map(item => item.trim()).filter(i => i),
-                screenshots: document.getElementById('appScreenshots').value.split(',').map(item => item.trim()).filter(i => i),
-                timestamp: Date.now()
+            const appData = {
+                id: id, name: name, dev: document.getElementById('appDev').value.trim(),
+                size: document.getElementById('appSize').value.trim(), version: document.getElementById('appVersion').value.trim(),
+                date: document.getElementById('appDate').value.trim(), shortDesc: document.getElementById('appShortDesc').value.trim(),
+                fullDesc: document.getElementById('appFullDesc').value.trim(), icon: document.getElementById('appIcon').value.trim(),
+                downloadLink: document.getElementById('appLink').value.trim(), whatsNew: document.getElementById('appWhatsNew').value.trim(),
+                features: document.getElementById('appFeatures').value.split(',').map(i => i.trim()).filter(i => i),
+                screenshots: document.getElementById('appScreenshots').value.split(',').map(i => i.trim()).filter(i => i),
             };
 
             try {
-                // Firebase Database ke "apps" folder me save karna
-                await setDoc(doc(db, "apps", id), newAppData);
-                alert("Boom! 🔥 App successfully added to SAAK App Hub!");
-                document.getElementById('addAppForm').reset(); // Form khali kar do
+                if(editingAppId) {
+                    await updateDoc(doc(db, "apps", id), appData);
+                    showMsg("App Updated!", "Changes have been saved successfully.", "success");
+                } else {
+                    appData.rating = "0.0"; 
+                    appData.timestamp = Date.now();
+                    await setDoc(doc(db, "apps", id), appData);
+                    showMsg("App Published!", "New app has been added to SAAK App Hub.", "success");
+                }
+                cancelEditing();
+                switchTab('manageTab');
+                document.querySelectorAll('.tab-btn')[0].classList.add('active');
+                document.getElementById('addTabBtn').classList.remove('active');
             } catch (error) {
-                console.error("Error adding document: ", error);
-                alert("Oh no! Kuch gadbad ho gayi. Console check karo.");
+                showMsg("Error", "Something went wrong. Please check your connection.", "error");
             } finally {
-                submitBtn.innerText = "Publish App to SAAK Hub";
-                submitBtn.disabled = false;
+                submitBtn.innerText = "Publish App"; submitBtn.disabled = false;
             }
         });
     </script>
 </body>
 </html>
-                          
