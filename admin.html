@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAAK Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --primary-color: #00e676;
+            --text-main: #ffffff;
+            --text-muted: #b0bec5;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--bg-gradient); color: var(--text-main); min-height: 100vh; padding: 20px; }
+        
+        .container { max-width: 800px; margin: 0 auto; }
+        .box { background: var(--glass-bg); padding: 30px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); text-align: center; margin-top: 50px; }
+        
+        h1 { color: var(--primary-color); margin-bottom: 20px; text-align: center; }
+        
+        .form-group { margin-bottom: 20px; text-align: left; }
+        label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 0.9rem; }
+        input, textarea { width: 100%; padding: 12px; border-radius: 8px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: white; outline: none; transition: 0.3s; }
+        input:focus, textarea:focus { border-color: var(--primary-color); }
+        
+        .btn { background: var(--primary-color); color: #000; padding: 12px 30px; border: none; border-radius: 25px; font-weight: 600; cursor: pointer; width: 100%; font-size: 1.1rem; transition: 0.3s; }
+        .btn:hover { transform: scale(1.02); box-shadow: 0 5px 15px rgba(0, 230, 118, 0.3); }
+        .google-btn { background: white; color: #333; display: inline-flex; align-items: center; gap: 10px; width: auto; }
+
+        #adminFormScreen, #accessDeniedScreen { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="loginScreen" class="box">
+            <i class="fas fa-user-shield" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 15px;"></i>
+            <h2>Admin Login</h2>
+            <p style="color: var(--text-muted); margin-bottom: 25px;">Strictly restricted for SAAK App Hub Owner.</p>
+            <button id="loginBtn" class="btn google-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" width="20"> Login to Access Control Room
+            </button>
+        </div>
+
+        <div id="accessDeniedScreen" class="box">
+            <i class="fas fa-lock" style="font-size: 3rem; color: #ff4757; margin-bottom: 15px;"></i>
+            <h2 style="color: #ff4757;">Access Denied</h2>
+            <p style="color: var(--text-muted); margin-bottom: 25px;">You are not authorized to view this page.</p>
+            <button onclick="logoutAdmin()" class="btn" style="background: rgba(255,255,255,0.1); color: white; width: auto;">Go Back / Logout</button>
+        </div>
+
+        <div id="adminFormScreen">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <h1><i class="fas fa-database"></i> Add New App</h1>
+                <button onclick="logoutAdmin()" class="btn" style="width: auto; padding: 8px 20px; font-size: 0.9rem; background: #ff4757; color: white;">Logout</button>
+            </div>
+
+            <div class="box" style="margin-top: 0; text-align: left;">
+                <form id="addAppForm">
+                    <div class="form-group">
+                        <label>App Name *</label>
+                        <input type="text" id="appName" placeholder="e.g., Tik Tok Tue" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Developer Name *</label>
+                        <input type="text" id="appDev" placeholder="e.g., OX Game" required>
+                    </div>
+                    <div style="display: flex; gap: 15px;">
+                        <div class="form-group" style="flex: 1;">
+                            <label>App Size *</label>
+                            <input type="text" id="appSize" placeholder="e.g., 33.4 MB" required>
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label>Version *</label>
+                            <input type="text" id="appVersion" placeholder="e.g., 1.0.0" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Release Date *</label>
+                        <input type="text" id="appDate" placeholder="e.g., Apr 10, 2026" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Short Description * (App card ke liye)</label>
+                        <input type="text" id="appShortDesc" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Full Description * (Modal ke andar ke liye)</label>
+                        <textarea id="appFullDesc" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>App Icon URL / Link * (Google Drive icon link)</label>
+                        <input type="text" id="appIcon" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Download Link * (Google Drive link)</label>
+                        <input type="text" id="appLink" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Key Features (Comma se alag karein. e.g., Fast, Secure, Free)</label>
+                        <textarea id="appFeatures" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>What's New (Update details)</label>
+                        <textarea id="appWhatsNew" rows="2" placeholder="- Bug fixes&#10;- New UI"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Screenshots URLs (Comma se alag karein)</label>
+                        <textarea id="appScreenshots" rows="3" placeholder="https://link1.png, https://link2.png"></textarea>
+                    </div>
+                    
+                    <button type="submit" id="submitBtn" class="btn">Publish App to SAAK Hub</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        // Firebase Config (Aapka purana wala)
+        const firebaseConfig = {
+            apiKey: "AIzaSyAbOtjHeldbPRC29tX-i5tbUeySQlTzWUU",
+            authDomain: "saak-app-hub-2ee63.firebaseapp.com",
+            projectId: "saak-app-hub-2ee63",
+            storageBucket: "saak-app-hub-2ee63.firebasestorage.app",
+            messagingSenderId: "233444896443",
+            appId: "1:233444896443:web:1fec78599d657162e1039e"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+        const db = getFirestore(app);
+
+        // BOSS KI EMAIL ID YAHAN HAI
+        const ADMIN_EMAIL = "shubhamsinghmzp1122@gmail.com";
+
+        const loginScreen = document.getElementById('loginScreen');
+        const accessDeniedScreen = document.getElementById('accessDeniedScreen');
+        const adminFormScreen = document.getElementById('adminFormScreen');
+
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            signInWithPopup(auth, provider).catch(err => alert("Login failed!"));
+        });
+
+        window.logoutAdmin = function() {
+            signOut(auth).then(() => {
+                location.reload();
+            });
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                if (user.email === ADMIN_EMAIL) {
+                    // Boss aagaye! Form khol do.
+                    loginScreen.style.display = 'none';
+                    accessDeniedScreen.style.display = 'none';
+                    adminFormScreen.style.display = 'block';
+                } else {
+                    // Koi aur hai! Bahar nikalo.
+                    loginScreen.style.display = 'none';
+                    adminFormScreen.style.display = 'none';
+                    accessDeniedScreen.style.display = 'block';
+                }
+            } else {
+                loginScreen.style.display = 'block';
+                accessDeniedScreen.style.display = 'none';
+                adminFormScreen.style.display = 'none';
+            }
+        });
+
+        // FORM SUBMIT KARNE KA JAADU
+        document.getElementById('addAppForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); // Page refresh rokne ke liye
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.innerText = "Publishing... Please wait";
+            submitBtn.disabled = true;
+
+            const name = document.getElementById('appName').value;
+            // Naam se ID generate karna (e.g., "Tik Tok Tue" -> "tiktoktue")
+            const id = name.toLowerCase().replace(/\s+/g, '');
+
+            // Data collect karna
+            const newAppData = {
+                id: id,
+                name: name,
+                dev: document.getElementById('appDev').value,
+                size: document.getElementById('appSize').value,
+                version: document.getElementById('appVersion').value,
+                date: document.getElementById('appDate').value,
+                shortDesc: document.getElementById('appShortDesc').value,
+                fullDesc: document.getElementById('appFullDesc').value,
+                icon: document.getElementById('appIcon').value,
+                downloadLink: document.getElementById('appLink').value,
+                whatsNew: document.getElementById('appWhatsNew').value,
+                rating: "0.0", // Naya app hai toh 0 rating
+                // Features aur screenshots ko comma hata kar list (array) banana
+                features: document.getElementById('appFeatures').value.split(',').map(item => item.trim()).filter(i => i),
+                screenshots: document.getElementById('appScreenshots').value.split(',').map(item => item.trim()).filter(i => i),
+                timestamp: Date.now()
+            };
+
+            try {
+                // Firebase Database ke "apps" folder me save karna
+                await setDoc(doc(db, "apps", id), newAppData);
+                alert("Boom! 🔥 App successfully added to SAAK App Hub!");
+                document.getElementById('addAppForm').reset(); // Form khali kar do
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                alert("Oh no! Kuch gadbad ho gayi. Console check karo.");
+            } finally {
+                submitBtn.innerText = "Publish App to SAAK Hub";
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
+                          
