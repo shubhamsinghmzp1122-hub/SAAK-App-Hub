@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SAAK App Hub</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f2027">
+    <link rel="apple-touch-icon" href="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg">
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -565,6 +570,10 @@
         </main>
 
         <div style="text-align: center; margin: 40px auto; padding-bottom: 40px;">
+            <button id="installAppBtn" class="btn" style="display: none; font-size: 1.1rem; padding: 12px 30px; margin-bottom: 20px; background: white; color: #0f2027; box-shadow: 0 4px 15px rgba(255,255,255,0.2);">
+                <i class="fas fa-mobile-alt"></i> Install App on Phone
+            </button>
+            <br>
             <button class="btn" onclick="window.openTeamModal()" style="font-size: 1.1rem; padding: 12px 30px; margin-bottom: 20px;">Team Information</button>
             <br>
             <button id="logoutBtn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
@@ -726,6 +735,35 @@
         </div>
     </div>
 
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    console.log('Service Worker registered!', reg);
+                }).catch(err => {
+                    console.log('Service Worker registration failed: ', err);
+                });
+            });
+        }
+
+        let deferredPrompt;
+        const installAppBtn = document.getElementById('installAppBtn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault(); // Chrome ka apna pop-up roko
+            deferredPrompt = e; // Event ko save karo
+            installAppBtn.style.display = 'inline-block'; // Apna mast white button dikhao
+        });
+
+        installAppBtn.addEventListener('click', async () => {
+            installAppBtn.style.display = 'none'; // Button chhupao
+            deferredPrompt.prompt(); // Chrome ka asli install pop-up lao
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`User response: ${outcome}`);
+            deferredPrompt = null;
+        });
+    </script>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -846,12 +884,11 @@
             }
         }
 
-        // 🔥 NAYA SHARE FUNCTION
-        window.handleShare = async function(appName, shortDesc) {
+        window.handleShare = async function(appName, shortDesc, downloadLink) {
             const shareData = {
                 title: appName + " - SAAK App Hub",
-                text: `Check out ${appName} on SAAK App Hub! 🚀\n${shortDesc}\n\nDownload here: `,
-                url: 'https://shubhamsinghmzp1122-hub.github.io/SAAK-App-Hub/' 
+                text: `Bhai ye mast app try kar: ${appName} 🚀\n${shortDesc}\n\nDirect Download Link: `,
+                url: downloadLink 
             };
 
             if (navigator.share) {
@@ -889,8 +926,7 @@
             document.getElementById('modalWhatsNew').innerText = app.whatsNew;
             
             document.getElementById('modalInstallBtn').onclick = () => window.handleInstall(appId, app.downloadLink);
-            // 🔥 SHARE BUTTON KO CLICK SE JOD DIYA
-            document.getElementById('modalShareBtn').onclick = () => window.handleShare(app.name, app.shortDesc);
+            document.getElementById('modalShareBtn').onclick = () => window.handleShare(app.name, app.shortDesc, app.downloadLink);
 
             const featuresList = document.getElementById('modalFeatures');
             featuresList.innerHTML = '';
@@ -1209,7 +1245,6 @@
             try {
                 renderApps(appsData); 
                 appsData.forEach((app, index) => {
-                    // Rating Listener
                     const q = query(collection(db, "reviews"), where("appId", "==", app.id));
                     onSnapshot(q, (querySnapshot) => {
                         let totalStars = 0;
@@ -1227,7 +1262,6 @@
                         else renderApps(appsData);
                     });
 
-                    // Download Listener for the main card UI
                     onSnapshot(doc(db, "app_stats", app.id), (docSnap) => {
                         let count = 0;
                         if(docSnap.exists() && docSnap.data().downloadedBy) {
