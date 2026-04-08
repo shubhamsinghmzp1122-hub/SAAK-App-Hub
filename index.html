@@ -48,7 +48,7 @@
         .search-bar input:focus { border-color: var(--primary-color); box-shadow: 0 0 10px rgba(0, 230, 118, 0.2); }
         .search-bar i.search-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
 
-        /* 🔥 NAYA: Notification Bell CSS */
+        /* Notification Bell CSS */
         .auth-section { display: flex; align-items: center; gap: 15px; position: relative; }
         .notif-bell { position: relative; cursor: pointer; color: white; font-size: 1.4rem; margin-right: 10px; transition: 0.3s; }
         .notif-bell:hover { color: var(--primary-color); transform: scale(1.1); }
@@ -126,6 +126,7 @@
         .modal-section p, .modal-section li { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
         .modal-section ul { padding-left: 20px; }
 
+        /* Developer Reply Box Design */
         .dev-reply { background: rgba(0, 230, 118, 0.08); border-left: 3px solid var(--primary-color); padding: 10px 15px; margin-top: 12px; border-radius: 5px; font-size: 0.85rem; }
         .dev-reply-header { font-weight: 600; color: var(--primary-color); margin-bottom: 5px; display: flex; align-items: center; gap: 5px; }
 
@@ -227,7 +228,7 @@
                     <button onclick="window.toggleNotifications()" style="background:none; border:none; color:white; cursor:pointer;"><i class="fas fa-times"></i></button>
                 </div>
                 <div class="notif-body" id="notifList">
-                    </div>
+                </div>
             </div>
         </header>
 
@@ -283,7 +284,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, signInWithRedirect, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        // 🔥 WAPAS POPUP METHOD IMPORT KAR LIYA HAI
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc, updateDoc, setDoc, getDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -319,7 +321,6 @@
         let reviewToDeleteId = null;
         let replyingToReviewId = null; 
         
-        // 🔥 NAYA: Notification Variables
         let userNotifications = [];
         let readNotifs = JSON.parse(localStorage.getItem('saak_read_notifs') || '[]');
 
@@ -496,9 +497,10 @@
             btn.disabled = true;
 
             try {
-                await updateDoc(doc(db, "reviews", replyingToReviewId), { developerReply: text });
+                await updateDoc(doc(db, "reviews", replyingToReviewId), {
+                    developerReply: text
+                });
                 
-                // 🔥 NAYA: Send Notification to the specific user!
                 if(text !== "") {
                     const rev = window.currentReviewsMap[replyingToReviewId];
                     if(rev && rev.userId) {
@@ -514,7 +516,7 @@
                 }
                 window.closeReplyModal();
             } catch (e) {
-                console.error("Error:", e);
+                console.error("Error posting reply:", e);
                 window.showCustomAlert("Error posting reply. Check connection.", "Error");
             } finally {
                 btn.innerText = "Post Reply";
@@ -525,7 +527,7 @@
         window.editReview = function(id) { const rev = window.currentReviewsMap[id]; if (!rev) return; editingReviewId = id; document.getElementById('reviewText').value = rev.text; const radios = document.getElementsByName('rating'); for (let r of radios) { if (parseInt(r.value) === rev.rating) r.checked = true; else r.checked = false; } document.getElementById('reviewFormTitle').innerText = "Edit your review:"; document.getElementById('submitReviewBtn').innerText = "Update Review"; document.getElementById('cancelEditBtn').style.display = "inline-block"; document.getElementById('reviewFormSection').scrollIntoView({ behavior: 'smooth' }); }
         window.cancelEdit = function() { editingReviewId = null; document.getElementById('reviewText').value = ''; const radios = document.getElementsByName('rating'); for (let r of radios) r.checked = false; document.getElementById('reviewFormTitle').innerText = "Rate this app:"; document.getElementById('submitReviewBtn').innerText = "Submit Review"; document.getElementById('cancelEditBtn').style.display = "none"; }
         window.confirmDeleteReview = function(id) { reviewToDeleteId = id; document.getElementById('deleteConfirmModal').classList.add('active'); }
-        document.getElementById('confirmDeleteBtn').addEventListener('click', async () => { if (reviewToDeleteId) { const btn = document.getElementById('confirmDeleteBtn'); btn.innerText = "Deleting..."; try { await deleteDoc(doc(db, "reviews", reviewToDeleteId)); if (editingReviewId === reviewToDeleteId) window.cancelEdit(); } catch(e) { window.showCustomAlert("Error deleting review.", "Error"); } btn.innerText = "Yes, Delete"; document.getElementById('deleteConfirmModal').classList.remove('active'); reviewToDeleteId = null; } });
+        document.getElementById('confirmDeleteBtn').addEventListener('click', async () => { if (reviewToDeleteId) { const btn = document.getElementById('confirmDeleteBtn'); btn.innerText = "Deleting..."; try { await deleteDoc(doc(db, "reviews", reviewToDeleteId)); if (editingReviewId === reviewToDeleteId) window.cancelEdit(); } catch(e) { window.showCustomAlert("Error deleting review. Please try again.", "Error"); } btn.innerText = "Yes, Delete"; document.getElementById('deleteConfirmModal').classList.remove('active'); reviewToDeleteId = null; } });
         
         window.submitReview = async function() { if (!auth.currentUser) { window.showCustomAlert("Please login first to submit a review!", "Login Required"); return; } const name = auth.currentUser.displayName || "Anonymous User"; const text = document.getElementById('reviewText').value.trim(); let rating = 0; const radios = document.getElementsByName('rating'); for (let r of radios) { if (r.checked) { rating = r.value; break; } } if (rating === 0) { window.showCustomAlert("Please select a star rating.", "Missing Rating"); return; } if (text === '') { window.showCustomAlert("Please write a review comment.", "Missing Comment"); return; } const submitBtn = document.getElementById('submitReviewBtn'); submitBtn.innerText = editingReviewId ? "Updating..." : "Submitting..."; submitBtn.disabled = true; try { if (editingReviewId) { await updateDoc(doc(db, "reviews", editingReviewId), { rating: Number(rating), text: text, timestamp: Date.now() }); window.showCustomAlert("Your review has been successfully updated!", "Success"); } else { await addDoc(collection(db, "reviews"), { appId: currentAppId, name: name, rating: Number(rating), text: text, timestamp: Date.now(), userId: auth.currentUser.uid }); window.showCustomAlert("Thank you! Your review has been posted.", "Success"); } window.cancelEdit(); } catch (error) { window.showCustomAlert("Error saving review.", "Error"); } finally { submitBtn.innerText = editingReviewId ? "Update Review" : "Submit Review"; submitBtn.disabled = false; } }
 
@@ -542,7 +544,6 @@
         window.openContactModal = () => { window.closeTeamModal(); document.getElementById('contactModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
         window.closeContactModal = () => { document.getElementById('contactModal').classList.remove('active'); document.body.style.overflow = 'auto'; }
 
-        // 🔥 NAYA: Fetch and Render Notifications
         function loadNotifications() {
             if(!auth.currentUser) return;
             
@@ -566,7 +567,7 @@
                 const badge = document.getElementById('notifBadge');
                 if(unreadCount > 0) {
                     badge.style.display = 'block';
-                    badge.innerText = unreadCount > 9 ? '9+' : unreadCount; // 9+ logic
+                    badge.innerText = unreadCount > 9 ? '9+' : unreadCount;
                 } else {
                     badge.style.display = 'none';
                 }
@@ -579,13 +580,12 @@
             dropdown.classList.toggle('active');
             
             if(dropdown.classList.contains('active')) {
-                // Mark all as read locally
                 userNotifications.forEach(n => {
                     if(!readNotifs.includes(n.id)) readNotifs.push(n.id);
                 });
                 localStorage.setItem('saak_read_notifs', JSON.stringify(readNotifs));
                 document.getElementById('notifBadge').style.display = 'none';
-                renderNotificationsList(); // Re-render to remove unread color
+                renderNotificationsList(); 
             }
         }
 
@@ -641,7 +641,6 @@
             fetchInitialApps();
         }
 
-        // Close dropdown when clicking outside
         window.onclick = function(event) {
             const modals = ['appModal', 'teamModal', 'contactModal', 'screenshotModal', 'logoutConfirmModal', 'customAlertModal', 'deleteConfirmModal', 'replyModal'];
             modals.forEach(id => { const m = document.getElementById(id); if (event.target == m) { if (id === 'appModal') window.closeModal(); else if (id === 'teamModal') window.closeTeamModal(); else if (id === 'contactModal') window.closeContactModal(); else if (id === 'screenshotModal') window.closeScreenshotModal(); else if (id === 'replyModal') window.closeReplyModal(); else m.classList.remove('active'); } });
@@ -655,9 +654,15 @@
 
         const loginScreen = document.getElementById('loginScreen'); const mainAppContent = document.getElementById('mainAppContent'); const loginBtn = document.getElementById('googleLoginBtn'); const userName = document.getElementById('userName'); const logoutBtn = document.getElementById('logoutBtn'); const logoutConfirmModal = document.getElementById('logoutConfirmModal'); const confirmLogoutBtn = document.getElementById('confirmLogoutBtn'); const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
 
+        // 🔥 WAPAS POPUP METHOD LAGA DIYA BINA KISI FEATURE KO HATAYE
         loginBtn.addEventListener('click', () => {
-            loginBtn.innerHTML = '<span>Redirecting to Google...</span>';
-            signInWithRedirect(auth, provider);
+            loginBtn.innerHTML = '<span>Please wait...</span>';
+            signInWithPopup(auth, provider).then(() => { 
+                loginBtn.innerHTML = '<img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" style="width: 20px; height: 20px;"> <span>Continue with Google</span>'; 
+            }).catch((error) => { 
+                loginBtn.innerHTML = '<img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" style="width: 20px; height: 20px;"> <span>Continue with Google</span>'; 
+                if (error.code !== 'auth/popup-closed-by-user') window.showCustomAlert("Login failed! Please try again.", "Error"); 
+            });
         });
 
         logoutBtn.addEventListener('click', () => logoutConfirmModal.classList.add('active'));
@@ -673,7 +678,6 @@
                 const reviewerInput = document.getElementById('reviewerName'); if(reviewerInput) reviewerInput.value = "Posting as: " + user.displayName;
                 if (currentAppId) window.loadLiveReviews(currentAppId);
                 
-                // 🔥 NAYA: Load notifications when user logs in
                 loadNotifications();
 
                 if (user.email === ADMIN_EMAIL) {
