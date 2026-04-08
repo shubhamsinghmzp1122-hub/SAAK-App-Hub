@@ -20,15 +20,13 @@
         .container { max-width: 900px; margin: 0 auto; }
         .box { background: var(--glass-bg); padding: 30px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); text-align: center; margin-top: 30px; }
         
-        h1 { color: var(--primary-color); margin-bottom: 20px; text-align: center; }
+        h1 { color: var(--primary-color); margin: 0; display: flex; align-items: center; justify-content: center; gap: 10px; }
         
         /* Form & Validation Styles */
         .form-group { margin-bottom: 20px; text-align: left; }
         label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 0.9rem; }
         input, textarea { width: 100%; padding: 12px; border-radius: 8px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: white; outline: none; transition: 0.3s; }
         input:focus, textarea:focus { border-color: var(--primary-color); }
-        
-        /* 🔥 GALTI WALA LAL BORDER (Validation) */
         input.error, textarea.error { border-color: #ff4757 !important; box-shadow: 0 0 8px rgba(255, 71, 87, 0.5); }
 
         .btn { background: var(--primary-color); color: #000; padding: 12px 30px; border: none; border-radius: 25px; font-weight: 600; cursor: pointer; width: 100%; font-size: 1.1rem; transition: 0.3s; }
@@ -37,20 +35,28 @@
 
         #adminMainScreen, #accessDeniedScreen { display: none; }
 
-        /* Tabs Style */
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; }
-        .tab-btn { background: rgba(255,255,255,0.1); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
-        .tab-btn.active { background: var(--primary-color); color: black; font-weight: bold; }
+        /* 🔥 NAYA: Header & Top Buttons Style */
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
+        .header-actions { display: flex; gap: 10px; }
+        .header-actions .btn { width: auto; padding: 10px 20px; font-size: 0.95rem; margin: 0; display: flex; align-items: center; gap: 8px; }
+        .btn-view { background: white; color: #000; }
+        .btn-logout { background: rgba(255, 71, 87, 0.9); color: white; }
+
+        /* 🔥 NAYA: VIP Tabs Style */
+        .tabs { display: flex; background: rgba(0,0,0,0.4); border-radius: 30px; padding: 5px; margin-bottom: 25px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); }
+        .tab-btn { flex: 1; background: transparent; color: var(--text-muted); border: none; padding: 12px 20px; border-radius: 25px; cursor: pointer; transition: 0.3s; font-size: 1rem; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .tab-btn.active { background: var(--primary-color); color: black; font-weight: bold; box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3); }
         
-        .tab-content { display: none; }
+        .tab-content { display: none; animation: fadeIn 0.4s ease; }
         .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Manage Apps Grid */
         .manage-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; text-align: left; }
         .manage-card { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; display: flex; flex-direction: column; gap: 10px; }
         .manage-card img { width: 50px; height: 50px; border-radius: 10px; }
         .action-btns { display: flex; gap: 10px; margin-top: auto; }
-        .btn-sm { padding: 8px 15px; border-radius: 15px; font-size: 0.85rem; border: none; cursor: pointer; color: white; width: 100%; font-weight: bold; }
+        .btn-sm { padding: 8px 15px; border-radius: 15px; font-size: 0.85rem; border: none; cursor: pointer; color: white; width: 100%; font-weight: bold; display: flex; justify-content: center; align-items: center; gap: 5px; }
         .edit-btn { background: #f39c12; } .edit-btn:hover { background: #e67e22; }
         .del-btn { background: #e74c3c; } .del-btn:hover { background: #c0392b; }
 
@@ -59,7 +65,13 @@
         .modal-overlay.active { opacity: 1; visibility: visible; }
         .modal-box { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 30px; border-radius: 20px; text-align: center; width: 90%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transform: scale(0.9); transition: 0.3s; }
         .modal-overlay.active .modal-box { transform: scale(1); }
-        
+
+        /* Mobile Responsiveness */
+        @media (max-width: 600px) {
+            .admin-header { flex-direction: column; text-align: center; gap: 20px; }
+            .header-actions { width: 100%; justify-content: center; }
+            .header-actions .btn { flex: 1; justify-content: center; }
+        }
     </style>
 </head>
 <body>
@@ -82,28 +94,28 @@
         </div>
 
         <div id="adminMainScreen">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h1 style="margin: 0;"><i class="fas fa-cogs"></i> SAAK Control Room</h1>
-                <div>
-                    <button class="btn" style="width: auto; padding: 8px 15px; font-size: 0.9rem; background: white; margin-right: 10px;" onclick="window.location.href='index.html'">View App</button>
-                    <button onclick="logoutAdmin()" class="btn" style="width: auto; padding: 8px 15px; font-size: 0.9rem; background: #ff4757; color: white;">Logout</button>
+            <div class="admin-header">
+                <h1><i class="fas fa-cogs"></i> SAAK Control Room</h1>
+                <div class="header-actions">
+                    <button class="btn btn-view" onclick="window.location.href='index.html'"><i class="fas fa-external-link-alt"></i> View App</button>
+                    <button class="btn btn-logout" onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Logout</button>
                 </div>
             </div>
 
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('manageTab')"><i class="fas fa-list"></i> Manage Apps</button>
+                <button class="tab-btn active" onclick="switchTab('manageTab')"><i class="fas fa-list-ul"></i> Manage Apps</button>
                 <button class="tab-btn" onclick="switchTab('addTab')" id="addTabBtn"><i class="fas fa-plus-circle"></i> Add New App</button>
             </div>
 
             <div id="manageTab" class="tab-content active box" style="margin-top: 0;">
-                <h3 style="margin-bottom: 20px; color: var(--primary-color); text-align: left;">All Published Apps</h3>
+                <h3 style="margin-bottom: 20px; color: var(--primary-color); text-align: left;"><i class="fas fa-box-open"></i> Published Apps</h3>
                 <div class="manage-grid" id="manageAppsContainer">
                     <p style="color: var(--text-muted);">Loading apps...</p>
                 </div>
             </div>
 
             <div id="addTab" class="tab-content box" style="margin-top: 0; text-align: left;">
-                <h3 style="margin-bottom: 20px; color: var(--primary-color);" id="formTitle">Add a New App</h3>
+                <h3 style="margin-bottom: 20px; color: var(--primary-color);" id="formTitle"><i class="fas fa-upload"></i> Add a New App</h3>
                 <form id="appForm">
                     <div class="form-group">
                         <label>App Name *</label>
@@ -157,7 +169,7 @@
                     </div>
                     
                     <div style="display: flex; gap: 15px;">
-                        <button type="submit" id="submitBtn" class="btn">Publish App</button>
+                        <button type="submit" id="submitBtn" class="btn"><i class="fas fa-rocket"></i> Publish App</button>
                         <button type="button" id="cancelEditBtn" class="btn" style="display: none; background: rgba(255,255,255,0.1); color: white;" onclick="cancelEditing()">Cancel</button>
                     </div>
                 </form>
@@ -210,7 +222,6 @@
         let editingAppId = null;
         let appToDelete = null;
 
-        // --- Custom Alert System ---
         window.showMsg = function(title, msg, type = 'info') {
             document.getElementById('alertTitle').innerText = title;
             document.getElementById('alertMsg').innerText = msg;
@@ -221,7 +232,6 @@
             document.getElementById('customAlertModal').classList.add('active');
         }
 
-        // --- Auth System ---
         document.getElementById('loginBtn').addEventListener('click', () => signInWithPopup(auth, provider));
         window.logoutAdmin = () => signOut(auth).then(() => location.reload());
 
@@ -229,7 +239,7 @@
             if (user && user.email === ADMIN_EMAIL) {
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('adminMainScreen').style.display = 'block';
-                loadApps(); // Load data from Firebase
+                loadApps(); 
             } else if (user) {
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('accessDeniedScreen').style.display = 'block';
@@ -240,7 +250,6 @@
             }
         });
 
-        // --- Tabs System ---
         window.switchTab = function(tabId) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -248,7 +257,6 @@
             event.currentTarget.classList.add('active');
         }
 
-        // --- Fetch & Show Apps ---
         function loadApps() {
             onSnapshot(collection(db, "apps"), (snapshot) => {
                 allAppsData = [];
@@ -283,7 +291,6 @@
             });
         }
 
-        // --- Delete App Logic ---
         window.confirmDelete = function(appId) {
             appToDelete = appId;
             document.getElementById('confirmDeleteModal').classList.add('active');
@@ -303,7 +310,6 @@
             appToDelete = null;
         });
 
-        // --- Edit (Update) App Logic ---
         window.editApp = function(appId) {
             const app = allAppsData.find(a => a.id === appId);
             if(!app) return;
@@ -322,8 +328,8 @@
             document.getElementById('appWhatsNew').value = app.whatsNew || '';
             document.getElementById('appScreenshots').value = (app.screenshots || []).join(', ');
 
-            document.getElementById('formTitle').innerText = "Update Existing App";
-            document.getElementById('submitBtn').innerText = "Update App Settings";
+            document.getElementById('formTitle').innerHTML = "<i class='fas fa-edit'></i> Update Existing App";
+            document.getElementById('submitBtn').innerHTML = "<i class='fas fa-save'></i> Update App Settings";
             document.getElementById('cancelEditBtn').style.display = "inline-block";
             
             switchTab('addTab');
@@ -334,25 +340,20 @@
         window.cancelEditing = function() {
             editingAppId = null;
             document.getElementById('appForm').reset();
-            document.getElementById('formTitle').innerText = "Add a New App";
-            document.getElementById('submitBtn').innerText = "Publish App";
+            document.getElementById('formTitle').innerHTML = "<i class='fas fa-upload'></i> Add a New App";
+            document.getElementById('submitBtn').innerHTML = "<i class='fas fa-rocket'></i> Publish App";
             document.getElementById('cancelEditBtn').style.display = "none";
-            // Remove red borders
             document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
         }
 
-        // Remove red border on typing
         document.querySelectorAll('input, textarea').forEach(el => {
             el.addEventListener('input', () => el.classList.remove('error'));
         });
 
-        // --- Form Submit & Validation ---
         document.getElementById('appForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
             let hasError = false;
-            
-            // Validation Logic (Galat data rokna)
             const requiredFields = ['appName', 'appDev', 'appSize', 'appVersion', 'appDate', 'appShortDesc', 'appFullDesc', 'appIcon', 'appLink'];
             requiredFields.forEach(id => {
                 const el = document.getElementById(id);
@@ -381,7 +382,6 @@
                 return;
             }
 
-            // Data Prepare
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.innerText = "Processing..."; submitBtn.disabled = true;
 
@@ -415,7 +415,7 @@
             } catch (error) {
                 showMsg("Error", "Something went wrong. Please check your connection.", "error");
             } finally {
-                submitBtn.innerText = "Publish App"; submitBtn.disabled = false;
+                submitBtn.innerHTML = "<i class='fas fa-rocket'></i> Publish App"; submitBtn.disabled = false;
             }
         });
     </script>
