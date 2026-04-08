@@ -101,6 +101,24 @@
         .modal-section p, .modal-section li { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
         .modal-section ul { padding-left: 20px; }
 
+        /* 🔥 NAYA: Developer Reply Box Design */
+        .dev-reply {
+            background: rgba(0, 230, 118, 0.08);
+            border-left: 3px solid var(--primary-color);
+            padding: 10px 15px;
+            margin-top: 12px;
+            border-radius: 5px;
+            font-size: 0.85rem;
+        }
+        .dev-reply-header {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
         .review-form { background: rgba(0,0,0,0.2); padding: 20px; border-radius: 10px; margin-bottom: 20px; }
         .star-rating-input { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 5px; margin-bottom: 15px; }
         .star-rating-input input { display: none; }
@@ -111,7 +129,8 @@
         .review-form input:focus, .review-form textarea:focus { border-color: var(--primary-color); }
 
         .review-list { display: flex; flex-direction: column; gap: 15px; }
-        .review-card { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 8px; border-left: 3px solid var(--primary-color); animation: fadeIn 0.5s ease; }
+        .review-card { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 8px; border-left: 3px solid var(--text-muted); animation: fadeIn 0.5s ease; transition: 0.3s; }
+        .review-card.has-reply { border-left-color: var(--primary-color); }
         .review-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
         .review-user { font-weight: 600; }
         .review-time { font-size: 0.8rem; color: var(--text-muted); }
@@ -119,6 +138,7 @@
         .review-actions button { background: transparent; border: none; cursor: pointer; font-size: 0.85rem; transition: opacity 0.3s; }
         .review-actions button:hover { opacity: 0.7; }
         .btn-edit { color: var(--primary-color); }
+        .btn-reply { color: #3498db; }
         .btn-delete { color: #E1306C; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -204,12 +224,27 @@
     </div> 
 
     <div class="modal-overlay" id="appModal"><div class="modal-content"><button class="close-btn" onclick="window.closeModal()"><i class="fas fa-times"></i></button><div class="modal-header-info"><img id="modalIcon" src="" alt="App Icon"><div class="modal-titles"><h2 id="modalName">App Name</h2><p style="color: var(--primary-color)" id="modalDev">Developer</p><div class="modal-meta"><div><strong id="modalRating">... <i class="fas fa-star" style="color:#ffd700"></i></strong><br><span id="modalReviewCount">Loading</span></div><div><strong id="modalDownloads">...</strong><br>Downloads</div><div><strong id="modalSize">25 MB</strong><br>Size</div><div><strong id="modalVersion">1.0.0</strong><br>Version</div></div><div style="display: flex; gap: 10px; margin-top: 15px; width: 100%;"><button id="modalInstallBtn" class="btn" style="flex: 1;"><i class="fas fa-download"></i> Install</button><button id="modalShareBtn" class="btn" style="flex: 1; background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid var(--glass-border);"><i class="fas fa-share-nodes"></i> Share</button></div></div></div><div class="screenshots" id="modalScreenshots"></div><div class="modal-section"><h4>About this app</h4><p id="modalFullDesc"></p><br><small style="color:var(--text-muted)">Released on: <span id="modalDate"></span></small></div><div class="modal-section"><h4>Key Features</h4><ul id="modalFeatures"></ul></div><div class="modal-section"><h4>What's New</h4><p id="modalWhatsNew" style="white-space: pre-line;"></p></div><div class="modal-section"><h4>Ratings and Reviews</h4><div class="review-form" id="reviewFormSection"><p style="margin-bottom: 10px;" id="reviewFormTitle">Rate this app:</p><div class="star-rating-input"><input type="radio" id="star5" name="rating" value="5"><label for="star5" class="fas fa-star"></label><input type="radio" id="star4" name="rating" value="4"><label for="star4" class="fas fa-star"></label><input type="radio" id="star3" name="rating" value="3"><label for="star3" class="fas fa-star"></label><input type="radio" id="star2" name="rating" value="2"><label for="star2" class="fas fa-star"></label><input type="radio" id="star1" name="rating" value="1"><label for="star1" class="fas fa-star"></label></div><input type="text" id="reviewerName" placeholder="Posting as..." readonly><textarea id="reviewText" rows="3" placeholder="Describe your experience (what's good, bad, bugs, suggestions...)"></textarea><button id="submitReviewBtn" class="btn" onclick="window.submitReview()">Submit Review</button><button id="cancelEditBtn" class="btn" style="display: none;" onclick="window.cancelEdit()">Cancel Edit</button></div><div class="review-list" id="reviewList"></div></div></div></div>
+    
     <div class="modal-overlay" id="teamModal"><div class="modal-content" style="max-width: 600px;"><button class="close-btn" onclick="window.closeTeamModal()"><i class="fas fa-times"></i></button><div class="modal-section" style="border-top: none; padding-top: 30px;"><h2 style="color: var(--primary-color); text-align: center; margin-bottom: 15px;">Team Information</h2><div style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 30px; text-align: center;"><p style="margin-bottom: 10px;"><strong>About the Developer Team</strong></p><p style="margin-bottom: 10px;">This application has been proudly developed and published by Shubham, who leads the overall app development, coding, and project execution.</p><p style="margin-bottom: 10px;">Arpit contributed as the Idea Finder, helping with creative concepts, feature planning, and innovative app ideas.</p><p style="margin-bottom: 10px;">Abhishek worked as the Design Finder, supporting the visual design, layout ideas, and user interface improvements.</p><p style="margin-bottom: 10px;">Kartik has been the Full Supporter, providing continuous support, feedback throughout the complete development process.</p><p>Together, this team focuses on creating simple, useful, and enjoyable applications for users.</p></div><div style="text-align: center; margin-top: 20px;"><button class="btn" onclick="window.openContactModal()" style="font-size: 1.1rem; padding: 10px 30px;">Contact Us</button></div></div></div></div>
     <div class="modal-overlay" id="contactModal"><div class="modal-content" style="max-width: 600px;"><button class="close-btn" onclick="window.closeContactModal()"><i class="fas fa-times"></i></button><div class="modal-section" style="border-top: none; padding-top: 30px;"><h3 style="color: var(--primary-color); text-align: center; margin-bottom: 10px;">Contact Our Team</h3><p style="text-align: center; color: var(--text-muted); font-size: 0.9rem;">Get in touch with the creators on Instagram.</p><div class="contact-grid"><a href="https://www.instagram.com/i_am_shubham_singh_0001?igsh=MWduMDRnY2RlZm1ldQ==" target="_blank" class="contact-card"><i class="fab fa-instagram"></i><div class="contact-info"><h4>Shubham</h4><p>Lead Developer</p></div></a><a href="https://www.instagram.com/arpittt__06?igsh=a29hbWZhaGRqZ3Fi" target="_blank" class="contact-card"><i class="fab fa-instagram"></i><div class="contact-info"><h4>Arpit</h4><p>Idea Finder</p></div></a><a href="https://www.instagram.com/_mr_abhishek_patel00?igsh=aHhmMmttajd3OHhv" target="_blank" class="contact-card"><i class="fab fa-instagram"></i><div class="contact-info"><h4>Abhishek</h4><p>Design Finder</p></div></a><a href="https://www.instagram.com/kartik_o707?igsh=MTcxaXcyd21qeXMxYQ==" target="_blank" class="contact-card"><i class="fab fa-instagram"></i><div class="contact-info"><h4>Kartik</h4><p>Full Supporter</p></div></a></div></div></div></div>
+    
     <div class="modal-overlay" id="screenshotModal"><button class="close-btn" style="position: absolute; top: 20px; right: 20px; z-index: 2010;" onclick="window.closeScreenshotModal()"><i class="fas fa-times"></i></button><button class="nav-btn prev-btn" onclick="window.prevScreenshot(event)"><i class="fas fa-chevron-left"></i></button><button class="nav-btn next-btn" onclick="window.nextScreenshot(event)"><i class="fas fa-chevron-right"></i></button><img id="fullScreenshot" src="" alt="Full Screen Preview"></div>
     <div class="modal-overlay" id="logoutConfirmModal"><div class="login-box" style="padding: 30px;"><i class="fas fa-sign-out-alt logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #E1306C;"></i><h2 style="font-size: 1.3rem;">Logout</h2><p style="margin-bottom: 25px;">Are you sure you want to logout from SAAK App Hub?</p><div style="display: flex; gap: 15px; justify-content: center;"><button id="cancelLogoutBtn" class="btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">Cancel</button><button id="confirmLogoutBtn" class="logout-btn-modal" style="margin: 0;">Yes, Logout</button></div></div></div>
     <div class="modal-overlay" id="deleteConfirmModal"><div class="login-box" style="padding: 30px;"><i class="fas fa-trash logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #E1306C;"></i><h2 style="font-size: 1.3rem;">Delete Review</h2><p style="margin-bottom: 25px;">Are you sure you want to delete this review permanently?</p><div style="display: flex; gap: 15px; justify-content: center;"><button onclick="document.getElementById('deleteConfirmModal').classList.remove('active')" class="btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">Cancel</button><button id="confirmDeleteBtn" class="logout-btn-modal" style="margin: 0;">Yes, Delete</button></div></div></div>
     <div class="modal-overlay" id="customAlertModal"><div class="login-box" style="padding: 30px;"><i class="fas fa-exclamation-circle logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #f39c12;"></i><h2 style="font-size: 1.3rem;" id="customAlertTitle">Alert</h2><p style="margin-bottom: 25px;" id="customAlertText">Message goes here.</p><button class="btn" onclick="document.getElementById('customAlertModal').classList.remove('active')" style="width: 100%;">OK</button></div></div>
+
+    <div class="modal-overlay" id="replyModal">
+        <div class="login-box" style="padding: 30px;">
+            <i class="fas fa-reply logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #3498db;"></i>
+            <h2 style="font-size: 1.3rem;">Developer Reply</h2>
+            <p style="color: var(--text-muted); margin-bottom: 15px; font-size: 0.9rem;">Your reply will be visible publicly to all users.</p>
+            <textarea id="replyTextInput" rows="3" placeholder="Type your professional reply here..." style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: white; outline: none; margin-bottom: 20px; font-family: 'Poppins', sans-serif; resize: none;"></textarea>
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button onclick="window.closeReplyModal()" class="btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">Cancel</button>
+                <button id="confirmReplyBtn" class="logout-btn-modal" style="margin: 0; background: #3498db;" onclick="window.submitReply()">Post Reply</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         if ('serviceWorker' in navigator) {
@@ -256,6 +291,9 @@
         window.currentReviewsMap = {}; 
         let editingReviewId = null;
         let reviewToDeleteId = null;
+        
+        // Naya variable developer reply ke liye
+        let replyingToReviewId = null; 
 
         function renderApps(apps) {
             const grid = document.getElementById('appGrid');
@@ -302,19 +340,10 @@
             }
         }
 
-        // 🔥 NAYA: ENGLISH SHARE MESSAGE
         window.handleShare = async function(appName, shortDesc, downloadLink) {
-            const shareData = { 
-                title: appName + " - SAAK App Hub", 
-                text: `Hey! Check out this awesome app: ${appName} 🚀\n${shortDesc}\n\nDirect Download Link: `, 
-                url: downloadLink 
-            };
-            
-            if (navigator.share) { 
-                try { await navigator.share(shareData); } catch (err) {} 
-            } else { 
-                navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`).then(() => window.showCustomAlert("Link copied to clipboard! Paste it anywhere.", "Copied!")).catch(err => {}); 
-            }
+            const shareData = { title: appName + " - SAAK App Hub", text: `Hey! Check out this awesome app: ${appName} 🚀\n${shortDesc}\n\nDirect Download Link: `, url: downloadLink };
+            if (navigator.share) { try { await navigator.share(shareData); } catch (err) {} } 
+            else { navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`).then(() => window.showCustomAlert("Link copied to clipboard! Paste it anywhere.", "Copied!")).catch(err => {}); }
         }
 
         window.openModal = function(appId) {
@@ -360,31 +389,99 @@
                 if(appIndex !== -1) { appsData[appIndex].rating = avg; const term = document.getElementById('searchInput').value.toLowerCase(); if (term) renderApps(appsData.filter(app => app.name.toLowerCase().includes(term))); else renderApps(appsData); }
                 appReviews.sort((a, b) => b.timestamp - a.timestamp); reviewList.innerHTML = '';
                 if (appReviews.length === 0) { reviewList.innerHTML = '<p style="text-align:center; color:var(--text-muted); margin-top:20px;">No reviews yet. Be the first to review!</p>'; return; }
+                
                 appReviews.forEach(rev => {
                     let starsHTML = ''; for(let i=1; i<=5; i++) { if(i <= rev.rating) starsHTML += '<i class="fas fa-star" style="color:#ffd700;"></i>'; else starsHTML += '<i class="far fa-star" style="color:var(--text-muted);"></i>'; }
                     let dateStr = "Just now"; if(rev.timestamp) { const d = new Date(rev.timestamp); dateStr = d.toLocaleDateString(); }
+                    
+                    // 🔥 NAYA: Developer Reply ka HTML
+                    let devReplyHTML = '';
+                    if (rev.developerReply && rev.developerReply.trim() !== '') {
+                        devReplyHTML = `
+                            <div class="dev-reply">
+                                <div class="dev-reply-header"><i class="fas fa-check-circle"></i> Developer Response</div>
+                                <p style="color: var(--text-main); margin: 0; font-size: 0.85rem; white-space: pre-wrap;">${rev.developerReply}</p>
+                            </div>
+                        `;
+                    }
+
                     let actionBtns = '';
                     if (auth.currentUser) {
-                        const isOwner = rev.userId === auth.currentUser.uid; const isAdmin = auth.currentUser.email === ADMIN_EMAIL;
-                        if (isOwner || isAdmin) { actionBtns += '<div class="review-actions">'; if (isOwner) { actionBtns += `<button class="btn-edit" onclick="window.editReview('${rev.id}')"><i class="fas fa-edit"></i> Edit</button>`; } actionBtns += `<button class="btn-delete" onclick="window.confirmDeleteReview('${rev.id}')"><i class="fas fa-trash"></i> Delete</button></div>`; }
+                        const isOwner = rev.userId === auth.currentUser.uid; 
+                        const isAdmin = auth.currentUser.email === ADMIN_EMAIL;
+                        
+                        if (isOwner || isAdmin) { 
+                            actionBtns += '<div class="review-actions">'; 
+                            if (isOwner) { actionBtns += `<button class="btn-edit" onclick="window.editReview('${rev.id}')"><i class="fas fa-edit"></i> Edit</button>`; } 
+                            // 🔥 NAYA: Sirf Boss ko dikhega Reply ka button
+                            if (isAdmin) { actionBtns += `<button class="btn-reply" onclick="window.openReplyModal('${rev.id}')"><i class="fas fa-reply"></i> Reply</button>`; }
+                            actionBtns += `<button class="btn-delete" onclick="window.confirmDeleteReview('${rev.id}')"><i class="fas fa-trash"></i> Delete</button></div>`; 
+                        }
                     }
-                    const card = document.createElement('div'); card.className = 'review-card';
-                    card.innerHTML = `<div class="review-header"><span class="review-user"><i class="fas fa-user-circle" style="color:var(--primary-color);"></i> ${rev.name}</span><span class="review-time">${dateStr}</span></div><div style="margin-bottom: 5px;">${starsHTML}</div><p style="font-size: 0.9rem; color: var(--text-muted); white-space: pre-wrap;">${rev.text}</p>${actionBtns}`;
+                    
+                    const card = document.createElement('div'); 
+                    card.className = `review-card ${rev.developerReply ? 'has-reply' : ''}`;
+                    card.innerHTML = `
+                        <div class="review-header"><span class="review-user"><i class="fas fa-user-circle" style="color:var(--primary-color);"></i> ${rev.name}</span><span class="review-time">${dateStr}</span></div>
+                        <div style="margin-bottom: 5px;">${starsHTML}</div>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); white-space: pre-wrap;">${rev.text}</p>
+                        ${devReplyHTML}
+                        ${actionBtns}
+                    `;
                     reviewList.appendChild(card);
                 });
             });
+        }
+
+        // 🔥 NAYA: Reply modal open close functions
+        window.openReplyModal = function(id) {
+            replyingToReviewId = id;
+            const rev = window.currentReviewsMap[id];
+            document.getElementById('replyTextInput').value = rev.developerReply || '';
+            document.getElementById('replyModal').classList.add('active');
+        }
+        
+        window.closeReplyModal = function() {
+            replyingToReviewId = null;
+            document.getElementById('replyTextInput').value = '';
+            document.getElementById('replyModal').classList.remove('active');
+        }
+
+        window.submitReply = async function() {
+            if (!replyingToReviewId) return;
+            const text = document.getElementById('replyTextInput').value.trim();
+            const btn = document.getElementById('confirmReplyBtn');
+            btn.innerText = "Posting...";
+            btn.disabled = true;
+
+            try {
+                await updateDoc(doc(db, "reviews", replyingToReviewId), {
+                    developerReply: text
+                });
+                window.closeReplyModal();
+                if(text !== "") {
+                    window.showCustomAlert("Reply posted successfully!", "Success");
+                }
+            } catch (e) {
+                console.error("Error posting reply:", e);
+                window.showCustomAlert("Error posting reply. Check connection.", "Error");
+            } finally {
+                btn.innerText = "Post Reply";
+                btn.disabled = false;
+            }
         }
 
         window.editReview = function(id) { const rev = window.currentReviewsMap[id]; if (!rev) return; editingReviewId = id; document.getElementById('reviewText').value = rev.text; const radios = document.getElementsByName('rating'); for (let r of radios) { if (parseInt(r.value) === rev.rating) r.checked = true; else r.checked = false; } document.getElementById('reviewFormTitle').innerText = "Edit your review:"; document.getElementById('submitReviewBtn').innerText = "Update Review"; document.getElementById('cancelEditBtn').style.display = "inline-block"; document.getElementById('reviewFormSection').scrollIntoView({ behavior: 'smooth' }); }
         window.cancelEdit = function() { editingReviewId = null; document.getElementById('reviewText').value = ''; const radios = document.getElementsByName('rating'); for (let r of radios) r.checked = false; document.getElementById('reviewFormTitle').innerText = "Rate this app:"; document.getElementById('submitReviewBtn').innerText = "Submit Review"; document.getElementById('cancelEditBtn').style.display = "none"; }
         window.confirmDeleteReview = function(id) { reviewToDeleteId = id; document.getElementById('deleteConfirmModal').classList.add('active'); }
         document.getElementById('confirmDeleteBtn').addEventListener('click', async () => { if (reviewToDeleteId) { const btn = document.getElementById('confirmDeleteBtn'); btn.innerText = "Deleting..."; try { await deleteDoc(doc(db, "reviews", reviewToDeleteId)); if (editingReviewId === reviewToDeleteId) window.cancelEdit(); } catch(e) { window.showCustomAlert("Error deleting review. Please try again.", "Error"); } btn.innerText = "Yes, Delete"; document.getElementById('deleteConfirmModal').classList.remove('active'); reviewToDeleteId = null; } });
+        
         window.submitReview = async function() { if (!auth.currentUser) { window.showCustomAlert("Please login first to submit a review!", "Login Required"); return; } const name = auth.currentUser.displayName || "Anonymous User"; const text = document.getElementById('reviewText').value.trim(); let rating = 0; const radios = document.getElementsByName('rating'); for (let r of radios) { if (r.checked) { rating = r.value; break; } } if (rating === 0) { window.showCustomAlert("Please select a star rating.", "Missing Rating"); return; } if (text === '') { window.showCustomAlert("Please write a review comment.", "Missing Comment"); return; } const submitBtn = document.getElementById('submitReviewBtn'); submitBtn.innerText = editingReviewId ? "Updating..." : "Submitting..."; submitBtn.disabled = true; try { if (editingReviewId) { await updateDoc(doc(db, "reviews", editingReviewId), { rating: Number(rating), text: text, timestamp: Date.now() }); window.showCustomAlert("Your review has been successfully updated!", "Success"); } else { await addDoc(collection(db, "reviews"), { appId: currentAppId, name: name, rating: Number(rating), text: text, timestamp: Date.now(), userId: auth.currentUser.uid }); window.showCustomAlert("Thank you! Your review has been posted.", "Success"); } window.cancelEdit(); } catch (error) { window.showCustomAlert("Error saving review.", "Error"); } finally { submitBtn.innerText = editingReviewId ? "Update Review" : "Submit Review"; submitBtn.disabled = false; } }
 
         let isAnimating = false;
         function updateNavButtons() { const prevBtn = document.querySelector('.prev-btn'); const nextBtn = document.querySelector('.next-btn'); if(!prevBtn || !nextBtn) return; prevBtn.style.display = currentScreenshotIndex <= 0 ? 'none' : 'flex'; nextBtn.style.display = currentScreenshotIndex >= currentScreenshots.length - 1 ? 'none' : 'flex'; }
         window.openScreenshotModal = function(index) { currentScreenshotIndex = index; const imgElement = document.getElementById('fullScreenshot'); imgElement.style.transition = 'none'; imgElement.classList.remove('swipe-left', 'swipe-right'); imgElement.src = currentScreenshots[currentScreenshotIndex]; void imgElement.offsetWidth; imgElement.style.transition = ''; updateNavButtons(); document.getElementById('screenshotModal').classList.add('active'); }
-        window.closeScreenshotModal = function() { document.getElementById('screenshotModal').classList.remove('active'); if (!document.getElementById('appModal').classList.contains('active') && !document.getElementById('teamModal').classList.contains('active') && !document.getElementById('contactModal').classList.contains('active')) { document.body.style.overflow = 'auto'; } }
+        window.closeScreenshotModal = function() { document.getElementById('screenshotModal').classList.remove('active'); if (!document.getElementById('appModal').classList.contains('active') && !document.getElementById('teamModal').classList.contains('active') && !document.getElementById('contactModal').classList.contains('active') && !document.getElementById('replyModal').classList.contains('active')) { document.body.style.overflow = 'auto'; } }
         function changeScreenshot(direction) { if (isAnimating || currentScreenshots.length <= 1) return; if (direction === 'next' && currentScreenshotIndex >= currentScreenshots.length - 1) return; if (direction === 'prev' && currentScreenshotIndex <= 0) return; isAnimating = true; const imgElement = document.getElementById('fullScreenshot'); imgElement.classList.add(direction === 'next' ? 'swipe-left' : 'swipe-right'); setTimeout(() => { currentScreenshotIndex += direction === 'next' ? 1 : -1; imgElement.src = currentScreenshots[currentScreenshotIndex]; imgElement.style.transition = 'none'; imgElement.classList.remove('swipe-left', 'swipe-right'); imgElement.classList.add(direction === 'next' ? 'swipe-right' : 'swipe-left'); void imgElement.offsetWidth; imgElement.style.transition = ''; imgElement.classList.remove('swipe-left', 'swipe-right'); updateNavButtons(); setTimeout(() => { isAnimating = false; }, 300); }, 300); }
         window.nextScreenshot = function(e) { if(e) e.stopPropagation(); changeScreenshot('next'); }
         window.prevScreenshot = function(e) { if(e) e.stopPropagation(); changeScreenshot('prev'); }
@@ -422,8 +519,8 @@
         window.onload = () => fetchInitialApps();
 
         window.onclick = function(event) {
-            const modals = ['appModal', 'teamModal', 'contactModal', 'screenshotModal', 'logoutConfirmModal', 'customAlertModal', 'deleteConfirmModal'];
-            modals.forEach(id => { const m = document.getElementById(id); if (event.target == m) { if (id === 'appModal') window.closeModal(); else if (id === 'teamModal') window.closeTeamModal(); else if (id === 'contactModal') window.closeContactModal(); else if (id === 'screenshotModal') window.closeScreenshotModal(); else m.classList.remove('active'); } });
+            const modals = ['appModal', 'teamModal', 'contactModal', 'screenshotModal', 'logoutConfirmModal', 'customAlertModal', 'deleteConfirmModal', 'replyModal'];
+            modals.forEach(id => { const m = document.getElementById(id); if (event.target == m) { if (id === 'appModal') window.closeModal(); else if (id === 'teamModal') window.closeTeamModal(); else if (id === 'contactModal') window.closeContactModal(); else if (id === 'screenshotModal') window.closeScreenshotModal(); else if (id === 'replyModal') window.closeReplyModal(); else m.classList.remove('active'); } });
         }
 
         const loginScreen = document.getElementById('loginScreen'); const mainAppContent = document.getElementById('mainAppContent'); const loginBtn = document.getElementById('googleLoginBtn'); const userName = document.getElementById('userName'); const logoutBtn = document.getElementById('logoutBtn'); const logoutConfirmModal = document.getElementById('logoutConfirmModal'); const confirmLogoutBtn = document.getElementById('confirmLogoutBtn'); const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
