@@ -48,14 +48,14 @@
         .search-bar input:focus { border-color: var(--primary-color); box-shadow: 0 0 10px rgba(0, 230, 118, 0.2); }
         .search-bar i.search-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
 
-        /* 🔥 FIX 1: Notification Bell Click Area Fixed */
+        /* Notification Bell CSS */
         .auth-section { display: flex; align-items: center; gap: 15px; position: relative; }
         .notif-bell { position: relative; cursor: pointer; color: white; font-size: 1.4rem; margin-right: 10px; transition: 0.3s; padding: 5px; }
         .notif-bell:hover { color: var(--primary-color); transform: scale(1.1); }
-        .notif-bell i, .notif-bell span { pointer-events: none; /* Icon ko click hone se rokega, sirf bell button kaam karega */ }
+        .notif-bell i, .notif-bell span { pointer-events: none; }
         .notif-badge { position: absolute; top: -2px; right: -5px; background: #ff4757; color: white; font-size: 0.7rem; font-weight: bold; padding: 2px 5px; border-radius: 50%; border: 2px solid #0f2027; display: none; }
         
-        .notif-dropdown { position: absolute; top: 60px; right: 0; width: 320px; background: var(--glass-bg); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); display: none; flex-direction: column; z-index: 9999; overflow: hidden; transform-origin: top right; }
+        .notif-dropdown { position: absolute; top: 55px; right: 0; width: 320px; background: var(--glass-bg); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); display: none; flex-direction: column; z-index: 1000; overflow: hidden; transform-origin: top right; }
         .notif-dropdown.active { display: flex; animation: fadeIn 0.3s ease; }
         .notif-header { padding: 15px; background: rgba(0,0,0,0.5); font-weight: 600; border-bottom: 1px solid var(--glass-border); color: var(--primary-color); display: flex; justify-content: space-between; align-items: center; }
         .notif-body { max-height: 350px; overflow-y: auto; }
@@ -407,7 +407,7 @@
         window.handleShare = async function(appName, shortDesc, downloadLink) {
             const shareData = { title: appName + " - SAAK App Hub", text: `Hey! Check out this awesome app: ${appName} 🚀\n${shortDesc}\n\nDirect Download Link: `, url: downloadLink };
             if (navigator.share) { try { await navigator.share(shareData); } catch (err) {} } 
-            else { navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`).then(() => window.showCustomAlert("Link copied to clipboard! Paste it anywhere.", "Copied!")).catch(err => {}); }
+            else { navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`).then(() => window.showCustomAlert("Link copied to clipboard! Paste it anywhere.", "Copied!", "success")).catch(err => {}); }
         }
 
         window.openModal = function(appId) {
@@ -508,7 +508,7 @@
             document.getElementById('replyModal').classList.remove('active');
         }
 
-        // 🔥 FIX 2: Reply Modal Ab Turant Band Hoga aur Green Aayega
+        // 🔥 FIX: Modal pehle band hoga, phir safety check karke notification jayega!
         window.submitReply = async function() {
             if (!replyingToReviewId) return;
             const text = document.getElementById('replyTextInput').value.trim();
@@ -517,31 +517,30 @@
             btn.disabled = true;
 
             try {
-                // Pehle reply update karo
+                // 1. Reply update in database
                 await updateDoc(doc(db, "reviews", replyingToReviewId), {
                     developerReply: text
                 });
                 
-                // Turant pop-up hata do
+                // 2. Turant popup band karo
                 window.closeReplyModal();
                 
-                // Ab success ka Green wala message dikhao
+                // 3. Notification bhej kar Success message dikhao
                 if(text !== "") {
-                    window.showCustomAlert("Reply posted successfully! 🎉", "Awesome!", "success");
-                    
-                    // Aur piche aaram se notification bhej do, isse app atkega nahi
-                    try {
-                        const rev = window.currentReviewsMap[replyingToReviewId];
-                        if(rev && rev.userId) {
-                            await addDoc(collection(db, "notifications"), {
-                                targetUserId: rev.userId,
-                                type: 'reply',
-                                title: 'Developer Reply',
-                                message: `Shubham Boss replied to your review on ${document.getElementById('modalName').innerText}!`,
-                                timestamp: Date.now()
-                            });
-                        }
-                    } catch(notifErr) { console.log("Notif error ignored"); }
+                    const rev = window.currentReviewsMap[replyingToReviewId];
+                    // Smart Check for Old Comments
+                    if(rev && rev.userId) {
+                        await addDoc(collection(db, "notifications"), {
+                            targetUserId: rev.userId,
+                            type: 'reply',
+                            title: 'Developer Reply',
+                            message: `Shubham Boss replied to your review on ${document.getElementById('modalName').innerText}!`,
+                            timestamp: Date.now()
+                        });
+                        window.showCustomAlert("Reply posted & Notification sent! 🎉", "Awesome!", "success");
+                    } else {
+                        window.showCustomAlert("Reply posted! Par ye ek purana comment hai (bina ID wala), isliye user ko notification nahi jayega.", "Info", "info");
+                    }
                 }
             } catch (e) {
                 console.error("Error posting reply:", e);
