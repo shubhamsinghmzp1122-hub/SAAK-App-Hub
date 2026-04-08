@@ -204,7 +204,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, collection, doc, setDoc, onSnapshot, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAbOtjHeldbPRC29tX-i5tbUeySQlTzWUU",
@@ -230,7 +230,6 @@
             document.getElementById(screenId).classList.add('active');
         }
 
-        // 🔥 NAYA: Dynamic Alert Box (Happy & Sad Colors)
         window.showMsg = function(title, msg, type = 'info') {
             const titleEl = document.getElementById('alertTitle');
             const icon = document.getElementById('alertIcon');
@@ -240,30 +239,12 @@
             document.getElementById('alertMsg').innerText = msg;
             
             if(type === 'error') { 
-                icon.className = "fas fa-exclamation-triangle"; 
-                icon.style.color = "#ff4757"; 
-                titleEl.style.color = "#ff4757";
-                btn.style.background = "#ff4757";
-                btn.style.color = "white";
-                btn.innerText = "Try Again";
+                icon.className = "fas fa-exclamation-triangle"; icon.style.color = "#ff4757"; titleEl.style.color = "#ff4757"; btn.style.background = "#ff4757"; btn.style.color = "white"; btn.innerText = "Try Again";
+            } else if(type === 'success') { 
+                icon.className = "fas fa-check-circle"; icon.style.color = "#00e676"; titleEl.style.color = "#00e676"; btn.style.background = "#00e676"; btn.style.color = "black"; btn.innerText = "Awesome!";
+            } else { 
+                icon.className = "fas fa-info-circle"; icon.style.color = "#3498db"; titleEl.style.color = "#3498db"; btn.style.background = "#3498db"; btn.style.color = "white"; btn.innerText = "Got it!";
             }
-            else if(type === 'success') { 
-                icon.className = "fas fa-check-circle"; 
-                icon.style.color = "#00e676"; 
-                titleEl.style.color = "#00e676";
-                btn.style.background = "#00e676";
-                btn.style.color = "black";
-                btn.innerText = "Awesome!";
-            }
-            else { 
-                icon.className = "fas fa-info-circle"; 
-                icon.style.color = "#3498db"; 
-                titleEl.style.color = "#3498db";
-                btn.style.background = "#3498db";
-                btn.style.color = "white";
-                btn.innerText = "Got it!";
-            }
-            
             document.getElementById('customAlertModal').classList.add('active');
         }
 
@@ -371,8 +352,25 @@
             const appData = { id: id, name: name, dev: document.getElementById('appDev').value.trim(), size: document.getElementById('appSize').value.trim(), version: document.getElementById('appVersion').value.trim(), date: document.getElementById('appDate').value.trim(), shortDesc: document.getElementById('appShortDesc').value.trim(), fullDesc: document.getElementById('appFullDesc').value.trim(), icon: document.getElementById('appIcon').value.trim(), downloadLink: document.getElementById('appLink').value.trim(), whatsNew: document.getElementById('appWhatsNew').value.trim(), features: document.getElementById('appFeatures').value.split(',').map(i => i.trim()).filter(i => i), screenshots: document.getElementById('appScreenshots').value.split(',').map(i => i.trim()).filter(i => i), };
 
             try {
-                if(editingAppId) { await updateDoc(doc(db, "apps", id), appData); showMsg("App Updated! 🎉", "Your app details have been successfully saved.", "success"); } 
-                else { appData.rating = "0.0"; appData.timestamp = Date.now(); await setDoc(doc(db, "apps", id), appData); showMsg("App Published! 🚀", "Congratulations! Your new app is now live.", "success"); }
+                if(editingAppId) { 
+                    await updateDoc(doc(db, "apps", id), appData); 
+                    showMsg("App Updated! 🎉", "Your app details have been successfully saved.", "success"); 
+                } 
+                else { 
+                    appData.rating = "0.0"; appData.timestamp = Date.now(); 
+                    await setDoc(doc(db, "apps", id), appData); 
+                    
+                    // 🔥 NAYA: Global Notification for New App
+                    await addDoc(collection(db, "notifications"), {
+                        targetUserId: "all",
+                        type: "new_app",
+                        title: "New App Alert! 🚀",
+                        message: `${name} is now available on SAAK App Hub. Download now!`,
+                        timestamp: Date.now()
+                    });
+
+                    showMsg("App Published! 🚀", "Congratulations! Your new app is now live.", "success"); 
+                }
                 cancelEditing(); switchTab('manageTab');
             } catch (error) { showMsg("Error ❌", "Something went wrong. Please check your internet connection.", "error"); } 
             finally { submitBtn.innerHTML = "<i class='fas fa-rocket'></i> Publish App"; submitBtn.disabled = false; }
