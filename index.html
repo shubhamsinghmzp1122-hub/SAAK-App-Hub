@@ -70,6 +70,16 @@
         .btn:hover { background: var(--primary-hover); transform: scale(1.05); }
         .app-card .btn { width: 100%; text-align: center; margin-top: auto; }
 
+        /* 🔥 NAYA: Shimmer Effect (Instagram Style Loading) CSS */
+        .shimmer-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 15px; padding: 20px; display: flex; flex-direction: column; gap: 12px; height: 100%; }
+        .shimmer-anim { animation: shimmer 1.5s infinite linear; background: linear-gradient(to right, rgba(255,255,255,0.05) 8%, rgba(255,255,255,0.15) 18%, rgba(255,255,255,0.05) 33%); background-size: 800px 100%; }
+        @keyframes shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
+        .sh-icon { width: 70px; height: 70px; border-radius: 15px; }
+        .sh-title { width: 70%; height: 20px; border-radius: 4px; }
+        .sh-rating { width: 40%; height: 15px; border-radius: 4px; }
+        .sh-desc { width: 100%; height: 35px; border-radius: 4px; }
+        .sh-btn { width: 100%; height: 40px; border-radius: 25px; margin-top: auto; }
+
         .bottom-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 40px auto; padding-bottom: 40px; }
         .action-btn { padding: 12px 25px; border-radius: 25px; font-weight: 600; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 1rem; border: none; }
         .vip-btn { background: #8e44ad; color: white; box-shadow: 0 4px 15px rgba(142, 68, 173, 0.4); }
@@ -101,7 +111,7 @@
         .modal-section p, .modal-section li { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
         .modal-section ul { padding-left: 20px; }
 
-        /* 🔥 Developer Reply Box Design */
+        /* Developer Reply Box Design */
         .dev-reply {
             background: rgba(0, 230, 118, 0.08);
             border-left: 3px solid var(--primary-color);
@@ -257,7 +267,6 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        // 🔥 WAPAS PEHLE WALA KARDIA: signInWithPopup is back!
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc, updateDoc, setDoc, getDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
@@ -292,8 +301,24 @@
         window.currentReviewsMap = {}; 
         let editingReviewId = null;
         let reviewToDeleteId = null;
-        
         let replyingToReviewId = null; 
+
+        // 🔥 NAYA: Shimmer Effect wala function
+        function renderShimmer() {
+            const grid = document.getElementById('appGrid');
+            grid.innerHTML = '';
+            for(let i = 0; i < 6; i++) {
+                grid.innerHTML += `
+                    <div class="shimmer-card">
+                        <div class="sh-icon shimmer-anim"></div>
+                        <div class="sh-title shimmer-anim"></div>
+                        <div class="sh-rating shimmer-anim"></div>
+                        <div class="sh-desc shimmer-anim"></div>
+                        <div class="sh-btn shimmer-anim"></div>
+                    </div>
+                `;
+            }
+        }
 
         function renderApps(apps) {
             const grid = document.getElementById('appGrid');
@@ -513,7 +538,11 @@
             });
         }
 
-        window.onload = () => fetchInitialApps();
+        // 🔥 NAYA: Website load hote hi sabse pehle Shimmer chamkega!
+        window.onload = () => {
+            renderShimmer();
+            fetchInitialApps();
+        }
 
         window.onclick = function(event) {
             const modals = ['appModal', 'teamModal', 'contactModal', 'screenshotModal', 'logoutConfirmModal', 'customAlertModal', 'deleteConfirmModal', 'replyModal'];
@@ -522,7 +551,6 @@
 
         const loginScreen = document.getElementById('loginScreen'); const mainAppContent = document.getElementById('mainAppContent'); const loginBtn = document.getElementById('googleLoginBtn'); const userName = document.getElementById('userName'); const logoutBtn = document.getElementById('logoutBtn'); const logoutConfirmModal = document.getElementById('logoutConfirmModal'); const confirmLogoutBtn = document.getElementById('confirmLogoutBtn'); const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
 
-        // 🔥 WAPAS PEHLE WALA METHOD LAGA DIYA HAI
         loginBtn.addEventListener('click', () => {
             loginBtn.innerHTML = '<span>Please wait...</span>';
             signInWithPopup(auth, provider).then(() => { 
@@ -546,7 +574,6 @@
                 const reviewerInput = document.getElementById('reviewerName'); if(reviewerInput) reviewerInput.value = "Posting as: " + user.displayName;
                 if (currentAppId) window.loadLiveReviews(currentAppId);
 
-                // VIP Admin button logic
                 if (user.email === ADMIN_EMAIL) {
                     vipAdminBtn.style.display = 'inline-flex';
                 } else {
