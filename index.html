@@ -6,14 +6,14 @@
     <title>SAAK App Hub</title>
     
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0f2027">
+    <meta name="theme-color" content="#0f2027" id="themeColorMeta">
     <link rel="apple-touch-icon" href="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* CSS Variables */
+        /* CSS Variables (VIP Default Theme) */
         :root {
             --bg-gradient: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
             --glass-bg: rgba(255, 255, 255, 0.05);
@@ -25,31 +25,60 @@
             --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
+        /* 🔥 NAYA: Light Mode Theme */
+        body.theme-light {
+            --bg-gradient: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --primary-color: #00b85c;
+            --primary-hover: #00964b;
+            --text-main: #1a1a1a;
+            --text-muted: #555555;
+            --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        /* 🔥 NAYA: Pure Dark Mode (OLED) Theme */
+        body.theme-dark {
+            --bg-gradient: #0f0f0f;
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --primary-color: #00e676;
+            --text-main: #ffffff;
+            --text-muted: #888888;
+            --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--bg-gradient); color: var(--text-main); min-height: 100vh; max-width: 100vw; overflow-x: hidden; }
+        body { background: var(--bg-gradient); color: var(--text-main); min-height: 100vh; max-width: 100vw; overflow-x: hidden; transition: background 0.5s ease, color 0.5s ease; }
         
         ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
         ::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 4px; }
 
-        #loginScreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-gradient); display: flex; justify-content: center; align-items: center; z-index: 9999; }
-        .login-box { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 40px 30px; border-radius: 20px; text-align: center; backdrop-filter: blur(10px); box-shadow: var(--card-shadow); width: 90%; max-width: 400px; animation: fadeIn 0.8s ease; }
+        #loginScreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-gradient); display: flex; justify-content: center; align-items: center; z-index: 9999; transition: background 0.5s ease; }
+        .login-box { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 40px 30px; border-radius: 20px; text-align: center; backdrop-filter: blur(10px); box-shadow: var(--card-shadow); width: 90%; max-width: 400px; animation: fadeIn 0.8s ease; transition: all 0.5s ease;}
         .login-box i.logo-icon { font-size: 3.5rem; color: var(--primary-color); margin-bottom: 15px; }
-        .login-box h2 { color: white; margin-bottom: 10px; font-size: 1.6rem; }
+        .login-box h2 { color: var(--text-main); margin-bottom: 10px; font-size: 1.6rem; }
         .login-box p { color: var(--text-muted); margin-bottom: 30px; font-size: 0.95rem; }
 
         .google-style-btn { background: #ffffff !important; color: #3c4043 !important; border: 1px solid #dadce0 !important; box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15); font-weight: 500; border-radius: 25px; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px 25px; width: 100%; font-size: 1.05rem; cursor: pointer; transition: all 0.3s ease; }
         .google-style-btn:hover { background: #f8f9fa !important; box-shadow: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15); }
 
-        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: var(--glass-bg); backdrop-filter: blur(10px); border-bottom: 1px solid var(--glass-border); position: sticky; top: 0; z-index: 100; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: var(--glass-bg); backdrop-filter: blur(10px); border-bottom: 1px solid var(--glass-border); position: sticky; top: 0; z-index: 100; transition: all 0.5s ease;}
         .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary-color); display: flex; align-items: center; gap: 10px; }
         .search-bar { position: relative; width: 40%; }
-        .search-bar input { width: 100%; padding: 10px 40px 10px 20px; border-radius: 20px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.2); color: white; outline: none; transition: 0.3s ease; }
+        .search-bar input { width: 100%; padding: 10px 40px 10px 20px; border-radius: 20px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.1); color: var(--text-main); outline: none; transition: 0.3s ease; }
         .search-bar input:focus { border-color: var(--primary-color); box-shadow: 0 0 10px rgba(0, 230, 118, 0.2); }
         .search-bar i.search-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+        body.theme-light .search-bar input { background: rgba(255,255,255,0.5); } /* Light mode input fix */
 
         .auth-section { display: flex; align-items: center; gap: 15px; }
-        .user-info { display: flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, 0.05); padding: 5px 15px; border-radius: 20px; border: 1px solid var(--glass-border); }
+        
+        /* 🔥 Theme Toggle Button CSS */
+        .theme-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-main); width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; font-size: 1.1rem; }
+        .theme-btn:hover { background: rgba(150, 150, 150, 0.2); transform: scale(1.05); }
+
+        .user-info { display: flex; align-items: center; gap: 10px; background: rgba(150, 150, 150, 0.1); padding: 5px 15px; border-radius: 20px; border: 1px solid var(--glass-border); }
         .user-name { font-weight: 500; color: var(--primary-color); font-size: 0.95rem; }
         
         .header-logout-btn { background: transparent; color: #ff4757; border: 1px solid rgba(255, 71, 87, 0.5); padding: 6px 15px; border-radius: 20px; cursor: pointer; transition: 0.3s; font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 5px; }
@@ -59,19 +88,20 @@
         .section-title { font-size: 1.5rem; margin-bottom: 20px; border-left: 4px solid var(--primary-color); padding-left: 10px; }
         
         .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 25px; }
-        .app-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 15px; padding: 20px; position: relative; backdrop-filter: blur(10px); box-shadow: var(--card-shadow); transition: transform 0.3s ease, box-shadow 0.3s ease; display: flex; flex-direction: column; cursor: pointer; }
+        .app-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 15px; padding: 20px; position: relative; backdrop-filter: blur(10px); box-shadow: var(--card-shadow); transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.5s ease; display: flex; flex-direction: column; cursor: pointer; }
         .app-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
-        .app-icon { width: 70px; height: 70px; border-radius: 15px; object-fit: cover; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        body.theme-light .app-card:hover { box-shadow: 0 15px 40px rgba(0,0,0,0.15); }
+        .app-icon { width: 70px; height: 70px; border-radius: 15px; object-fit: cover; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .app-info h3 { font-size: 1.2rem; margin-bottom: 5px; }
         .app-info p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; flex-grow: 1; }
         .rating { color: #ffd700; font-size: 0.9rem; margin-bottom: 15px; }
         
-        .btn { padding: 10px 25px; background: var(--primary-color); color: #000; border: none; border-radius: 25px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: inline-block; }
+        .btn { padding: 10px 25px; background: var(--primary-color); color: #ffffff; border: none; border-radius: 25px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: inline-block; text-shadow: 0 1px 2px rgba(0,0,0,0.3);}
         .btn:hover { background: var(--primary-hover); transform: scale(1.05); }
         .app-card .btn { width: 100%; text-align: center; margin-top: auto; }
 
         .shimmer-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 15px; padding: 20px; display: flex; flex-direction: column; gap: 12px; height: 100%; }
-        .shimmer-anim { animation: shimmer 1.5s infinite linear; background: linear-gradient(to right, rgba(255,255,255,0.05) 8%, rgba(255,255,255,0.15) 18%, rgba(255,255,255,0.05) 33%); background-size: 800px 100%; }
+        .shimmer-anim { animation: shimmer 1.5s infinite linear; background: linear-gradient(to right, rgba(150,150,150,0.05) 8%, rgba(150,150,150,0.15) 18%, rgba(150,150,150,0.05) 33%); background-size: 800px 100%; }
         @keyframes shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
         .sh-icon { width: 70px; height: 70px; border-radius: 15px; }
         .sh-title { width: 70%; height: 20px; border-radius: 4px; }
@@ -85,15 +115,16 @@
         .vip-btn:hover { background: #9b59b6; transform: translateY(-3px); box-shadow: 0 6px 20px rgba(142, 68, 173, 0.6); }
         .install-btn { background: white; color: #0f2027; box-shadow: 0 4px 15px rgba(255,255,255,0.2); }
         .install-btn:hover { background: #f1f1f1; transform: translateY(-3px); box-shadow: 0 6px 20px rgba(255,255,255,0.4); }
-        .team-btn { background: rgba(255,255,255,0.1); color: white; border: 1px solid var(--glass-border); }
-        .team-btn:hover { background: rgba(255,255,255,0.2); transform: translateY(-3px); }
+        .team-btn { background: rgba(150,150,150,0.1); color: var(--text-main); border: 1px solid var(--glass-border); }
+        .team-btn:hover { background: rgba(150,150,150,0.2); transform: translateY(-3px); }
 
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.4s ease; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal-content { background: linear-gradient(135deg, #1e293b, #0f172a); width: 90%; max-width: 800px; max-height: 90vh; border-radius: 20px; border: 1px solid var(--glass-border); overflow-y: auto; position: relative; transform: translateY(50px) scale(0.9); transition: all 0.4s ease; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .modal-content { background: var(--bg-gradient); width: 90%; max-width: 800px; max-height: 90vh; border-radius: 20px; border: 1px solid var(--glass-border); overflow-y: auto; position: relative; transform: translateY(50px) scale(0.9); transition: all 0.4s ease; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        body.theme-light .modal-content { background: #ffffff; }
         .modal-overlay.active .modal-content { transform: translateY(0) scale(1); }
-        .close-btn { position: sticky; top: 15px; float: right; right: 20px; background: rgba(255,255,255,0.1); border: none; color: white; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; z-index: 2; transition: background 0.3s; }
-        .close-btn:hover { background: rgba(255,0,0,0.7); }
+        .close-btn { position: sticky; top: 15px; float: right; right: 20px; background: rgba(150,150,150,0.2); border: none; color: var(--text-main); width: 35px; height: 35px; border-radius: 50%; cursor: pointer; z-index: 2; transition: background 0.3s; }
+        .close-btn:hover { background: rgba(255,0,0,0.7); color: white;}
 
         .modal-header-info { display: flex; gap: 20px; padding: 30px 30px 10px; align-items: center; }
         .modal-header-info img { width: 100px; height: 100px; border-radius: 20px; }
@@ -102,7 +133,7 @@
         .modal-meta div:last-child { border-right: none; }
 
         .screenshots { display: flex; overflow-x: auto; gap: 15px; padding: 20px 30px; scroll-snap-type: x mandatory; }
-        .screenshots img { height: 250px; border-radius: 10px; scroll-snap-align: start; box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: transform 0.3s; cursor: pointer; }
+        .screenshots img { height: 250px; border-radius: 10px; scroll-snap-align: start; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: transform 0.3s; cursor: pointer; }
         .screenshots img:hover { transform: scale(1.02); }
 
         .modal-section { padding: 20px 30px; border-top: 1px solid var(--glass-border); }
@@ -113,34 +144,41 @@
         .dev-reply { background: rgba(0, 230, 118, 0.08); border-left: 3px solid var(--primary-color); padding: 10px 15px; margin-top: 12px; border-radius: 5px; font-size: 0.85rem; }
         .dev-reply-header { font-weight: 600; color: var(--primary-color); margin-bottom: 5px; display: flex; align-items: center; gap: 5px; }
 
-        .review-form { background: rgba(0,0,0,0.2); padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        .review-form { background: rgba(150,150,150,0.1); padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid var(--glass-border); }
         .star-rating-input { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 5px; margin-bottom: 15px; }
         .star-rating-input input { display: none; }
         .star-rating-input label { color: var(--text-muted); font-size: 1.5rem; cursor: pointer; transition: color 0.2s; }
         .star-rating-input input:checked ~ label, .star-rating-input label:hover, .star-rating-input label:hover ~ label { color: #ffd700; }
-        .review-form input[type="text"], .review-form textarea { width: 100%; padding: 10px; margin-bottom: 15px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 5px; color: white; outline: none; }
-        .review-form input[type="text"]:read-only { background: rgba(255,255,255,0.01); color: var(--text-muted); cursor: not-allowed; border-color: transparent; padding-left: 0; font-weight: 500; }
+        .review-form input[type="text"], .review-form textarea { width: 100%; padding: 10px; margin-bottom: 15px; background: rgba(150,150,150,0.1); border: 1px solid var(--glass-border); border-radius: 5px; color: var(--text-main); outline: none; transition: 0.3s;}
+        .review-form input[type="text"]:read-only { background: transparent; color: var(--text-muted); cursor: not-allowed; border-color: transparent; padding-left: 0; font-weight: 500; }
         .review-form input:focus, .review-form textarea:focus { border-color: var(--primary-color); }
 
         .review-list { display: flex; flex-direction: column; gap: 15px; }
-        .review-card { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 8px; border-left: 3px solid var(--text-muted); animation: fadeIn 0.5s ease; transition: 0.3s; }
+        .review-card { background: rgba(150,150,150,0.05); padding: 15px; border-radius: 8px; border-left: 3px solid var(--text-muted); animation: fadeIn 0.5s ease; transition: 0.3s; border: 1px solid var(--glass-border);}
         .review-card.has-reply { border-left-color: var(--primary-color); }
         .review-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
-        .review-user { font-weight: 600; }
+        .review-user { font-weight: 600; color: var(--text-main); }
         .review-time { font-size: 0.8rem; color: var(--text-muted); }
-        .review-actions { margin-top: 10px; display: flex; gap: 15px; }
-        .review-actions button { background: transparent; border: none; cursor: pointer; font-size: 0.85rem; transition: opacity 0.3s; }
+        .review-actions { margin-top: 10px; display: flex; gap: 15px; flex-wrap: wrap;}
+        .review-actions button { background: transparent; border: none; cursor: pointer; font-size: 0.85rem; transition: opacity 0.3s; font-family: 'Poppins', sans-serif; display: flex; align-items: center; gap: 5px; font-weight: 500;}
         .review-actions button:hover { opacity: 0.7; }
+        
+        /* 🔥 LIKES BUTTON CSS */
+        .btn-like { color: var(--text-muted); }
+        .btn-like.liked { color: #e74c3c; }
+        .btn-like.liked i { animation: pop 0.3s ease; }
+        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
+        
         .btn-edit { color: var(--primary-color); }
         .btn-reply { color: #3498db; }
         .btn-delete { color: #E1306C; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         .contact-grid { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
-        .contact-card { display: flex; align-items: center; gap: 20px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); padding: 15px 20px; border-radius: 12px; text-decoration: none; color: white; transition: all 0.3s ease; }
-        .contact-card:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.1); border-color: var(--primary-color); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4); }
+        .contact-card { display: flex; align-items: center; gap: 20px; background: rgba(150,150,150,0.05); border: 1px solid var(--glass-border); padding: 15px 20px; border-radius: 12px; text-decoration: none; color: var(--text-main); transition: all 0.3s ease; }
+        .contact-card:hover { transform: translateY(-5px); border-color: var(--primary-color); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); }
         .contact-card i { font-size: 2.2rem; color: #E1306C; }
-        .contact-info h4 { margin: 0; font-size: 1.1rem; color: white; }
+        .contact-info h4 { margin: 0; font-size: 1.1rem; color: var(--text-main); }
         .contact-info p { margin: 0; font-size: 0.9rem; color: var(--text-muted); }
 
         #screenshotModal { z-index: 2000; }
@@ -148,8 +186,8 @@
         #screenshotModal.active img { transform: scale(1); opacity: 1; }
         #screenshotModal img.swipe-left { transform: translateX(-100px) scale(0.9) !important; opacity: 0 !important; }
         #screenshotModal img.swipe-right { transform: translateX(100px) scale(0.9) !important; opacity: 0 !important; }
-        .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(5px); border: none; color: white; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; z-index: 2010; transition: background 0.3s, transform 0.2s; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; }
-        .nav-btn:hover { background: rgba(255, 255, 255, 0.3); transform: translateY(-50%) scale(1.1); }
+        .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(150,150,150, 0.3); backdrop-filter: blur(5px); border: none; color: var(--text-main); width: 45px; height: 45px; border-radius: 50%; cursor: pointer; z-index: 2010; transition: background 0.3s, transform 0.2s; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; }
+        .nav-btn:hover { background: rgba(150,150,150, 0.5); transform: translateY(-50%) scale(1.1); }
         .prev-btn { left: 20px; } .next-btn { right: 20px; }
 
         .logout-btn-modal { padding: 10px 30px; background: rgba(225, 48, 108, 0.8); color: white; border: none; border-radius: 25px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
@@ -190,6 +228,10 @@
             </div>
             
             <div class="auth-section">
+                <button class="theme-btn" id="themeToggleBtn" onclick="window.cycleTheme()" title="Change Theme">
+                    <i class="fas fa-desktop" id="themeIcon"></i>
+                </button>
+
                 <div id="userInfo" class="user-info">
                     <i class="fas fa-user-circle" style="font-size: 1.2rem; color: var(--primary-color);"></i>
                     <span id="userName" class="user-name"></span>
@@ -218,14 +260,14 @@
         </div>
     </div> 
 
-    <div class="modal-overlay" id="appModal"><div class="modal-content"><button class="close-btn" onclick="window.closeModal()"><i class="fas fa-times"></i></button><div class="modal-header-info"><img id="modalIcon" src="" alt="App Icon"><div class="modal-titles"><h2 id="modalName">App Name</h2><p style="color: var(--primary-color)" id="modalDev">Developer</p><div class="modal-meta"><div><strong id="modalRating">... <i class="fas fa-star" style="color:#ffd700"></i></strong><br><span id="modalReviewCount">Loading</span></div><div><strong id="modalDownloads">...</strong><br>Downloads</div><div><strong id="modalSize">25 MB</strong><br>Size</div><div><strong id="modalVersion">1.0.0</strong><br>Version</div></div><div style="display: flex; gap: 10px; margin-top: 15px; width: 100%;"><button id="modalInstallBtn" class="btn" style="flex: 1;"><i class="fas fa-download"></i> Install</button><button id="modalShareBtn" class="btn" style="flex: 1; background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid var(--glass-border);"><i class="fas fa-share-nodes"></i> Share</button></div></div></div><div class="screenshots" id="modalScreenshots"></div><div class="modal-section"><h4>About this app</h4><p id="modalFullDesc"></p><br><small style="color:var(--text-muted)">Released on: <span id="modalDate"></span></small></div><div class="modal-section"><h4>Key Features</h4><ul id="modalFeatures"></ul></div><div class="modal-section"><h4>What's New</h4><p id="modalWhatsNew" style="white-space: pre-line;"></p></div><div class="modal-section"><h4>Ratings and Reviews</h4><div class="review-form" id="reviewFormSection"><p style="margin-bottom: 10px;" id="reviewFormTitle">Rate this app:</p><div class="star-rating-input"><input type="radio" id="star5" name="rating" value="5"><label for="star5" class="fas fa-star"></label><input type="radio" id="star4" name="rating" value="4"><label for="star4" class="fas fa-star"></label><input type="radio" id="star3" name="rating" value="3"><label for="star3" class="fas fa-star"></label><input type="radio" id="star2" name="rating" value="2"><label for="star2" class="fas fa-star"></label><input type="radio" id="star1" name="rating" value="1"><label for="star1" class="fas fa-star"></label></div><input type="text" id="reviewerName" placeholder="Posting as..." readonly><textarea id="reviewText" rows="3" placeholder="Describe your experience (what's good, bad, bugs, suggestions...)"></textarea><button id="submitReviewBtn" class="btn" onclick="window.submitReview()">Submit Review</button><button id="cancelEditBtn" class="btn" style="display: none;" onclick="window.cancelEdit()">Cancel Edit</button></div><div class="review-list" id="reviewList"></div></div></div></div>
+    <div class="modal-overlay" id="appModal"><div class="modal-content"><button class="close-btn" onclick="window.closeModal()"><i class="fas fa-times"></i></button><div class="modal-header-info"><img id="modalIcon" src="" alt="App Icon"><div class="modal-titles"><h2 id="modalName">App Name</h2><p style="color: var(--primary-color)" id="modalDev">Developer</p><div class="modal-meta"><div><strong id="modalRating">... <i class="fas fa-star" style="color:#ffd700"></i></strong><br><span id="modalReviewCount">Loading</span></div><div><strong id="modalDownloads">...</strong><br>Downloads</div><div><strong id="modalSize">25 MB</strong><br>Size</div><div><strong id="modalVersion">1.0.0</strong><br>Version</div></div><div style="display: flex; gap: 10px; margin-top: 15px; width: 100%;"><button id="modalInstallBtn" class="btn" style="flex: 1;"><i class="fas fa-download"></i> Install</button><button id="modalShareBtn" class="btn" style="flex: 1; background: rgba(150,150,150,0.1); color: var(--text-main); border: 1px solid var(--glass-border);"><i class="fas fa-share-nodes"></i> Share</button></div></div></div><div class="screenshots" id="modalScreenshots"></div><div class="modal-section"><h4>About this app</h4><p id="modalFullDesc"></p><br><small style="color:var(--text-muted)">Released on: <span id="modalDate"></span></small></div><div class="modal-section"><h4>Key Features</h4><ul id="modalFeatures"></ul></div><div class="modal-section"><h4>What's New</h4><p id="modalWhatsNew" style="white-space: pre-line;"></p></div><div class="modal-section"><h4>Ratings and Reviews</h4><div class="review-form" id="reviewFormSection"><p style="margin-bottom: 10px;" id="reviewFormTitle">Rate this app:</p><div class="star-rating-input"><input type="radio" id="star5" name="rating" value="5"><label for="star5" class="fas fa-star"></label><input type="radio" id="star4" name="rating" value="4"><label for="star4" class="fas fa-star"></label><input type="radio" id="star3" name="rating" value="3"><label for="star3" class="fas fa-star"></label><input type="radio" id="star2" name="rating" value="2"><label for="star2" class="fas fa-star"></label><input type="radio" id="star1" name="rating" value="1"><label for="star1" class="fas fa-star"></label></div><input type="text" id="reviewerName" placeholder="Posting as..." readonly><textarea id="reviewText" rows="3" placeholder="Describe your experience (what's good, bad, bugs, suggestions...)"></textarea><button id="submitReviewBtn" class="btn" onclick="window.submitReview()">Submit Review</button><button id="cancelEditBtn" class="btn" style="display: none; background: #e74c3c;" onclick="window.cancelEdit()">Cancel Edit</button></div><div class="review-list" id="reviewList"></div></div></div></div>
     
     <div class="modal-overlay" id="teamModal"><div class="modal-content" style="max-width: 600px;"><button class="close-btn" onclick="window.closeTeamModal()"><i class="fas fa-times"></i></button><div class="modal-section" style="border-top: none; padding-top: 30px;"><h2 style="color: var(--primary-color); text-align: center; margin-bottom: 15px;">Team Information</h2><div style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 30px; text-align: center;"><p style="margin-bottom: 10px;"><strong>About the Developer Team</strong></p><p style="margin-bottom: 10px;">This application has been proudly developed and published by Shubham, who leads the overall app development, coding, and project execution.</p><p style="margin-bottom: 10px;">Arpit contributed as the Idea Finder, helping with creative concepts, feature planning, and innovative app ideas.</p><p style="margin-bottom: 10px;">Abhishek worked as the Design Finder, supporting the visual design, layout ideas, and user interface improvements.</p><p style="margin-bottom: 10px;">Kartik has been the Full Supporter, providing continuous support, feedback throughout the complete development process.</p><p>Together, this team focuses on creating simple, useful, and enjoyable applications for users.</p></div><div style="text-align: center; margin-top: 20px;"><button class="btn" onclick="window.openContactModal()" style="font-size: 1.1rem; padding: 10px 30px;">Contact Us</button></div></div></div></div>
     <div class="modal-overlay" id="contactModal"><div class="modal-content" style="max-width: 600px;"><button class="close-btn" onclick="window.closeContactModal()"><i class="fas fa-times"></i></button><div class="modal-section" style="border-top: none; padding-top: 30px;"><h3 style="color: var(--primary-color); text-align: center; margin-bottom: 10px;">Contact Our Team</h3><p style="text-align: center; color: var(--text-muted); font-size: 0.9rem;">Get in touch with the creators on Instagram.</p><div class="contact-grid"><a href="https://www.instagram.com/i_am_shubham_singh_0001?igsh=MWduMDRnY2RlZm1ldQ==" target="_blank" class="contact-card"><i class="fab fa-instagram"></i><div class="contact-info"><h4>Shubham</h4><p>Lead Developer</p></div></a><a href="https://www.instagram.com/arpittt__06?igsh=a29hbWZhaGRqZ3Fi" target="_blank" class="contact-card"><i class="fab fa-instagram"></i><div class="contact-info"><h4>Arpit</h4><p>Idea Finder</p></div></a><a href="https://www.instagram.com/_mr_abhishek_patel00?igsh=aHhmMmttajd3OHhv" target="_blank" class="contact-card"><i class="fab fa-instagram"></i><div class="contact-info"><h4>Abhishek</h4><p>Design Finder</p></div></a><a href="https://www.instagram.com/kartik_o707?igsh=MTcxaXcyd21qeXMxYQ==" target="_blank" class="contact-card"><i class="fab fa-instagram"></i><div class="contact-info"><h4>Kartik</h4><p>Full Supporter</p></div></a></div></div></div></div>
     
     <div class="modal-overlay" id="screenshotModal"><button class="close-btn" style="position: absolute; top: 20px; right: 20px; z-index: 2010;" onclick="window.closeScreenshotModal()"><i class="fas fa-times"></i></button><button class="nav-btn prev-btn" onclick="window.prevScreenshot(event)"><i class="fas fa-chevron-left"></i></button><button class="nav-btn next-btn" onclick="window.nextScreenshot(event)"><i class="fas fa-chevron-right"></i></button><img id="fullScreenshot" src="" alt="Full Screen Preview"></div>
-    <div class="modal-overlay" id="logoutConfirmModal"><div class="login-box" style="padding: 30px;"><i class="fas fa-sign-out-alt logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #E1306C;"></i><h2 style="font-size: 1.3rem;">Logout</h2><p style="margin-bottom: 25px;">Are you sure you want to logout from SAAK App Hub?</p><div style="display: flex; gap: 15px; justify-content: center;"><button id="cancelLogoutBtn" class="btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">Cancel</button><button id="confirmLogoutBtn" class="logout-btn-modal" style="margin: 0;">Yes, Logout</button></div></div></div>
-    <div class="modal-overlay" id="deleteConfirmModal"><div class="login-box" style="padding: 30px;"><i class="fas fa-trash logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #E1306C;"></i><h2 style="font-size: 1.3rem;">Delete Review</h2><p style="margin-bottom: 25px;">Are you sure you want to delete this review permanently?</p><div style="display: flex; gap: 15px; justify-content: center;"><button onclick="document.getElementById('deleteConfirmModal').classList.remove('active')" class="btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">Cancel</button><button id="confirmDeleteBtn" class="logout-btn-modal" style="margin: 0;">Yes, Delete</button></div></div></div>
+    <div class="modal-overlay" id="logoutConfirmModal"><div class="login-box" style="padding: 30px;"><i class="fas fa-sign-out-alt logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #E1306C;"></i><h2 style="font-size: 1.3rem;">Logout</h2><p style="margin-bottom: 25px;">Are you sure you want to logout from SAAK App Hub?</p><div style="display: flex; gap: 15px; justify-content: center;"><button id="cancelLogoutBtn" class="btn" style="background: rgba(150,150,150,0.1); color: var(--text-main); border: 1px solid rgba(150,150,150,0.2);">Cancel</button><button id="confirmLogoutBtn" class="logout-btn-modal" style="margin: 0;">Yes, Logout</button></div></div></div>
+    <div class="modal-overlay" id="deleteConfirmModal"><div class="login-box" style="padding: 30px;"><i class="fas fa-trash logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #E1306C;"></i><h2 style="font-size: 1.3rem;">Delete Review</h2><p style="margin-bottom: 25px;">Are you sure you want to delete this review permanently?</p><div style="display: flex; gap: 15px; justify-content: center;"><button onclick="document.getElementById('deleteConfirmModal').classList.remove('active')" class="btn" style="background: rgba(150,150,150,0.1); color: var(--text-main); border: 1px solid rgba(150,150,150,0.2);">Cancel</button><button id="confirmDeleteBtn" class="logout-btn-modal" style="margin: 0;">Yes, Delete</button></div></div></div>
     
     <div class="modal-overlay" id="customAlertModal" style="z-index: 10001;">
         <div class="login-box" style="padding: 30px;">
@@ -241,9 +283,9 @@
             <i class="fas fa-reply logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #3498db;"></i>
             <h2 style="font-size: 1.3rem;">Developer Reply</h2>
             <p style="color: var(--text-muted); margin-bottom: 15px; font-size: 0.9rem;">Your reply will be visible publicly to all users.</p>
-            <textarea id="replyTextInput" rows="3" placeholder="Type your professional reply here..." style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: white; outline: none; margin-bottom: 20px; font-family: 'Poppins', sans-serif; resize: none;"></textarea>
+            <textarea id="replyTextInput" rows="3" placeholder="Type your professional reply here..." style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(150,150,150,0.1); border: 1px solid rgba(150,150,150,0.2); color: var(--text-main); outline: none; margin-bottom: 20px; font-family: 'Poppins', sans-serif; resize: none;"></textarea>
             <div style="display: flex; gap: 15px; justify-content: center;">
-                <button onclick="window.closeReplyModal()" class="btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">Cancel</button>
+                <button onclick="window.closeReplyModal()" class="btn" style="background: rgba(150,150,150,0.1); color: var(--text-main); border: 1px solid rgba(150,150,150,0.2);">Cancel</button>
                 <button id="confirmReplyBtn" class="logout-btn-modal" style="margin: 0; background: #3498db;" onclick="window.submitReply()">Post Reply</button>
             </div>
         </div>
@@ -261,7 +303,8 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc, updateDoc, setDoc, getDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        // 🔥 NAYA: arrayRemove added for unliking
+        import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc, updateDoc, setDoc, getDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAbOtjHeldbPRC29tX-i5tbUeySQlTzWUU",
@@ -278,6 +321,42 @@
         const db = getFirestore(app);
 
         const ADMIN_EMAIL = "shubhamsinghmzp1122@gmail.com";
+
+        // 🔥 THEME LOGIC
+        const themes = ['default', 'light', 'dark'];
+        let currentThemeIndex = 0;
+
+        function applyTheme(themeName) {
+            document.body.classList.remove('theme-light', 'theme-dark');
+            const icon = document.getElementById('themeIcon');
+            const metaColor = document.getElementById('themeColorMeta');
+            
+            if (themeName === 'light') {
+                document.body.classList.add('theme-light');
+                icon.className = "fas fa-sun";
+                metaColor.content = "#f5f7fa";
+            } else if (themeName === 'dark') {
+                document.body.classList.add('theme-dark');
+                icon.className = "fas fa-moon";
+                metaColor.content = "#0f0f0f";
+            } else {
+                // Default theme (Current VIP Gradient)
+                icon.className = "fas fa-desktop";
+                metaColor.content = "#0f2027";
+            }
+            localStorage.setItem('saak_theme', themeName);
+        }
+
+        window.cycleTheme = function() {
+            currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+            applyTheme(themes[currentThemeIndex]);
+        }
+
+        // Load saved theme on startup
+        const savedTheme = localStorage.getItem('saak_theme') || 'default';
+        currentThemeIndex = themes.indexOf(savedTheme) !== -1 ? themes.indexOf(savedTheme) : 0;
+        applyTheme(themes[currentThemeIndex]);
+
 
         window.showCustomAlert = function(msg, title="Notice", type="info") {
             const titleEl = document.getElementById('customAlertTitle');
@@ -403,6 +482,25 @@
 
         window.closeModal = function() { document.getElementById('appModal').classList.remove('active'); document.body.style.overflow = 'auto'; currentAppId = null; window.cancelEdit(); if(unsubscribeReviews) { unsubscribeReviews(); unsubscribeReviews = null; } if(unsubscribeDownloads) { unsubscribeDownloads(); unsubscribeDownloads = null; } }
 
+        // 🔥 NAYA: Review Like Toggle Function
+        window.toggleLike = async function(reviewId) {
+            if (!auth.currentUser) { 
+                window.showCustomAlert("Please login to like reviews!", "Login Required", "error"); 
+                return; 
+            }
+            const rev = window.currentReviewsMap[reviewId];
+            if (!rev) return;
+            const uid = auth.currentUser.uid;
+            const revRef = doc(db, "reviews", reviewId);
+            try {
+                if (rev.likedBy && rev.likedBy.includes(uid)) {
+                    await updateDoc(revRef, { likedBy: arrayRemove(uid) });
+                } else {
+                    await updateDoc(revRef, { likedBy: arrayUnion(uid) });
+                }
+            } catch(e) { console.error("Error liking review:", e); }
+        }
+
         window.loadLiveReviews = function(appId) {
             const reviewList = document.getElementById('reviewList'); reviewList.innerHTML = '<p style="text-align:center; color:var(--text-muted); margin-top:20px;">Loading reviews...</p>';
             if (unsubscribeReviews) unsubscribeReviews();
@@ -416,7 +514,16 @@
                 document.getElementById('modalReviewCount').innerText = `${reviewCount} ${reviewCount === 1 ? 'Review' : 'Reviews'}`;
                 const appIndex = appsData.findIndex(a => a.id === appId);
                 if(appIndex !== -1) { appsData[appIndex].rating = avg; const term = document.getElementById('searchInput').value.toLowerCase(); if (term) renderApps(appsData.filter(app => app.name.toLowerCase().includes(term))); else renderApps(appsData); }
-                appReviews.sort((a, b) => b.timestamp - a.timestamp); reviewList.innerHTML = '';
+                
+                // Sort by likes first, then timestamp
+                appReviews.sort((a, b) => {
+                    const likesA = a.likedBy ? a.likedBy.length : 0;
+                    const likesB = b.likedBy ? b.likedBy.length : 0;
+                    if(likesB !== likesA) return likesB - likesA;
+                    return b.timestamp - a.timestamp;
+                });
+                
+                reviewList.innerHTML = '';
                 if (appReviews.length === 0) { reviewList.innerHTML = '<p style="text-align:center; color:var(--text-muted); margin-top:20px;">No reviews yet. Be the first to review!</p>'; return; }
                 
                 appReviews.forEach(rev => {
@@ -433,25 +540,32 @@
                         `;
                     }
 
-                    let actionBtns = '';
+                    // 🔥 NAYA: Like Button Logic
+                    let likesCount = rev.likedBy ? rev.likedBy.length : 0;
+                    let isLiked = auth.currentUser && rev.likedBy && rev.likedBy.includes(auth.currentUser.uid);
+                    let likeIcon = isLiked ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>';
+                    
+                    // Saare users like kar sakte hain
+                    let actionBtns = `<div class="review-actions">
+                        <button class="btn-like ${isLiked ? 'liked' : ''}" onclick="window.toggleLike('${rev.id}')">${likeIcon} <span style="margin-left: 2px;">${likesCount > 0 ? likesCount : 'Like'}</span></button>
+                    `;
+                    
                     if (auth.currentUser) {
                         const isOwner = rev.userId === auth.currentUser.uid; 
                         const isAdmin = auth.currentUser.email === ADMIN_EMAIL;
                         
-                        if (isOwner || isAdmin) { 
-                            actionBtns += '<div class="review-actions">'; 
-                            if (isOwner) { actionBtns += `<button class="btn-edit" onclick="window.editReview('${rev.id}')"><i class="fas fa-edit"></i> Edit</button>`; } 
-                            if (isAdmin) { actionBtns += `<button class="btn-reply" onclick="window.openReplyModal('${rev.id}')"><i class="fas fa-reply"></i> Reply</button>`; }
-                            actionBtns += `<button class="btn-delete" onclick="window.confirmDeleteReview('${rev.id}')"><i class="fas fa-trash"></i> Delete</button></div>`; 
-                        }
+                        if (isOwner) { actionBtns += `<button class="btn-edit" onclick="window.editReview('${rev.id}')"><i class="fas fa-edit"></i> Edit</button>`; } 
+                        if (isAdmin) { actionBtns += `<button class="btn-reply" onclick="window.openReplyModal('${rev.id}')"><i class="fas fa-reply"></i> Reply</button>`; }
+                        if (isOwner || isAdmin) { actionBtns += `<button class="btn-delete" onclick="window.confirmDeleteReview('${rev.id}')"><i class="fas fa-trash"></i> Delete</button>`; }
                     }
+                    actionBtns += `</div>`; // Close actions div
                     
                     const card = document.createElement('div'); 
                     card.className = `review-card ${rev.developerReply ? 'has-reply' : ''}`;
                     card.innerHTML = `
                         <div class="review-header"><span class="review-user"><i class="fas fa-user-circle" style="color:var(--primary-color);"></i> ${rev.name}</span><span class="review-time">${dateStr}</span></div>
                         <div style="margin-bottom: 5px;">${starsHTML}</div>
-                        <p style="font-size: 0.9rem; color: var(--text-muted); white-space: pre-wrap;">${rev.text}</p>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); white-space: pre-wrap; margin-bottom: 10px;">${rev.text}</p>
                         ${devReplyHTML}
                         ${actionBtns}
                     `;
@@ -484,9 +598,7 @@
                 await updateDoc(doc(db, "reviews", replyingToReviewId), {
                     developerReply: text
                 });
-                
                 window.closeReplyModal();
-                
                 if(text !== "") {
                     window.showCustomAlert("Reply posted successfully! 🎉", "Awesome!", "success");
                 }
@@ -504,7 +616,7 @@
         window.confirmDeleteReview = function(id) { reviewToDeleteId = id; document.getElementById('deleteConfirmModal').classList.add('active'); }
         document.getElementById('confirmDeleteBtn').addEventListener('click', async () => { if (reviewToDeleteId) { const btn = document.getElementById('confirmDeleteBtn'); btn.innerText = "Deleting..."; try { await deleteDoc(doc(db, "reviews", reviewToDeleteId)); if (editingReviewId === reviewToDeleteId) window.cancelEdit(); } catch(e) { window.showCustomAlert("Error deleting review. Please try again.", "Error", "error"); } btn.innerText = "Yes, Delete"; document.getElementById('deleteConfirmModal').classList.remove('active'); reviewToDeleteId = null; } });
         
-        window.submitReview = async function() { if (!auth.currentUser) { window.showCustomAlert("Please login first to submit a review!", "Login Required", "error"); return; } const name = auth.currentUser.displayName || "Anonymous User"; const text = document.getElementById('reviewText').value.trim(); let rating = 0; const radios = document.getElementsByName('rating'); for (let r of radios) { if (r.checked) { rating = r.value; break; } } if (rating === 0) { window.showCustomAlert("Please select a star rating.", "Missing Rating", "error"); return; } if (text === '') { window.showCustomAlert("Please write a review comment.", "Missing Comment", "error"); return; } const submitBtn = document.getElementById('submitReviewBtn'); submitBtn.innerText = editingReviewId ? "Updating..." : "Submitting..."; submitBtn.disabled = true; try { if (editingReviewId) { await updateDoc(doc(db, "reviews", editingReviewId), { rating: Number(rating), text: text, timestamp: Date.now() }); window.showCustomAlert("Your review has been successfully updated!", "Success", "success"); } else { await addDoc(collection(db, "reviews"), { appId: currentAppId, name: name, rating: Number(rating), text: text, timestamp: Date.now(), userId: auth.currentUser.uid }); window.showCustomAlert("Thank you! Your review has been posted.", "Success", "success"); } window.cancelEdit(); } catch (error) { window.showCustomAlert("Error saving review.", "Error", "error"); } finally { submitBtn.innerText = editingReviewId ? "Update Review" : "Submit Review"; submitBtn.disabled = false; } }
+        window.submitReview = async function() { if (!auth.currentUser) { window.showCustomAlert("Please login first to submit a review!", "Login Required", "error"); return; } const name = auth.currentUser.displayName || "Anonymous User"; const text = document.getElementById('reviewText').value.trim(); let rating = 0; const radios = document.getElementsByName('rating'); for (let r of radios) { if (r.checked) { rating = r.value; break; } } if (rating === 0) { window.showCustomAlert("Please select a star rating.", "Missing Rating", "error"); return; } if (text === '') { window.showCustomAlert("Please write a review comment.", "Missing Comment", "error"); return; } const submitBtn = document.getElementById('submitReviewBtn'); submitBtn.innerText = editingReviewId ? "Updating..." : "Submitting..."; submitBtn.disabled = true; try { if (editingReviewId) { await updateDoc(doc(db, "reviews", editingReviewId), { rating: Number(rating), text: text, timestamp: Date.now() }); window.showCustomAlert("Your review has been successfully updated!", "Success", "success"); } else { await addDoc(collection(db, "reviews"), { appId: currentAppId, name: name, rating: Number(rating), text: text, timestamp: Date.now(), userId: auth.currentUser.uid, likedBy: [] }); window.showCustomAlert("Thank you! Your review has been posted.", "Success", "success"); } window.cancelEdit(); } catch (error) { window.showCustomAlert("Error saving review.", "Error", "error"); } finally { submitBtn.innerText = editingReviewId ? "Update Review" : "Submit Review"; submitBtn.disabled = false; } }
 
         let isAnimating = false;
         function updateNavButtons() { const prevBtn = document.querySelector('.prev-btn'); const nextBtn = document.querySelector('.next-btn'); if(!prevBtn || !nextBtn) return; prevBtn.style.display = currentScreenshotIndex <= 0 ? 'none' : 'flex'; nextBtn.style.display = currentScreenshotIndex >= currentScreenshots.length - 1 ? 'none' : 'flex'; }
