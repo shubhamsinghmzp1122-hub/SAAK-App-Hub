@@ -25,9 +25,10 @@
         /* Form Styles */
         .form-group { margin-bottom: 20px; text-align: left; }
         label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 0.9rem; }
-        input, textarea { width: 100%; padding: 12px; border-radius: 8px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: white; outline: none; transition: 0.3s; }
-        input:focus, textarea:focus { border-color: var(--primary-color); }
+        input, textarea, select { width: 100%; padding: 12px; border-radius: 8px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: white; outline: none; transition: 0.3s; font-family: 'Poppins', sans-serif; }
+        input:focus, textarea:focus, select:focus { border-color: var(--primary-color); }
         input.error, textarea.error { border-color: #ff4757 !important; box-shadow: 0 0 8px rgba(255, 71, 87, 0.5); }
+        select option { background: #0f2027; color: white; }
 
         .btn { background: var(--primary-color); color: #000; padding: 12px 30px; border: none; border-radius: 25px; font-weight: 600; cursor: pointer; width: 100%; font-size: 1.1rem; transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
         .btn:hover { transform: scale(1.02); box-shadow: 0 5px 15px rgba(0, 230, 118, 0.3); }
@@ -42,8 +43,8 @@
         .header-actions .btn { width: auto; padding: 10px 20px; font-size: 0.95rem; margin: 0; background: white; color: #000; }
 
         /* Tabs */
-        .tabs { display: flex; background: rgba(0,0,0,0.4); border-radius: 30px; padding: 5px; margin-bottom: 25px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); }
-        .tab-btn { flex: 1; background: transparent; color: var(--text-muted); border: none; padding: 12px 20px; border-radius: 25px; cursor: pointer; transition: 0.3s; font-size: 1rem; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .tabs { display: flex; background: rgba(0,0,0,0.4); border-radius: 30px; padding: 5px; margin-bottom: 25px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); overflow-x: auto; white-space: nowrap; }
+        .tab-btn { flex: 1; background: transparent; color: var(--text-muted); border: none; padding: 12px 20px; border-radius: 25px; cursor: pointer; transition: 0.3s; font-size: 1rem; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 8px; min-width: 150px; }
         .tab-btn.active { background: var(--primary-color); color: black; font-weight: bold; box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3); }
         .tab-content { display: none; animation: fadeIn 0.4s ease; }
         .tab-content.active { display: block; }
@@ -70,6 +71,7 @@
             .admin-header { flex-direction: column; text-align: center; gap: 20px; }
             .header-actions { width: 100%; justify-content: center; }
             .header-actions .btn { flex: 1; justify-content: center; }
+            .tabs { justify-content: flex-start; } /* Swipeable tabs on small screens */
         }
     </style>
 </head>
@@ -97,20 +99,20 @@
             <button onclick="window.location.href='index.html'" class="btn" style="background: rgba(255,255,255,0.1); color: white; width: auto;">Go Back</button>
         </div>
 
-        <div id="pinScreen" class="screen box" style="margin-top: 100px; max-width: 450px; margin-left: auto; margin-right: auto;">
-            <i class="fas fa-shield-alt" style="font-size: 3.5rem; color: var(--primary-color); margin-bottom: 15px;"></i>
-            <h2 id="pinTitle">Enter PIN</h2>
-            <p id="pinDesc" style="color: var(--text-muted); margin-bottom: 25px;">Enter your secret PIN to unlock the Control Room.</p>
+        <div id="lockScreen" class="screen box" style="margin-top: 100px; max-width: 450px; margin-left: auto; margin-right: auto;">
+            <i id="lockIcon" class="fas fa-shield-alt" style="font-size: 3.5rem; color: var(--primary-color); margin-bottom: 15px;"></i>
+            <h2 id="lockTitle">Admin Lock</h2>
+            <p id="lockDesc" style="color: var(--text-muted); margin-bottom: 25px;">Enter your credentials to unlock the Control Room.</p>
             
-            <input type="password" id="pinInput" placeholder="****" style="text-align: center; font-size: 2rem; letter-spacing: 15px; margin-bottom: 20px; padding: 15px;" autocomplete="off" maxlength="10">
-            <p id="pinError" style="color: #ff4757; margin-bottom: 15px; display: none;">Incorrect PIN! Try again.</p>
+            <input type="password" id="lockInput" placeholder="Enter key" style="text-align: center; font-size: 1.5rem; letter-spacing: 5px; margin-bottom: 20px; padding: 15px;" autocomplete="off">
+            <p id="lockError" style="color: #ff4757; margin-bottom: 15px; display: none;">Incorrect key! Try again.</p>
             
-            <button id="pinActionBtn" class="btn" onclick="handlePinAction()"><i class="fas fa-unlock"></i> Unlock</button>
+            <button id="lockActionBtn" class="btn" onclick="handleLockAction()"><i class="fas fa-unlock"></i> Unlock</button>
             <div style="margin-top: 20px;">
                 <button onclick="window.location.href='index.html'" class="btn" style="background: transparent; color: var(--text-muted); font-size: 0.9rem; border: 1px solid var(--glass-border); width: auto; padding: 8px 20px;">Cancel</button>
             </div>
             
-            <button id="resetPinText" onclick="resetPin()" style="background:none; border:none; color:var(--primary-color); text-decoration:underline; cursor:pointer; margin-top: 25px; display:none; font-size: 0.85rem;">Forgot PIN? Reset it.</button>
+            <button id="resetLockText" onclick="resetLock()" style="background:none; border:none; color:var(--primary-color); text-decoration:underline; cursor:pointer; margin-top: 25px; display:none; font-size: 0.85rem;">Forgot Security Key? Reset it.</button>
         </div>
 
         <div id="adminMainScreen" class="screen">
@@ -122,8 +124,9 @@
             </div>
 
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('manageTab')"><i class="fas fa-list-ul"></i> Manage Apps</button>
-                <button class="tab-btn" onclick="switchTab('addTab')" id="addTabBtn"><i class="fas fa-plus-circle"></i> Add New App</button>
+                <button class="tab-btn active" onclick="switchTab('manageTab')" id="manageTabBtn"><i class="fas fa-list-ul"></i> Manage</button>
+                <button class="tab-btn" onclick="switchTab('addTab')" id="addTabBtn"><i class="fas fa-plus-circle"></i> Add App</button>
+                <button class="tab-btn" onclick="switchTab('securityTab')" id="securityTabBtn"><i class="fas fa-lock"></i> Security</button>
             </div>
 
             <div id="manageTab" class="tab-content active box" style="margin-top: 0;">
@@ -193,6 +196,28 @@
                     </div>
                 </form>
             </div>
+
+            <div id="securityTab" class="tab-content box" style="margin-top: 0; text-align: left;">
+                <h3 style="margin-bottom: 20px; color: var(--primary-color);"><i class="fas fa-user-shield"></i> App Lock Settings</h3>
+                <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Setup your lock preference. You can choose a numeric PIN or an alphanumeric Password.</p>
+                
+                <div class="form-group">
+                    <label>Select Lock Type</label>
+                    <select id="settingLockType" onchange="updateLockTypeHint()">
+                        <option value="pin">PIN (Numbers only)</option>
+                        <option value="password">Password (Letters & Numbers)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Enter New PIN/Password</label>
+                    <input type="text" id="settingLockKey" placeholder="Enter new secret key">
+                    <small id="lockHint" style="color: #f39c12; font-size: 0.8rem; display: block; margin-top: 5px;">Only numbers will be allowed on lock screen.</small>
+                </div>
+                
+                <button class="btn" onclick="saveSecuritySettings()"><i class="fas fa-save"></i> Save Security Info</button>
+            </div>
+
         </div>
     </div>
 
@@ -239,7 +264,7 @@
         let allAppsData = [];
         let editingAppId = null;
         let appToDelete = null;
-        let isSettingNewPin = false;
+        let isSettingNewLock = false;
 
         // Screen Management
         function showScreen(screenId) {
@@ -260,86 +285,133 @@
         // 🔥 AUTHENTICATION CHECK
         onAuthStateChanged(auth, (user) => {
             if (user && user.email === ADMIN_EMAIL) {
-                // Boss Logged In -> Check for PIN
-                checkPinSetup();
+                checkSecuritySetup();
             } else if (user) {
-                // User Logged in, but not Boss
                 showScreen('accessDeniedScreen');
             } else {
-                // Nobody is logged in
                 showScreen('notLoggedInScreen');
             }
         });
 
-        // 🔥 PIN LOCK SYSTEM
-        function checkPinSetup() {
-            const savedPin = localStorage.getItem('saak_admin_pin');
-            document.getElementById('pinInput').value = '';
-            document.getElementById('pinError').style.display = 'none';
+        // 🔥 NEW SECURITY SYSTEM (PIN / PASSWORD)
+        function checkSecuritySetup() {
+            const savedKey = localStorage.getItem('saak_admin_key');
+            const lockType = localStorage.getItem('saak_lock_type') || 'pin'; // Default is pin
+            
+            const lockInput = document.getElementById('lockInput');
+            lockInput.value = '';
+            document.getElementById('lockError').style.display = 'none';
 
-            if (!savedPin) {
-                // Setup Mode
-                isSettingNewPin = true;
-                document.getElementById('pinTitle').innerText = "Create New PIN";
-                document.getElementById('pinDesc').innerText = "Create a secure PIN to lock your dashboard.";
-                document.getElementById('pinActionBtn').innerHTML = '<i class="fas fa-save"></i> Save PIN';
-                document.getElementById('resetPinText').style.display = 'none';
+            if (!savedKey) {
+                // Pehli baar khol raha hai (Setup Mode)
+                isSettingNewLock = true;
+                document.getElementById('lockTitle').innerText = "Set Security PIN";
+                document.getElementById('lockDesc').innerText = "First time setup: Create a numeric PIN to lock your dashboard.";
+                document.getElementById('lockActionBtn').innerHTML = '<i class="fas fa-save"></i> Save PIN';
+                document.getElementById('resetLockText').style.display = 'none';
+                
+                lockInput.setAttribute('inputmode', 'numeric');
+                lockInput.setAttribute('placeholder', '****');
+                lockInput.style.letterSpacing = '15px';
             } else {
-                // Unlock Mode
-                isSettingNewPin = false;
-                document.getElementById('pinTitle').innerText = "Enter PIN";
-                document.getElementById('pinDesc').innerText = "Enter your secret PIN to unlock the Control Room.";
-                document.getElementById('pinActionBtn').innerHTML = '<i class="fas fa-unlock"></i> Unlock';
-                document.getElementById('resetPinText').style.display = 'inline-block';
+                // Pehle se set hai (Unlock Mode)
+                isSettingNewLock = false;
+                document.getElementById('lockTitle').innerText = lockType === 'pin' ? "Enter PIN" : "Enter Password";
+                document.getElementById('lockDesc').innerText = `Enter your secret ${lockType} to unlock the Control Room.`;
+                document.getElementById('lockActionBtn').innerHTML = '<i class="fas fa-unlock"></i> Unlock';
+                document.getElementById('resetLockText').style.display = 'inline-block';
+
+                if(lockType === 'pin') {
+                    lockInput.setAttribute('inputmode', 'numeric');
+                    lockInput.setAttribute('placeholder', '****');
+                    lockInput.style.letterSpacing = '15px';
+                } else {
+                    lockInput.removeAttribute('inputmode');
+                    lockInput.setAttribute('placeholder', 'Enter Password');
+                    lockInput.style.letterSpacing = '5px';
+                }
             }
-            showScreen('pinScreen');
+            showScreen('lockScreen');
         }
 
-        window.handlePinAction = function() {
-            const input = document.getElementById('pinInput').value;
-            const errorMsg = document.getElementById('pinError');
+        window.handleLockAction = function() {
+            const input = document.getElementById('lockInput').value.trim();
+            const errorMsg = document.getElementById('lockError');
 
-            if(input.length < 4) {
-                errorMsg.innerText = "PIN must be at least 4 characters.";
+            if(input.length < 3) {
+                errorMsg.innerText = "Key is too short.";
                 errorMsg.style.display = 'block';
                 return;
             }
 
-            if (isSettingNewPin) {
-                // Save new PIN
-                localStorage.setItem('saak_admin_pin', input);
+            if (isSettingNewLock) {
+                // Pehli baar save kar raha hai
+                localStorage.setItem('saak_admin_key', input);
+                localStorage.setItem('saak_lock_type', 'pin'); // Default pin on first run
                 errorMsg.style.display = 'none';
-                showMsg("PIN Saved!", "Your Admin panel is now securely locked.", "success");
-                // Open Admin
+                showMsg("Security Set!", "Your Admin panel is now locked.", "success");
                 showScreen('adminMainScreen');
                 loadApps();
             } else {
-                // Verify PIN
-                const savedPin = localStorage.getItem('saak_admin_pin');
-                if (input === savedPin) {
-                    // Correct PIN
+                // Verify kar raha hai
+                const savedKey = localStorage.getItem('saak_admin_key');
+                if (input === savedKey) {
                     errorMsg.style.display = 'none';
                     showScreen('adminMainScreen');
                     loadApps();
                 } else {
-                    // Wrong PIN
-                    errorMsg.innerText = "Incorrect PIN! Try again.";
+                    errorMsg.innerText = "Incorrect credentials! Try again.";
                     errorMsg.style.display = 'block';
                 }
             }
         };
 
-        window.resetPin = function() {
-            if(confirm("Are you sure you want to reset your PIN?")) {
-                localStorage.removeItem('saak_admin_pin');
-                checkPinSetup(); // Reload PIN screen in setup mode
+        window.resetLock = function() {
+            if(confirm("Are you sure you want to reset your Security Settings?")) {
+                localStorage.removeItem('saak_admin_key');
+                localStorage.removeItem('saak_lock_type');
+                checkSecuritySetup(); 
             }
         };
 
-        // Allow pressing Enter to submit PIN
-        document.getElementById('pinInput').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') handlePinAction();
+        document.getElementById('lockInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') handleLockAction();
         });
+
+        // 🔥 SECURITY SETTINGS TAB LOGIC
+        window.updateLockTypeHint = function() {
+            const type = document.getElementById('settingLockType').value;
+            const hint = document.getElementById('lockHint');
+            if(type === 'pin') {
+                hint.innerText = "Only numbers will be allowed on the lock screen keypad.";
+                hint.style.color = "#f39c12";
+            } else {
+                hint.innerText = "You can use both letters and numbers for a stronger lock.";
+                hint.style.color = "#00e676";
+            }
+        }
+
+        window.saveSecuritySettings = function() {
+            const newType = document.getElementById('settingLockType').value;
+            const newKey = document.getElementById('settingLockKey').value.trim();
+
+            if(newKey.length < 3) {
+                showMsg("Too Short", "Your PIN or Password must be at least 3 characters long.", "error");
+                return;
+            }
+
+            // Agar PIN select kiya hai toh check karo ki usme sirf numbers hain
+            if(newType === 'pin' && !/^\d+$/.test(newKey)) {
+                showMsg("Invalid PIN", "A PIN can only contain numbers (0-9). No letters allowed.", "error");
+                return;
+            }
+
+            localStorage.setItem('saak_lock_type', newType);
+            localStorage.setItem('saak_admin_key', newKey);
+            
+            document.getElementById('settingLockKey').value = '';
+            showMsg("Saved Successfully", `Your new ${newType} has been updated. It will be required on next login.`, "success");
+        }
 
 
         // --- REST OF ADMIN LOGIC (Manage Apps) ---
@@ -347,7 +419,17 @@
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
+            
+            // Tab button highlighting
+            let targetBtnId = tabId === 'manageTab' ? 'manageTabBtn' : (tabId === 'addTab' ? 'addTabBtn' : 'securityTabBtn');
+            document.getElementById(targetBtnId).classList.add('active');
+
+            // Pre-fill security settings if Security Tab is opened
+            if(tabId === 'securityTab') {
+                const currentType = localStorage.getItem('saak_lock_type') || 'pin';
+                document.getElementById('settingLockType').value = currentType;
+                updateLockTypeHint();
+            }
         }
 
         function loadApps() {
@@ -396,9 +478,7 @@
                 await deleteDoc(doc(db, "apps", appToDelete));
                 document.getElementById('confirmDeleteModal').classList.remove('active');
                 showMsg("Deleted", "App permanently deleted from database.", "success");
-            } catch(e) {
-                showMsg("Error", "Could not delete app. Please try again.", "error");
-            }
+            } catch(e) { showMsg("Error", "Could not delete app. Please try again.", "error"); }
             document.getElementById('finalDeleteBtn').innerText = "Yes, Delete";
             appToDelete = null;
         });
@@ -408,85 +488,39 @@
             if(!app) return;
             editingAppId = appId;
             
-            document.getElementById('appName').value = app.name;
-            document.getElementById('appDev').value = app.dev;
-            document.getElementById('appSize').value = app.size;
-            document.getElementById('appVersion').value = app.version;
-            document.getElementById('appDate').value = app.date;
-            document.getElementById('appShortDesc').value = app.shortDesc;
-            document.getElementById('appFullDesc').value = app.fullDesc;
-            document.getElementById('appIcon').value = app.icon;
-            document.getElementById('appLink').value = app.downloadLink;
-            document.getElementById('appFeatures').value = (app.features || []).join(', ');
-            document.getElementById('appWhatsNew').value = app.whatsNew || '';
-            document.getElementById('appScreenshots').value = (app.screenshots || []).join(', ');
-
-            document.getElementById('formTitle').innerHTML = "<i class='fas fa-edit'></i> Update Existing App";
-            document.getElementById('submitBtn').innerHTML = "<i class='fas fa-save'></i> Update App Settings";
-            document.getElementById('cancelEditBtn').style.display = "inline-block";
+            document.getElementById('appName').value = app.name; document.getElementById('appDev').value = app.dev; document.getElementById('appSize').value = app.size; document.getElementById('appVersion').value = app.version; document.getElementById('appDate').value = app.date; document.getElementById('appShortDesc').value = app.shortDesc; document.getElementById('appFullDesc').value = app.fullDesc; document.getElementById('appIcon').value = app.icon; document.getElementById('appLink').value = app.downloadLink; document.getElementById('appFeatures').value = (app.features || []).join(', '); document.getElementById('appWhatsNew').value = app.whatsNew || ''; document.getElementById('appScreenshots').value = (app.screenshots || []).join(', ');
+            document.getElementById('formTitle').innerHTML = "<i class='fas fa-edit'></i> Update Existing App"; document.getElementById('submitBtn').innerHTML = "<i class='fas fa-save'></i> Update App Settings"; document.getElementById('cancelEditBtn').style.display = "inline-block";
             
             switchTab('addTab');
-            document.getElementById('addTabBtn').classList.add('active');
-            document.querySelectorAll('.tab-btn')[0].classList.remove('active');
         }
 
         window.cancelEditing = function() {
-            editingAppId = null;
-            document.getElementById('appForm').reset();
-            document.getElementById('formTitle').innerHTML = "<i class='fas fa-upload'></i> Add a New App";
-            document.getElementById('submitBtn').innerHTML = "<i class='fas fa-rocket'></i> Publish App";
-            document.getElementById('cancelEditBtn').style.display = "none";
+            editingAppId = null; document.getElementById('appForm').reset();
+            document.getElementById('formTitle').innerHTML = "<i class='fas fa-upload'></i> Add a New App"; document.getElementById('submitBtn').innerHTML = "<i class='fas fa-rocket'></i> Publish App"; document.getElementById('cancelEditBtn').style.display = "none";
             document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
         }
 
-        document.querySelectorAll('input, textarea').forEach(el => {
-            el.addEventListener('input', () => el.classList.remove('error'));
-        });
+        document.querySelectorAll('input, textarea').forEach(el => { el.addEventListener('input', () => el.classList.remove('error')); });
 
         document.getElementById('appForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             let hasError = false;
             const requiredFields = ['appName', 'appDev', 'appSize', 'appVersion', 'appDate', 'appShortDesc', 'appFullDesc', 'appIcon', 'appLink'];
-            requiredFields.forEach(id => {
-                const el = document.getElementById(id);
-                if(el.value.trim() === '') { el.classList.add('error'); hasError = true; }
-            });
+            requiredFields.forEach(id => { const el = document.getElementById(id); if(el.value.trim() === '') { el.classList.add('error'); hasError = true; } });
+            const iconLink = document.getElementById('appIcon'); if(iconLink.value && !iconLink.value.startsWith('http')) { iconLink.classList.add('error'); showMsg("Invalid Link", "App Icon link must start with http or https.", "error"); return; }
+            const downloadLink = document.getElementById('appLink'); if(downloadLink.value && !downloadLink.value.startsWith('http')) { downloadLink.classList.add('error'); showMsg("Invalid Link", "Download link must start with http or https.", "error"); return; }
+            if(hasError) { showMsg("Incomplete Form", "Please fill all required fields correctly.", "error"); return; }
 
-            const iconLink = document.getElementById('appIcon');
-            if(iconLink.value && !iconLink.value.startsWith('http')) { iconLink.classList.add('error'); showMsg("Invalid Link", "App Icon link must start with http or https.", "error"); return; }
-            const downloadLink = document.getElementById('appLink');
-            if(downloadLink.value && !downloadLink.value.startsWith('http')) { downloadLink.classList.add('error'); showMsg("Invalid Link", "Download link must start with http or https.", "error"); return; }
+            const submitBtn = document.getElementById('submitBtn'); submitBtn.innerText = "Processing..."; submitBtn.disabled = true;
 
-            if(hasError) { showMsg("Incomplete Form", "Please fill all required fields correctly (highlighted in red).", "error"); return; }
-
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.innerText = "Processing..."; submitBtn.disabled = true;
-
-            const name = document.getElementById('appName').value.trim();
-            const id = editingAppId ? editingAppId : name.toLowerCase().replace(/[^a-z0-9]/g, '');
-
-            const appData = {
-                id: id, name: name, dev: document.getElementById('appDev').value.trim(),
-                size: document.getElementById('appSize').value.trim(), version: document.getElementById('appVersion').value.trim(),
-                date: document.getElementById('appDate').value.trim(), shortDesc: document.getElementById('appShortDesc').value.trim(),
-                fullDesc: document.getElementById('appFullDesc').value.trim(), icon: document.getElementById('appIcon').value.trim(),
-                downloadLink: document.getElementById('appLink').value.trim(), whatsNew: document.getElementById('appWhatsNew').value.trim(),
-                features: document.getElementById('appFeatures').value.split(',').map(i => i.trim()).filter(i => i),
-                screenshots: document.getElementById('appScreenshots').value.split(',').map(i => i.trim()).filter(i => i),
-            };
+            const name = document.getElementById('appName').value.trim(); const id = editingAppId ? editingAppId : name.toLowerCase().replace(/[^a-z0-9]/g, '');
+            const appData = { id: id, name: name, dev: document.getElementById('appDev').value.trim(), size: document.getElementById('appSize').value.trim(), version: document.getElementById('appVersion').value.trim(), date: document.getElementById('appDate').value.trim(), shortDesc: document.getElementById('appShortDesc').value.trim(), fullDesc: document.getElementById('appFullDesc').value.trim(), icon: document.getElementById('appIcon').value.trim(), downloadLink: document.getElementById('appLink').value.trim(), whatsNew: document.getElementById('appWhatsNew').value.trim(), features: document.getElementById('appFeatures').value.split(',').map(i => i.trim()).filter(i => i), screenshots: document.getElementById('appScreenshots').value.split(',').map(i => i.trim()).filter(i => i), };
 
             try {
-                if(editingAppId) {
-                    await updateDoc(doc(db, "apps", id), appData);
-                    showMsg("App Updated!", "Changes have been saved successfully.", "success");
-                } else {
-                    appData.rating = "0.0"; appData.timestamp = Date.now();
-                    await setDoc(doc(db, "apps", id), appData);
-                    showMsg("App Published!", "New app has been added to SAAK App Hub.", "success");
-                }
-                cancelEditing(); switchTab('manageTab'); document.querySelectorAll('.tab-btn')[0].classList.add('active'); document.getElementById('addTabBtn').classList.remove('active');
-            } catch (error) { showMsg("Error", "Something went wrong. Please check your connection.", "error"); } 
+                if(editingAppId) { await updateDoc(doc(db, "apps", id), appData); showMsg("App Updated!", "Changes have been saved successfully.", "success"); } 
+                else { appData.rating = "0.0"; appData.timestamp = Date.now(); await setDoc(doc(db, "apps", id), appData); showMsg("App Published!", "New app has been added.", "success"); }
+                cancelEditing(); switchTab('manageTab');
+            } catch (error) { showMsg("Error", "Something went wrong.", "error"); } 
             finally { submitBtn.innerHTML = "<i class='fas fa-rocket'></i> Publish App"; submitBtn.disabled = false; }
         });
     </script>
