@@ -18,55 +18,54 @@
         body { background: var(--bg-gradient); color: var(--text-main); min-height: 100vh; padding: 20px; }
         
         .container { max-width: 900px; margin: 0 auto; }
-        .box { background: var(--glass-bg); padding: 30px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); text-align: center; margin-top: 30px; }
+        .box { background: var(--glass-bg); padding: 30px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); text-align: center; margin-top: 30px; animation: fadeIn 0.5s ease; }
         
         h1 { color: var(--primary-color); margin: 0; display: flex; align-items: center; justify-content: center; gap: 10px; }
         
-        /* Form & Validation Styles */
+        /* Form Styles */
         .form-group { margin-bottom: 20px; text-align: left; }
         label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 0.9rem; }
         input, textarea { width: 100%; padding: 12px; border-radius: 8px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: white; outline: none; transition: 0.3s; }
         input:focus, textarea:focus { border-color: var(--primary-color); }
         input.error, textarea.error { border-color: #ff4757 !important; box-shadow: 0 0 8px rgba(255, 71, 87, 0.5); }
 
-        .btn { background: var(--primary-color); color: #000; padding: 12px 30px; border: none; border-radius: 25px; font-weight: 600; cursor: pointer; width: 100%; font-size: 1.1rem; transition: 0.3s; }
+        .btn { background: var(--primary-color); color: #000; padding: 12px 30px; border: none; border-radius: 25px; font-weight: 600; cursor: pointer; width: 100%; font-size: 1.1rem; transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
         .btn:hover { transform: scale(1.02); box-shadow: 0 5px 15px rgba(0, 230, 118, 0.3); }
-        .google-btn { background: white; color: #333; display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: auto; margin-top: 20px; }
 
-        #adminMainScreen, #accessDeniedScreen { display: none; }
+        /* Screens Management */
+        .screen { display: none; }
+        .screen.active { display: block; }
 
-        /* 🔥 NAYA: Header & Top Buttons Style */
+        /* Header */
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
         .header-actions { display: flex; gap: 10px; }
-        .header-actions .btn { width: auto; padding: 10px 20px; font-size: 0.95rem; margin: 0; display: flex; align-items: center; gap: 8px; }
-        .btn-view { background: white; color: #000; }
-        .btn-logout { background: rgba(255, 71, 87, 0.9); color: white; }
+        .header-actions .btn { width: auto; padding: 10px 20px; font-size: 0.95rem; margin: 0; background: white; color: #000; }
 
-        /* 🔥 NAYA: VIP Tabs Style */
+        /* Tabs */
         .tabs { display: flex; background: rgba(0,0,0,0.4); border-radius: 30px; padding: 5px; margin-bottom: 25px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); }
         .tab-btn { flex: 1; background: transparent; color: var(--text-muted); border: none; padding: 12px 20px; border-radius: 25px; cursor: pointer; transition: 0.3s; font-size: 1rem; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .tab-btn.active { background: var(--primary-color); color: black; font-weight: bold; box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3); }
-        
         .tab-content { display: none; animation: fadeIn 0.4s ease; }
         .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Manage Apps Grid */
+        /* Grid */
         .manage-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; text-align: left; }
         .manage-card { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; display: flex; flex-direction: column; gap: 10px; }
         .manage-card img { width: 50px; height: 50px; border-radius: 10px; }
         .action-btns { display: flex; gap: 10px; margin-top: auto; }
-        .btn-sm { padding: 8px 15px; border-radius: 15px; font-size: 0.85rem; border: none; cursor: pointer; color: white; width: 100%; font-weight: bold; display: flex; justify-content: center; align-items: center; gap: 5px; }
+        .btn-sm { padding: 8px 15px; border-radius: 15px; font-size: 0.85rem; border: none; cursor: pointer; color: white; width: 100%; font-weight: bold; }
         .edit-btn { background: #f39c12; } .edit-btn:hover { background: #e67e22; }
         .del-btn { background: #e74c3c; } .del-btn:hover { background: #c0392b; }
 
-        /* Custom Modal VIP */
+        /* Modals */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 9999; opacity: 0; visibility: hidden; transition: 0.3s; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
         .modal-box { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 30px; border-radius: 20px; text-align: center; width: 90%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transform: scale(0.9); transition: 0.3s; }
         .modal-overlay.active .modal-box { transform: scale(1); }
 
-        /* Mobile Responsiveness */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Mobile */
         @media (max-width: 600px) {
             .admin-header { flex-direction: column; text-align: center; gap: 20px; }
             .header-actions { width: 100%; justify-content: center; }
@@ -77,28 +76,48 @@
 <body>
 
     <div class="container">
-        <div id="loginScreen" class="box" style="margin-top: 100px;">
-            <i class="fas fa-user-shield" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 15px;"></i>
-            <h2>Admin Login</h2>
-            <p style="color: var(--text-muted);">Strictly restricted for SAAK App Hub Owner.</p>
-            <button id="loginBtn" class="btn google-btn">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" width="20"> Login to Access Control Room
-            </button>
+
+        <div id="loadingScreen" class="screen active box" style="margin-top: 100px;">
+            <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 15px;"></i>
+            <h2>Checking Security...</h2>
+            <p style="color: var(--text-muted);">Please wait.</p>
         </div>
 
-        <div id="accessDeniedScreen" class="box" style="margin-top: 100px;">
+        <div id="notLoggedInScreen" class="screen box" style="margin-top: 100px;">
+            <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #f39c12; margin-bottom: 15px;"></i>
+            <h2 style="color: #f39c12;">Login Required</h2>
+            <p style="color: var(--text-muted); margin-bottom: 25px;">You need to login from the main app first.</p>
+            <button onclick="window.location.href='index.html'" class="btn" style="width: auto;">Go to Main App</button>
+        </div>
+
+        <div id="accessDeniedScreen" class="screen box" style="margin-top: 100px;">
             <i class="fas fa-lock" style="font-size: 3rem; color: #ff4757; margin-bottom: 15px;"></i>
             <h2 style="color: #ff4757;">Access Denied</h2>
-            <p style="color: var(--text-muted); margin-bottom: 25px;">You are not authorized to view this page.</p>
-            <button onclick="logoutAdmin()" class="btn" style="background: rgba(255,255,255,0.1); color: white; width: auto;">Go Back / Logout</button>
+            <p style="color: var(--text-muted); margin-bottom: 25px;">You are not authorized to view this page. Restricted for Boss only.</p>
+            <button onclick="window.location.href='index.html'" class="btn" style="background: rgba(255,255,255,0.1); color: white; width: auto;">Go Back</button>
         </div>
 
-        <div id="adminMainScreen">
+        <div id="pinScreen" class="screen box" style="margin-top: 100px; max-width: 450px; margin-left: auto; margin-right: auto;">
+            <i class="fas fa-shield-alt" style="font-size: 3.5rem; color: var(--primary-color); margin-bottom: 15px;"></i>
+            <h2 id="pinTitle">Enter PIN</h2>
+            <p id="pinDesc" style="color: var(--text-muted); margin-bottom: 25px;">Enter your secret PIN to unlock the Control Room.</p>
+            
+            <input type="password" id="pinInput" placeholder="****" style="text-align: center; font-size: 2rem; letter-spacing: 15px; margin-bottom: 20px; padding: 15px;" autocomplete="off" maxlength="10">
+            <p id="pinError" style="color: #ff4757; margin-bottom: 15px; display: none;">Incorrect PIN! Try again.</p>
+            
+            <button id="pinActionBtn" class="btn" onclick="handlePinAction()"><i class="fas fa-unlock"></i> Unlock</button>
+            <div style="margin-top: 20px;">
+                <button onclick="window.location.href='index.html'" class="btn" style="background: transparent; color: var(--text-muted); font-size: 0.9rem; border: 1px solid var(--glass-border); width: auto; padding: 8px 20px;">Cancel</button>
+            </div>
+            
+            <button id="resetPinText" onclick="resetPin()" style="background:none; border:none; color:var(--primary-color); text-decoration:underline; cursor:pointer; margin-top: 25px; display:none; font-size: 0.85rem;">Forgot PIN? Reset it.</button>
+        </div>
+
+        <div id="adminMainScreen" class="screen">
             <div class="admin-header">
                 <h1><i class="fas fa-cogs"></i> SAAK Control Room</h1>
                 <div class="header-actions">
-                    <button class="btn btn-view" onclick="window.location.href='index.html'"><i class="fas fa-external-link-alt"></i> View App</button>
-                    <button class="btn btn-logout" onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                    <button class="btn btn-view" onclick="window.location.href='index.html'"><i class="fas fa-external-link-alt"></i> Back to App</button>
                 </div>
             </div>
 
@@ -200,7 +219,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, doc, setDoc, onSnapshot, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -214,13 +233,19 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const provider = new GoogleAuthProvider();
         const db = getFirestore(app);
 
         const ADMIN_EMAIL = "shubhamsinghmzp1122@gmail.com";
         let allAppsData = [];
         let editingAppId = null;
         let appToDelete = null;
+        let isSettingNewPin = false;
+
+        // Screen Management
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
 
         window.showMsg = function(title, msg, type = 'info') {
             document.getElementById('alertTitle').innerText = title;
@@ -232,24 +257,92 @@
             document.getElementById('customAlertModal').classList.add('active');
         }
 
-        document.getElementById('loginBtn').addEventListener('click', () => signInWithPopup(auth, provider));
-        window.logoutAdmin = () => signOut(auth).then(() => location.reload());
-
+        // 🔥 AUTHENTICATION CHECK
         onAuthStateChanged(auth, (user) => {
             if (user && user.email === ADMIN_EMAIL) {
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('adminMainScreen').style.display = 'block';
-                loadApps(); 
+                // Boss Logged In -> Check for PIN
+                checkPinSetup();
             } else if (user) {
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('accessDeniedScreen').style.display = 'block';
+                // User Logged in, but not Boss
+                showScreen('accessDeniedScreen');
             } else {
-                document.getElementById('loginScreen').style.display = 'block';
-                document.getElementById('adminMainScreen').style.display = 'none';
-                document.getElementById('accessDeniedScreen').style.display = 'none';
+                // Nobody is logged in
+                showScreen('notLoggedInScreen');
             }
         });
 
+        // 🔥 PIN LOCK SYSTEM
+        function checkPinSetup() {
+            const savedPin = localStorage.getItem('saak_admin_pin');
+            document.getElementById('pinInput').value = '';
+            document.getElementById('pinError').style.display = 'none';
+
+            if (!savedPin) {
+                // Setup Mode
+                isSettingNewPin = true;
+                document.getElementById('pinTitle').innerText = "Create New PIN";
+                document.getElementById('pinDesc').innerText = "Create a secure PIN to lock your dashboard.";
+                document.getElementById('pinActionBtn').innerHTML = '<i class="fas fa-save"></i> Save PIN';
+                document.getElementById('resetPinText').style.display = 'none';
+            } else {
+                // Unlock Mode
+                isSettingNewPin = false;
+                document.getElementById('pinTitle').innerText = "Enter PIN";
+                document.getElementById('pinDesc').innerText = "Enter your secret PIN to unlock the Control Room.";
+                document.getElementById('pinActionBtn').innerHTML = '<i class="fas fa-unlock"></i> Unlock';
+                document.getElementById('resetPinText').style.display = 'inline-block';
+            }
+            showScreen('pinScreen');
+        }
+
+        window.handlePinAction = function() {
+            const input = document.getElementById('pinInput').value;
+            const errorMsg = document.getElementById('pinError');
+
+            if(input.length < 4) {
+                errorMsg.innerText = "PIN must be at least 4 characters.";
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            if (isSettingNewPin) {
+                // Save new PIN
+                localStorage.setItem('saak_admin_pin', input);
+                errorMsg.style.display = 'none';
+                showMsg("PIN Saved!", "Your Admin panel is now securely locked.", "success");
+                // Open Admin
+                showScreen('adminMainScreen');
+                loadApps();
+            } else {
+                // Verify PIN
+                const savedPin = localStorage.getItem('saak_admin_pin');
+                if (input === savedPin) {
+                    // Correct PIN
+                    errorMsg.style.display = 'none';
+                    showScreen('adminMainScreen');
+                    loadApps();
+                } else {
+                    // Wrong PIN
+                    errorMsg.innerText = "Incorrect PIN! Try again.";
+                    errorMsg.style.display = 'block';
+                }
+            }
+        };
+
+        window.resetPin = function() {
+            if(confirm("Are you sure you want to reset your PIN?")) {
+                localStorage.removeItem('saak_admin_pin');
+                checkPinSetup(); // Reload PIN screen in setup mode
+            }
+        };
+
+        // Allow pressing Enter to submit PIN
+        document.getElementById('pinInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') handlePinAction();
+        });
+
+
+        // --- REST OF ADMIN LOGIC (Manage Apps) ---
         window.switchTab = function(tabId) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -357,30 +450,15 @@
             const requiredFields = ['appName', 'appDev', 'appSize', 'appVersion', 'appDate', 'appShortDesc', 'appFullDesc', 'appIcon', 'appLink'];
             requiredFields.forEach(id => {
                 const el = document.getElementById(id);
-                if(el.value.trim() === '') {
-                    el.classList.add('error');
-                    hasError = true;
-                }
+                if(el.value.trim() === '') { el.classList.add('error'); hasError = true; }
             });
 
             const iconLink = document.getElementById('appIcon');
-            if(iconLink.value && !iconLink.value.startsWith('http')) {
-                iconLink.classList.add('error');
-                showMsg("Invalid Link", "App Icon link must start with http or https.", "error");
-                return;
-            }
-
+            if(iconLink.value && !iconLink.value.startsWith('http')) { iconLink.classList.add('error'); showMsg("Invalid Link", "App Icon link must start with http or https.", "error"); return; }
             const downloadLink = document.getElementById('appLink');
-            if(downloadLink.value && !downloadLink.value.startsWith('http')) {
-                downloadLink.classList.add('error');
-                showMsg("Invalid Link", "Download link must start with http or https.", "error");
-                return;
-            }
+            if(downloadLink.value && !downloadLink.value.startsWith('http')) { downloadLink.classList.add('error'); showMsg("Invalid Link", "Download link must start with http or https.", "error"); return; }
 
-            if(hasError) {
-                showMsg("Incomplete Form", "Please fill all required fields correctly (highlighted in red).", "error");
-                return;
-            }
+            if(hasError) { showMsg("Incomplete Form", "Please fill all required fields correctly (highlighted in red).", "error"); return; }
 
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.innerText = "Processing..."; submitBtn.disabled = true;
@@ -403,20 +481,13 @@
                     await updateDoc(doc(db, "apps", id), appData);
                     showMsg("App Updated!", "Changes have been saved successfully.", "success");
                 } else {
-                    appData.rating = "0.0"; 
-                    appData.timestamp = Date.now();
+                    appData.rating = "0.0"; appData.timestamp = Date.now();
                     await setDoc(doc(db, "apps", id), appData);
                     showMsg("App Published!", "New app has been added to SAAK App Hub.", "success");
                 }
-                cancelEditing();
-                switchTab('manageTab');
-                document.querySelectorAll('.tab-btn')[0].classList.add('active');
-                document.getElementById('addTabBtn').classList.remove('active');
-            } catch (error) {
-                showMsg("Error", "Something went wrong. Please check your connection.", "error");
-            } finally {
-                submitBtn.innerHTML = "<i class='fas fa-rocket'></i> Publish App"; submitBtn.disabled = false;
-            }
+                cancelEditing(); switchTab('manageTab'); document.querySelectorAll('.tab-btn')[0].classList.add('active'); document.getElementById('addTabBtn').classList.remove('active');
+            } catch (error) { showMsg("Error", "Something went wrong. Please check your connection.", "error"); } 
+            finally { submitBtn.innerHTML = "<i class='fas fa-rocket'></i> Publish App"; submitBtn.disabled = false; }
         });
     </script>
 </body>
