@@ -48,13 +48,14 @@
         .search-bar input:focus { border-color: var(--primary-color); box-shadow: 0 0 10px rgba(0, 230, 118, 0.2); }
         .search-bar i.search-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
 
-        /* 🔥 FIX: Notification Bell CSS Positioning Fixed */
+        /* 🔥 FIX 1: Notification Bell Click Area Fixed */
         .auth-section { display: flex; align-items: center; gap: 15px; position: relative; }
         .notif-bell { position: relative; cursor: pointer; color: white; font-size: 1.4rem; margin-right: 10px; transition: 0.3s; padding: 5px; }
         .notif-bell:hover { color: var(--primary-color); transform: scale(1.1); }
+        .notif-bell i, .notif-bell span { pointer-events: none; /* Icon ko click hone se rokega, sirf bell button kaam karega */ }
         .notif-badge { position: absolute; top: -2px; right: -5px; background: #ff4757; color: white; font-size: 0.7rem; font-weight: bold; padding: 2px 5px; border-radius: 50%; border: 2px solid #0f2027; display: none; }
         
-        .notif-dropdown { position: absolute; top: 55px; right: 0; width: 320px; background: var(--glass-bg); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); display: none; flex-direction: column; z-index: 1000; overflow: hidden; transform-origin: top right; }
+        .notif-dropdown { position: absolute; top: 60px; right: 0; width: 320px; background: var(--glass-bg); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); display: none; flex-direction: column; z-index: 9999; overflow: hidden; transform-origin: top right; }
         .notif-dropdown.active { display: flex; animation: fadeIn 0.3s ease; }
         .notif-header { padding: 15px; background: rgba(0,0,0,0.5); font-weight: 600; border-bottom: 1px solid var(--glass-border); color: var(--primary-color); display: flex; justify-content: space-between; align-items: center; }
         .notif-body { max-height: 350px; overflow-y: auto; }
@@ -180,7 +181,7 @@
             .hide-mobile { display: none; }
             .bottom-actions { flex-direction: column; align-items: center; padding: 0 20px; }
             .action-btn { width: 100%; }
-            .notif-dropdown { right: -20px; width: 300px; top: 65px;} /* Mobile fix for dropdown */
+            .notif-dropdown { right: 10px; width: 300px; top: 120px;} 
         }
     </style>
 </head>
@@ -219,14 +220,14 @@
                 <button id="logoutBtn" class="header-logout-btn" title="Logout">
                     <i class="fas fa-sign-out-alt"></i> <span class="hide-mobile">Logout</span>
                 </button>
-                
-                <div class="notif-dropdown" id="notifDropdown">
-                    <div class="notif-header">
-                        <span><i class="fas fa-bell"></i> Notifications</span>
-                        <button onclick="window.toggleNotifications(event)" style="background:none; border:none; color:white; cursor:pointer;"><i class="fas fa-times"></i></button>
-                    </div>
-                    <div class="notif-body" id="notifList">
-                    </div>
+            </div>
+            
+            <div class="notif-dropdown" id="notifDropdown">
+                <div class="notif-header">
+                    <span><i class="fas fa-bell"></i> Notifications</span>
+                    <button onclick="window.toggleNotifications(event)" style="background:none; border:none; color:white; cursor:pointer;"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="notif-body" id="notifList">
                 </div>
             </div>
         </header>
@@ -258,7 +259,7 @@
     <div class="modal-overlay" id="logoutConfirmModal"><div class="login-box" style="padding: 30px;"><i class="fas fa-sign-out-alt logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #E1306C;"></i><h2 style="font-size: 1.3rem;">Logout</h2><p style="margin-bottom: 25px;">Are you sure you want to logout from SAAK App Hub?</p><div style="display: flex; gap: 15px; justify-content: center;"><button id="cancelLogoutBtn" class="btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">Cancel</button><button id="confirmLogoutBtn" class="logout-btn-modal" style="margin: 0;">Yes, Logout</button></div></div></div>
     <div class="modal-overlay" id="deleteConfirmModal"><div class="login-box" style="padding: 30px;"><i class="fas fa-trash logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #E1306C;"></i><h2 style="font-size: 1.3rem;">Delete Review</h2><p style="margin-bottom: 25px;">Are you sure you want to delete this review permanently?</p><div style="display: flex; gap: 15px; justify-content: center;"><button onclick="document.getElementById('deleteConfirmModal').classList.remove('active')" class="btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">Cancel</button><button id="confirmDeleteBtn" class="logout-btn-modal" style="margin: 0;">Yes, Delete</button></div></div></div>
     
-    <div class="modal-overlay" id="customAlertModal">
+    <div class="modal-overlay" id="customAlertModal" style="z-index: 10001;">
         <div class="login-box" style="padding: 30px;">
             <i class="fas fa-info-circle logo-icon" id="alertIcon" style="font-size: 4rem; margin-bottom: 15px; transition: 0.3s;"></i>
             <h2 style="font-size: 1.6rem; margin-bottom: 10px; transition: 0.3s;" id="customAlertTitle">Alert</h2>
@@ -310,7 +311,6 @@
 
         const ADMIN_EMAIL = "shubhamsinghmzp1122@gmail.com";
 
-        // 🔥 FIX: Beautiful Alert Function (Synced with admin.html)
         window.showCustomAlert = function(msg, title="Notice", type="info") {
             const titleEl = document.getElementById('customAlertTitle');
             const icon = document.getElementById('alertIcon');
@@ -508,6 +508,7 @@
             document.getElementById('replyModal').classList.remove('active');
         }
 
+        // 🔥 FIX 2: Reply Modal Ab Turant Band Hoga aur Green Aayega
         window.submitReply = async function() {
             if (!replyingToReviewId) return;
             const text = document.getElementById('replyTextInput').value.trim();
@@ -516,25 +517,32 @@
             btn.disabled = true;
 
             try {
+                // Pehle reply update karo
                 await updateDoc(doc(db, "reviews", replyingToReviewId), {
                     developerReply: text
                 });
                 
-                if(text !== "") {
-                    const rev = window.currentReviewsMap[replyingToReviewId];
-                    if(rev && rev.userId) {
-                        await addDoc(collection(db, "notifications"), {
-                            targetUserId: rev.userId,
-                            type: 'reply',
-                            title: 'Developer Reply',
-                            message: `Shubham Boss replied to your review on ${document.getElementById('modalName').innerText}!`,
-                            timestamp: Date.now()
-                        });
-                    }
-                    // 🔥 FIX: Success Type passed so it turns Green ✅
-                    window.showCustomAlert("Reply posted successfully! 🎉", "Awesome!", "success");
-                }
+                // Turant pop-up hata do
                 window.closeReplyModal();
+                
+                // Ab success ka Green wala message dikhao
+                if(text !== "") {
+                    window.showCustomAlert("Reply posted successfully! 🎉", "Awesome!", "success");
+                    
+                    // Aur piche aaram se notification bhej do, isse app atkega nahi
+                    try {
+                        const rev = window.currentReviewsMap[replyingToReviewId];
+                        if(rev && rev.userId) {
+                            await addDoc(collection(db, "notifications"), {
+                                targetUserId: rev.userId,
+                                type: 'reply',
+                                title: 'Developer Reply',
+                                message: `Shubham Boss replied to your review on ${document.getElementById('modalName').innerText}!`,
+                                timestamp: Date.now()
+                            });
+                        }
+                    } catch(notifErr) { console.log("Notif error ignored"); }
+                }
             } catch (e) {
                 console.error("Error posting reply:", e);
                 window.showCustomAlert("Error posting reply. Check connection.", "Error", "error");
@@ -595,7 +603,6 @@
             });
         }
 
-        // 🔥 FIX: Bell click Event Stop Propagation
         window.toggleNotifications = function(e) {
             if(e) e.stopPropagation();
             const dropdown = document.getElementById('notifDropdown');
