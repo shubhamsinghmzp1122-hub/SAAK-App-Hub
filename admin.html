@@ -204,7 +204,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, doc, setDoc, onSnapshot, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAbOtjHeldbPRC29tX-i5tbUeySQlTzWUU",
@@ -359,16 +359,6 @@
                 else { 
                     appData.rating = "0.0"; appData.timestamp = Date.now(); 
                     await setDoc(doc(db, "apps", id), appData); 
-                    
-                    // 🔥 NAYA: Global Notification for New App
-                    await addDoc(collection(db, "notifications"), {
-                        targetUserId: "all",
-                        type: "new_app",
-                        title: "New App Alert! 🚀",
-                        message: `${name} is now available on SAAK App Hub. Download now!`,
-                        timestamp: Date.now()
-                    });
-
                     showMsg("App Published! 🚀", "Congratulations! Your new app is now live.", "success"); 
                 }
                 cancelEditing(); switchTab('manageTab');
