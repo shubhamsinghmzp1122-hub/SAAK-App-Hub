@@ -101,6 +101,7 @@
         .modal-section p, .modal-section li { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
         .modal-section ul { padding-left: 20px; }
 
+        /* 🔥 Developer Reply Box Design */
         .dev-reply {
             background: rgba(0, 230, 118, 0.08);
             border-left: 3px solid var(--primary-color);
@@ -256,8 +257,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        // 🔥 NAYA FIX: popup ko hata kar redirect wala code laga diya
-        import { getAuth, signInWithRedirect, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        // 🔥 WAPAS PEHLE WALA KARDIA: signInWithPopup is back!
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc, updateDoc, setDoc, getDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -521,10 +522,15 @@
 
         const loginScreen = document.getElementById('loginScreen'); const mainAppContent = document.getElementById('mainAppContent'); const loginBtn = document.getElementById('googleLoginBtn'); const userName = document.getElementById('userName'); const logoutBtn = document.getElementById('logoutBtn'); const logoutConfirmModal = document.getElementById('logoutConfirmModal'); const confirmLogoutBtn = document.getElementById('confirmLogoutBtn'); const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
 
-        // 🔥 NAYA FIX: Popup ko hata kar Redirect laga diya hai taaki mobile me login hamesha work kare!
+        // 🔥 WAPAS PEHLE WALA METHOD LAGA DIYA HAI
         loginBtn.addEventListener('click', () => {
-            loginBtn.innerHTML = '<span>Redirecting to Google...</span>';
-            signInWithRedirect(auth, provider);
+            loginBtn.innerHTML = '<span>Please wait...</span>';
+            signInWithPopup(auth, provider).then(() => { 
+                loginBtn.innerHTML = '<img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" style="width: 20px; height: 20px;"> <span>Continue with Google</span>'; 
+            }).catch((error) => { 
+                loginBtn.innerHTML = '<img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" style="width: 20px; height: 20px;"> <span>Continue with Google</span>'; 
+                if (error.code !== 'auth/popup-closed-by-user') window.showCustomAlert("Login failed! Please try again.", "Error"); 
+            });
         });
 
         logoutBtn.addEventListener('click', () => logoutConfirmModal.classList.add('active'));
