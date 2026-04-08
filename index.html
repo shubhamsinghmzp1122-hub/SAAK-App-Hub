@@ -48,13 +48,13 @@
         .search-bar input:focus { border-color: var(--primary-color); box-shadow: 0 0 10px rgba(0, 230, 118, 0.2); }
         .search-bar i.search-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
 
-        /* Notification Bell CSS */
+        /* 🔥 FIX: Notification Bell CSS Positioning Fixed */
         .auth-section { display: flex; align-items: center; gap: 15px; position: relative; }
-        .notif-bell { position: relative; cursor: pointer; color: white; font-size: 1.4rem; margin-right: 10px; transition: 0.3s; }
+        .notif-bell { position: relative; cursor: pointer; color: white; font-size: 1.4rem; margin-right: 10px; transition: 0.3s; padding: 5px; }
         .notif-bell:hover { color: var(--primary-color); transform: scale(1.1); }
-        .notif-badge { position: absolute; top: -5px; right: -8px; background: #ff4757; color: white; font-size: 0.7rem; font-weight: bold; padding: 2px 5px; border-radius: 50%; border: 2px solid #0f2027; display: none; }
+        .notif-badge { position: absolute; top: -2px; right: -5px; background: #ff4757; color: white; font-size: 0.7rem; font-weight: bold; padding: 2px 5px; border-radius: 50%; border: 2px solid #0f2027; display: none; }
         
-        .notif-dropdown { position: absolute; top: 60px; right: 100px; width: 320px; background: var(--glass-bg); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); display: none; flex-direction: column; z-index: 1000; overflow: hidden; }
+        .notif-dropdown { position: absolute; top: 55px; right: 0; width: 320px; background: var(--glass-bg); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); display: none; flex-direction: column; z-index: 1000; overflow: hidden; transform-origin: top right; }
         .notif-dropdown.active { display: flex; animation: fadeIn 0.3s ease; }
         .notif-header { padding: 15px; background: rgba(0,0,0,0.5); font-weight: 600; border-bottom: 1px solid var(--glass-border); color: var(--primary-color); display: flex; justify-content: space-between; align-items: center; }
         .notif-body { max-height: 350px; overflow-y: auto; }
@@ -126,7 +126,6 @@
         .modal-section p, .modal-section li { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
         .modal-section ul { padding-left: 20px; }
 
-        /* Developer Reply Box Design */
         .dev-reply { background: rgba(0, 230, 118, 0.08); border-left: 3px solid var(--primary-color); padding: 10px 15px; margin-top: 12px; border-radius: 5px; font-size: 0.85rem; }
         .dev-reply-header { font-weight: 600; color: var(--primary-color); margin-bottom: 5px; display: flex; align-items: center; gap: 5px; }
 
@@ -181,7 +180,7 @@
             .hide-mobile { display: none; }
             .bottom-actions { flex-direction: column; align-items: center; padding: 0 20px; }
             .action-btn { width: 100%; }
-            .notif-dropdown { right: 5%; width: 90%; top: 120px;}
+            .notif-dropdown { right: -20px; width: 300px; top: 65px;} /* Mobile fix for dropdown */
         }
     </style>
 </head>
@@ -208,7 +207,7 @@
             </div>
             
             <div class="auth-section">
-                <div class="notif-bell" onclick="window.toggleNotifications()" id="bellIcon">
+                <div class="notif-bell" onclick="window.toggleNotifications(event)" id="bellIcon">
                     <i class="fas fa-bell"></i>
                     <span class="notif-badge" id="notifBadge">0</span>
                 </div>
@@ -220,14 +219,14 @@
                 <button id="logoutBtn" class="header-logout-btn" title="Logout">
                     <i class="fas fa-sign-out-alt"></i> <span class="hide-mobile">Logout</span>
                 </button>
-            </div>
-            
-            <div class="notif-dropdown" id="notifDropdown">
-                <div class="notif-header">
-                    <span><i class="fas fa-bell"></i> Notifications</span>
-                    <button onclick="window.toggleNotifications()" style="background:none; border:none; color:white; cursor:pointer;"><i class="fas fa-times"></i></button>
-                </div>
-                <div class="notif-body" id="notifList">
+                
+                <div class="notif-dropdown" id="notifDropdown">
+                    <div class="notif-header">
+                        <span><i class="fas fa-bell"></i> Notifications</span>
+                        <button onclick="window.toggleNotifications(event)" style="background:none; border:none; color:white; cursor:pointer;"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="notif-body" id="notifList">
+                    </div>
                 </div>
             </div>
         </header>
@@ -258,7 +257,15 @@
     <div class="modal-overlay" id="screenshotModal"><button class="close-btn" style="position: absolute; top: 20px; right: 20px; z-index: 2010;" onclick="window.closeScreenshotModal()"><i class="fas fa-times"></i></button><button class="nav-btn prev-btn" onclick="window.prevScreenshot(event)"><i class="fas fa-chevron-left"></i></button><button class="nav-btn next-btn" onclick="window.nextScreenshot(event)"><i class="fas fa-chevron-right"></i></button><img id="fullScreenshot" src="" alt="Full Screen Preview"></div>
     <div class="modal-overlay" id="logoutConfirmModal"><div class="login-box" style="padding: 30px;"><i class="fas fa-sign-out-alt logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #E1306C;"></i><h2 style="font-size: 1.3rem;">Logout</h2><p style="margin-bottom: 25px;">Are you sure you want to logout from SAAK App Hub?</p><div style="display: flex; gap: 15px; justify-content: center;"><button id="cancelLogoutBtn" class="btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">Cancel</button><button id="confirmLogoutBtn" class="logout-btn-modal" style="margin: 0;">Yes, Logout</button></div></div></div>
     <div class="modal-overlay" id="deleteConfirmModal"><div class="login-box" style="padding: 30px;"><i class="fas fa-trash logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #E1306C;"></i><h2 style="font-size: 1.3rem;">Delete Review</h2><p style="margin-bottom: 25px;">Are you sure you want to delete this review permanently?</p><div style="display: flex; gap: 15px; justify-content: center;"><button onclick="document.getElementById('deleteConfirmModal').classList.remove('active')" class="btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">Cancel</button><button id="confirmDeleteBtn" class="logout-btn-modal" style="margin: 0;">Yes, Delete</button></div></div></div>
-    <div class="modal-overlay" id="customAlertModal"><div class="login-box" style="padding: 30px;"><i class="fas fa-exclamation-circle logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #f39c12;"></i><h2 style="font-size: 1.3rem;" id="customAlertTitle">Alert</h2><p style="margin-bottom: 25px;" id="customAlertText">Message goes here.</p><button class="btn" onclick="document.getElementById('customAlertModal').classList.remove('active')" style="width: 100%;">OK</button></div></div>
+    
+    <div class="modal-overlay" id="customAlertModal">
+        <div class="login-box" style="padding: 30px;">
+            <i class="fas fa-info-circle logo-icon" id="alertIcon" style="font-size: 4rem; margin-bottom: 15px; transition: 0.3s;"></i>
+            <h2 style="font-size: 1.6rem; margin-bottom: 10px; transition: 0.3s;" id="customAlertTitle">Alert</h2>
+            <p style="color: var(--text-muted); margin-bottom: 25px;" id="customAlertText">Message goes here.</p>
+            <button class="btn" id="alertBtn" onclick="document.getElementById('customAlertModal').classList.remove('active')" style="width: 100%;">Got it!</button>
+        </div>
+    </div>
 
     <div class="modal-overlay" id="replyModal">
         <div class="login-box" style="padding: 30px;">
@@ -284,7 +291,6 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        // 🔥 WAPAS POPUP METHOD IMPORT KAR LIYA HAI
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc, updateDoc, setDoc, getDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
@@ -304,9 +310,22 @@
 
         const ADMIN_EMAIL = "shubhamsinghmzp1122@gmail.com";
 
-        window.showCustomAlert = function(msg, title="Notice") {
-            document.getElementById('customAlertTitle').innerText = title;
+        // 🔥 FIX: Beautiful Alert Function (Synced with admin.html)
+        window.showCustomAlert = function(msg, title="Notice", type="info") {
+            const titleEl = document.getElementById('customAlertTitle');
+            const icon = document.getElementById('alertIcon');
+            const btn = document.getElementById('alertBtn');
+            
+            titleEl.innerText = title;
             document.getElementById('customAlertText').innerText = msg;
+            
+            if(type === 'error') { 
+                icon.className = "fas fa-exclamation-triangle logo-icon"; icon.style.color = "#ff4757"; titleEl.style.color = "#ff4757"; btn.style.background = "#ff4757"; btn.style.color = "white"; btn.innerText = "Try Again";
+            } else if(type === 'success') { 
+                icon.className = "fas fa-check-circle logo-icon"; icon.style.color = "#00e676"; titleEl.style.color = "#00e676"; btn.style.background = "#00e676"; btn.style.color = "black"; btn.innerText = "Awesome!";
+            } else { 
+                icon.className = "fas fa-info-circle logo-icon"; icon.style.color = "#3498db"; titleEl.style.color = "#3498db"; btn.style.background = "#3498db"; btn.style.color = "white"; btn.innerText = "Got it!";
+            }
             document.getElementById('customAlertModal').classList.add('active');
         }
 
@@ -512,12 +531,13 @@
                             timestamp: Date.now()
                         });
                     }
-                    window.showCustomAlert("Reply posted successfully!", "Success");
+                    // 🔥 FIX: Success Type passed so it turns Green ✅
+                    window.showCustomAlert("Reply posted successfully! 🎉", "Awesome!", "success");
                 }
                 window.closeReplyModal();
             } catch (e) {
                 console.error("Error posting reply:", e);
-                window.showCustomAlert("Error posting reply. Check connection.", "Error");
+                window.showCustomAlert("Error posting reply. Check connection.", "Error", "error");
             } finally {
                 btn.innerText = "Post Reply";
                 btn.disabled = false;
@@ -527,9 +547,9 @@
         window.editReview = function(id) { const rev = window.currentReviewsMap[id]; if (!rev) return; editingReviewId = id; document.getElementById('reviewText').value = rev.text; const radios = document.getElementsByName('rating'); for (let r of radios) { if (parseInt(r.value) === rev.rating) r.checked = true; else r.checked = false; } document.getElementById('reviewFormTitle').innerText = "Edit your review:"; document.getElementById('submitReviewBtn').innerText = "Update Review"; document.getElementById('cancelEditBtn').style.display = "inline-block"; document.getElementById('reviewFormSection').scrollIntoView({ behavior: 'smooth' }); }
         window.cancelEdit = function() { editingReviewId = null; document.getElementById('reviewText').value = ''; const radios = document.getElementsByName('rating'); for (let r of radios) r.checked = false; document.getElementById('reviewFormTitle').innerText = "Rate this app:"; document.getElementById('submitReviewBtn').innerText = "Submit Review"; document.getElementById('cancelEditBtn').style.display = "none"; }
         window.confirmDeleteReview = function(id) { reviewToDeleteId = id; document.getElementById('deleteConfirmModal').classList.add('active'); }
-        document.getElementById('confirmDeleteBtn').addEventListener('click', async () => { if (reviewToDeleteId) { const btn = document.getElementById('confirmDeleteBtn'); btn.innerText = "Deleting..."; try { await deleteDoc(doc(db, "reviews", reviewToDeleteId)); if (editingReviewId === reviewToDeleteId) window.cancelEdit(); } catch(e) { window.showCustomAlert("Error deleting review. Please try again.", "Error"); } btn.innerText = "Yes, Delete"; document.getElementById('deleteConfirmModal').classList.remove('active'); reviewToDeleteId = null; } });
+        document.getElementById('confirmDeleteBtn').addEventListener('click', async () => { if (reviewToDeleteId) { const btn = document.getElementById('confirmDeleteBtn'); btn.innerText = "Deleting..."; try { await deleteDoc(doc(db, "reviews", reviewToDeleteId)); if (editingReviewId === reviewToDeleteId) window.cancelEdit(); } catch(e) { window.showCustomAlert("Error deleting review. Please try again.", "Error", "error"); } btn.innerText = "Yes, Delete"; document.getElementById('deleteConfirmModal').classList.remove('active'); reviewToDeleteId = null; } });
         
-        window.submitReview = async function() { if (!auth.currentUser) { window.showCustomAlert("Please login first to submit a review!", "Login Required"); return; } const name = auth.currentUser.displayName || "Anonymous User"; const text = document.getElementById('reviewText').value.trim(); let rating = 0; const radios = document.getElementsByName('rating'); for (let r of radios) { if (r.checked) { rating = r.value; break; } } if (rating === 0) { window.showCustomAlert("Please select a star rating.", "Missing Rating"); return; } if (text === '') { window.showCustomAlert("Please write a review comment.", "Missing Comment"); return; } const submitBtn = document.getElementById('submitReviewBtn'); submitBtn.innerText = editingReviewId ? "Updating..." : "Submitting..."; submitBtn.disabled = true; try { if (editingReviewId) { await updateDoc(doc(db, "reviews", editingReviewId), { rating: Number(rating), text: text, timestamp: Date.now() }); window.showCustomAlert("Your review has been successfully updated!", "Success"); } else { await addDoc(collection(db, "reviews"), { appId: currentAppId, name: name, rating: Number(rating), text: text, timestamp: Date.now(), userId: auth.currentUser.uid }); window.showCustomAlert("Thank you! Your review has been posted.", "Success"); } window.cancelEdit(); } catch (error) { window.showCustomAlert("Error saving review.", "Error"); } finally { submitBtn.innerText = editingReviewId ? "Update Review" : "Submit Review"; submitBtn.disabled = false; } }
+        window.submitReview = async function() { if (!auth.currentUser) { window.showCustomAlert("Please login first to submit a review!", "Login Required", "error"); return; } const name = auth.currentUser.displayName || "Anonymous User"; const text = document.getElementById('reviewText').value.trim(); let rating = 0; const radios = document.getElementsByName('rating'); for (let r of radios) { if (r.checked) { rating = r.value; break; } } if (rating === 0) { window.showCustomAlert("Please select a star rating.", "Missing Rating", "error"); return; } if (text === '') { window.showCustomAlert("Please write a review comment.", "Missing Comment", "error"); return; } const submitBtn = document.getElementById('submitReviewBtn'); submitBtn.innerText = editingReviewId ? "Updating..." : "Submitting..."; submitBtn.disabled = true; try { if (editingReviewId) { await updateDoc(doc(db, "reviews", editingReviewId), { rating: Number(rating), text: text, timestamp: Date.now() }); window.showCustomAlert("Your review has been successfully updated!", "Success", "success"); } else { await addDoc(collection(db, "reviews"), { appId: currentAppId, name: name, rating: Number(rating), text: text, timestamp: Date.now(), userId: auth.currentUser.uid }); window.showCustomAlert("Thank you! Your review has been posted.", "Success", "success"); } window.cancelEdit(); } catch (error) { window.showCustomAlert("Error saving review.", "Error", "error"); } finally { submitBtn.innerText = editingReviewId ? "Update Review" : "Submit Review"; submitBtn.disabled = false; } }
 
         let isAnimating = false;
         function updateNavButtons() { const prevBtn = document.querySelector('.prev-btn'); const nextBtn = document.querySelector('.next-btn'); if(!prevBtn || !nextBtn) return; prevBtn.style.display = currentScreenshotIndex <= 0 ? 'none' : 'flex'; nextBtn.style.display = currentScreenshotIndex >= currentScreenshots.length - 1 ? 'none' : 'flex'; }
@@ -575,7 +595,9 @@
             });
         }
 
-        window.toggleNotifications = function() {
+        // 🔥 FIX: Bell click Event Stop Propagation
+        window.toggleNotifications = function(e) {
+            if(e) e.stopPropagation();
             const dropdown = document.getElementById('notifDropdown');
             dropdown.classList.toggle('active');
             
@@ -654,14 +676,13 @@
 
         const loginScreen = document.getElementById('loginScreen'); const mainAppContent = document.getElementById('mainAppContent'); const loginBtn = document.getElementById('googleLoginBtn'); const userName = document.getElementById('userName'); const logoutBtn = document.getElementById('logoutBtn'); const logoutConfirmModal = document.getElementById('logoutConfirmModal'); const confirmLogoutBtn = document.getElementById('confirmLogoutBtn'); const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
 
-        // 🔥 WAPAS POPUP METHOD LAGA DIYA BINA KISI FEATURE KO HATAYE
         loginBtn.addEventListener('click', () => {
             loginBtn.innerHTML = '<span>Please wait...</span>';
             signInWithPopup(auth, provider).then(() => { 
                 loginBtn.innerHTML = '<img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" style="width: 20px; height: 20px;"> <span>Continue with Google</span>'; 
             }).catch((error) => { 
                 loginBtn.innerHTML = '<img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" style="width: 20px; height: 20px;"> <span>Continue with Google</span>'; 
-                if (error.code !== 'auth/popup-closed-by-user') window.showCustomAlert("Login failed! Please try again.", "Error"); 
+                if (error.code !== 'auth/popup-closed-by-user') window.showCustomAlert("Login failed! Please try again.", "Error", "error"); 
             });
         });
 
