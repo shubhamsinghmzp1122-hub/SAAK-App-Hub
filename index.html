@@ -38,7 +38,7 @@
         .login-box h2 { color: white; margin-bottom: 10px; font-size: 1.6rem; }
         .login-box p { color: var(--text-muted); margin-bottom: 30px; font-size: 0.95rem; }
 
-        .google-style-btn { background: #ffffff !important; color: #3c4043 !important; border: 1px solid #dadce0 !important; box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15); font-weight: 500; font-family: 'Roboto', 'Poppins', sans-serif; border-radius: 25px; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px 25px; width: 100%; font-size: 1.05rem; cursor: pointer; transition: all 0.3s ease; }
+        .google-style-btn { background: #ffffff !important; color: #3c4043 !important; border: 1px solid #dadce0 !important; box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15); font-weight: 500; border-radius: 25px; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px 25px; width: 100%; font-size: 1.05rem; cursor: pointer; transition: all 0.3s ease; }
         .google-style-btn:hover { background: #f8f9fa !important; box-shadow: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15); }
 
         header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: var(--glass-bg); backdrop-filter: blur(10px); border-bottom: 1px solid var(--glass-border); position: sticky; top: 0; z-index: 100; }
@@ -48,25 +48,42 @@
         .search-bar input:focus { border-color: var(--primary-color); box-shadow: 0 0 10px rgba(0, 230, 118, 0.2); }
         .search-bar i.search-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
 
-        .auth-section { display: flex; align-items: center; }
+        /* 🔥 NAYA: Auth Section & Header Logout */
+        .auth-section { display: flex; align-items: center; gap: 15px; }
         .user-info { display: flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, 0.05); padding: 5px 15px; border-radius: 20px; border: 1px solid var(--glass-border); }
         .user-name { font-weight: 500; color: var(--primary-color); font-size: 0.95rem; }
-
-        .logout-btn { padding: 10px 30px; background: rgba(225, 48, 108, 0.8); color: white; border: none; border-radius: 25px; cursor: pointer; transition: all 0.3s ease; font-weight: 600; font-size: 1rem; display: inline-flex; align-items: center; gap: 8px; }
-        .logout-btn:hover { background: rgba(225, 48, 108, 1); transform: scale(1.05); }
+        
+        .header-logout-btn { background: transparent; color: #ff4757; border: 1px solid rgba(255, 71, 87, 0.5); padding: 6px 15px; border-radius: 20px; cursor: pointer; transition: 0.3s; font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 5px; }
+        .header-logout-btn:hover { background: rgba(255, 71, 87, 0.1); border-color: #ff4757; }
 
         .container { padding: 30px 5% 20px; }
         .section-title { font-size: 1.5rem; margin-bottom: 20px; border-left: 4px solid var(--primary-color); padding-left: 10px; }
+        
+        /* App Grid */
         .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 25px; }
-
         .app-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 15px; padding: 20px; position: relative; backdrop-filter: blur(10px); box-shadow: var(--card-shadow); transition: transform 0.3s ease, box-shadow 0.3s ease; display: flex; flex-direction: column; cursor: pointer; }
         .app-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
         .app-icon { width: 70px; height: 70px; border-radius: 15px; object-fit: cover; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
         .app-info h3 { font-size: 1.2rem; margin-bottom: 5px; }
         .app-info p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; flex-grow: 1; }
         .rating { color: #ffd700; font-size: 0.9rem; margin-bottom: 15px; }
+        
+        /* Buttons */
+        .btn { padding: 10px 25px; background: var(--primary-color); color: #000; border: none; border-radius: 25px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: inline-block; }
+        .btn:hover { background: var(--primary-hover); transform: scale(1.05); }
         .app-card .btn { width: 100%; text-align: center; margin-top: auto; }
 
+        /* 🔥 NAYA: Bottom Actions Bar */
+        .bottom-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 40px auto; padding-bottom: 40px; }
+        .action-btn { padding: 12px 25px; border-radius: 25px; font-weight: 600; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 1rem; border: none; }
+        .vip-btn { background: #8e44ad; color: white; box-shadow: 0 4px 15px rgba(142, 68, 173, 0.4); }
+        .vip-btn:hover { background: #9b59b6; transform: translateY(-3px); box-shadow: 0 6px 20px rgba(142, 68, 173, 0.6); }
+        .install-btn { background: white; color: #0f2027; box-shadow: 0 4px 15px rgba(255,255,255,0.2); }
+        .install-btn:hover { background: #f1f1f1; transform: translateY(-3px); box-shadow: 0 6px 20px rgba(255,255,255,0.4); }
+        .team-btn { background: rgba(255,255,255,0.1); color: white; border: 1px solid var(--glass-border); }
+        .team-btn:hover { background: rgba(255,255,255,0.2); transform: translateY(-3px); }
+
+        /* Modals */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.4s ease; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
         .modal-content { background: linear-gradient(135deg, #1e293b, #0f172a); width: 90%; max-width: 800px; max-height: 90vh; border-radius: 20px; border: 1px solid var(--glass-border); overflow-y: auto; position: relative; transform: translateY(50px) scale(0.9); transition: all 0.4s ease; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
@@ -104,18 +121,16 @@
         .review-user { font-weight: 600; }
         .review-time { font-size: 0.8rem; color: var(--text-muted); }
         .review-actions { margin-top: 10px; display: flex; gap: 15px; }
-        .review-actions button { background: transparent; border: none; cursor: pointer; font-size: 0.85rem; transition: opacity 0.3s; font-family: 'Poppins', sans-serif; }
+        .review-actions button { background: transparent; border: none; cursor: pointer; font-size: 0.85rem; transition: opacity 0.3s; }
         .review-actions button:hover { opacity: 0.7; }
         .btn-edit { color: var(--primary-color); }
         .btn-delete { color: #E1306C; }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         .contact-grid { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
         .contact-card { display: flex; align-items: center; gap: 20px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); padding: 15px 20px; border-radius: 12px; text-decoration: none; color: white; transition: all 0.3s ease; }
         .contact-card:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.1); border-color: var(--primary-color); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4); }
         .contact-card i { font-size: 2.2rem; color: #E1306C; }
-        .contact-card .contact-info { display: flex; flex-direction: column; }
         .contact-info h4 { margin: 0; font-size: 1.1rem; color: white; }
         .contact-info p { margin: 0; font-size: 0.9rem; color: var(--text-muted); }
 
@@ -124,16 +139,11 @@
         #screenshotModal.active img { transform: scale(1); opacity: 1; }
         #screenshotModal img.swipe-left { transform: translateX(-100px) scale(0.9) !important; opacity: 0 !important; }
         #screenshotModal img.swipe-right { transform: translateX(100px) scale(0.9) !important; opacity: 0 !important; }
-
         .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(5px); border: none; color: white; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; z-index: 2010; transition: background 0.3s, transform 0.2s; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; }
         .nav-btn:hover { background: rgba(255, 255, 255, 0.3); transform: translateY(-50%) scale(1.1); }
         .prev-btn { left: 20px; } .next-btn { right: 20px; }
 
-        .btn { padding: 10px 25px; background: var(--primary-color); color: #000; border: none; border-radius: 25px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: inline-block; }
-        .btn:hover { background: var(--primary-hover); transform: scale(1.05); }
-
-        #cancelEditBtn { background: rgba(255, 255, 255, 0.1); color: white; margin-left: 10px; }
-        #cancelEditBtn:hover { background: rgba(255, 255, 255, 0.2); }
+        .logout-btn-modal { padding: 10px 30px; background: rgba(225, 48, 108, 0.8); color: white; border: none; border-radius: 25px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
 
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 15px; }
@@ -142,8 +152,9 @@
             .modal-header-info { flex-direction: column; text-align: center; }
             .modal-meta { justify-content: center; flex-wrap: wrap; gap: 10px; }
             .modal-meta div { border: none; padding: 0; width: 45%; }
-            .nav-btn { width: 40px; height: 40px; font-size: 1.1rem; }
-            .prev-btn { left: 10px; } .next-btn { right: 10px; }
+            .hide-mobile { display: none; } /* Sirf icon dikhega mobile par logout ka */
+            .bottom-actions { flex-direction: column; align-items: center; padding: 0 20px; }
+            .action-btn { width: 100%; }
         }
     </style>
 </head>
@@ -173,6 +184,9 @@
                     <i class="fas fa-user-circle" style="font-size: 1.2rem; color: var(--primary-color);"></i>
                     <span id="userName" class="user-name"></span>
                 </div>
+                <button id="logoutBtn" class="header-logout-btn" title="Logout">
+                    <i class="fas fa-sign-out-alt"></i> <span class="hide-mobile">Logout</span>
+                </button>
             </div>
         </header>
 
@@ -181,18 +195,16 @@
             <div class="app-grid" id="appGrid"></div>
         </main>
 
-        <div style="text-align: center; margin: 40px auto; padding-bottom: 40px;">
-            <button id="vipAdminBtn" class="btn" style="display: none; font-size: 1.1rem; padding: 12px 30px; margin-bottom: 20px; background: #8e44ad; color: white; box-shadow: 0 4px 15px rgba(142, 68, 173, 0.4);" onclick="window.location.href='admin.html'">
+        <div class="bottom-actions">
+            <button id="vipAdminBtn" class="action-btn vip-btn" style="display: none;" onclick="window.location.href='admin.html'">
                 <i class="fas fa-user-shield"></i> Open Admin Panel
             </button>
-            <br>
-            <button id="installAppBtn" class="btn" style="display: none; font-size: 1.1rem; padding: 12px 30px; margin-bottom: 20px; background: white; color: #0f2027; box-shadow: 0 4px 15px rgba(255,255,255,0.2);">
+            <button id="installAppBtn" class="action-btn install-btn" style="display: none;">
                 <i class="fas fa-mobile-alt"></i> Install App on Phone
             </button>
-            <br>
-            <button class="btn" onclick="window.openTeamModal()" style="font-size: 1.1rem; padding: 12px 30px; margin-bottom: 20px;">Team Information</button>
-            <br>
-            <button id="logoutBtn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            <button class="action-btn team-btn" onclick="window.openTeamModal()">
+                <i class="fas fa-users"></i> Team Information
+            </button>
         </div>
     </div> 
 
@@ -200,8 +212,8 @@
     <div class="modal-overlay" id="teamModal"><div class="modal-content" style="max-width: 600px;"><button class="close-btn" onclick="window.closeTeamModal()"><i class="fas fa-times"></i></button><div class="modal-section" style="border-top: none; padding-top: 30px;"><h2 style="color: var(--primary-color); text-align: center; margin-bottom: 15px;">Team Information</h2><div style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 30px; text-align: center;"><p style="margin-bottom: 10px;"><strong>About the Developer Team</strong></p><p style="margin-bottom: 10px;">This application has been proudly developed and published by Shubham, who leads the overall app development, coding, and project execution.</p><p style="margin-bottom: 10px;">Arpit contributed as the Idea Finder, helping with creative concepts, feature planning, and innovative app ideas.</p><p style="margin-bottom: 10px;">Abhishek worked as the Design Finder, supporting the visual design, layout ideas, and user interface improvements.</p><p style="margin-bottom: 10px;">Kartik has been the Full Supporter, providing continuous support, feedback throughout the complete development process.</p><p>Together, this team focuses on creating simple, useful, and enjoyable applications for users.</p></div><div style="text-align: center; margin-top: 20px;"><button class="btn" onclick="window.openContactModal()" style="font-size: 1.1rem; padding: 10px 30px;">Contact Us</button></div></div></div></div>
     <div class="modal-overlay" id="contactModal"><div class="modal-content" style="max-width: 600px;"><button class="close-btn" onclick="window.closeContactModal()"><i class="fas fa-times"></i></button><div class="modal-section" style="border-top: none; padding-top: 30px;"><h3 style="color: var(--primary-color); text-align: center; margin-bottom: 10px;">Contact Our Team</h3><p style="text-align: center; color: var(--text-muted); font-size: 0.9rem;">Get in touch with the creators on Instagram.</p><div class="contact-grid"><a href="https://www.instagram.com/i_am_shubham_singh_0001?igsh=MWduMDRnY2RlZm1ldQ==" target="_blank" class="contact-card"><i class="fab fa-instagram"></i><div class="contact-info"><h4>Shubham</h4><p>Lead Developer</p></div></a><a href="https://www.instagram.com/arpittt__06?igsh=a29hbWZhaGRqZ3Fi" target="_blank" class="contact-card"><i class="fab fa-instagram"></i><div class="contact-info"><h4>Arpit</h4><p>Idea Finder</p></div></a><a href="https://www.instagram.com/_mr_abhishek_patel00?igsh=aHhmMmttajd3OHhv" target="_blank" class="contact-card"><i class="fab fa-instagram"></i><div class="contact-info"><h4>Abhishek</h4><p>Design Finder</p></div></a><a href="https://www.instagram.com/kartik_o707?igsh=MTcxaXcyd21qeXMxYQ==" target="_blank" class="contact-card"><i class="fab fa-instagram"></i><div class="contact-info"><h4>Kartik</h4><p>Full Supporter</p></div></a></div></div></div></div>
     <div class="modal-overlay" id="screenshotModal"><button class="close-btn" style="position: absolute; top: 20px; right: 20px; z-index: 2010;" onclick="window.closeScreenshotModal()"><i class="fas fa-times"></i></button><button class="nav-btn prev-btn" onclick="window.prevScreenshot(event)"><i class="fas fa-chevron-left"></i></button><button class="nav-btn next-btn" onclick="window.nextScreenshot(event)"><i class="fas fa-chevron-right"></i></button><img id="fullScreenshot" src="" alt="Full Screen Preview"></div>
-    <div class="modal-overlay" id="logoutConfirmModal"><div class="login-box" style="padding: 30px;"><i class="fas fa-sign-out-alt logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #E1306C;"></i><h2 style="font-size: 1.3rem;">Logout</h2><p style="margin-bottom: 25px;">Are you sure you want to logout from SAAK App Hub?</p><div style="display: flex; gap: 15px; justify-content: center;"><button id="cancelLogoutBtn" class="btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">Cancel</button><button id="confirmLogoutBtn" class="logout-btn" style="margin: 0;">Yes, Logout</button></div></div></div>
-    <div class="modal-overlay" id="deleteConfirmModal"><div class="login-box" style="padding: 30px;"><i class="fas fa-trash logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #E1306C;"></i><h2 style="font-size: 1.3rem;">Delete Review</h2><p style="margin-bottom: 25px;">Are you sure you want to delete this review permanently?</p><div style="display: flex; gap: 15px; justify-content: center;"><button onclick="document.getElementById('deleteConfirmModal').classList.remove('active')" class="btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">Cancel</button><button id="confirmDeleteBtn" class="logout-btn" style="margin: 0;">Yes, Delete</button></div></div></div>
+    <div class="modal-overlay" id="logoutConfirmModal"><div class="login-box" style="padding: 30px;"><i class="fas fa-sign-out-alt logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #E1306C;"></i><h2 style="font-size: 1.3rem;">Logout</h2><p style="margin-bottom: 25px;">Are you sure you want to logout from SAAK App Hub?</p><div style="display: flex; gap: 15px; justify-content: center;"><button id="cancelLogoutBtn" class="btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">Cancel</button><button id="confirmLogoutBtn" class="logout-btn-modal" style="margin: 0;">Yes, Logout</button></div></div></div>
+    <div class="modal-overlay" id="deleteConfirmModal"><div class="login-box" style="padding: 30px;"><i class="fas fa-trash logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #E1306C;"></i><h2 style="font-size: 1.3rem;">Delete Review</h2><p style="margin-bottom: 25px;">Are you sure you want to delete this review permanently?</p><div style="display: flex; gap: 15px; justify-content: center;"><button onclick="document.getElementById('deleteConfirmModal').classList.remove('active')" class="btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">Cancel</button><button id="confirmDeleteBtn" class="logout-btn-modal" style="margin: 0;">Yes, Delete</button></div></div></div>
     <div class="modal-overlay" id="customAlertModal"><div class="login-box" style="padding: 30px;"><i class="fas fa-exclamation-circle logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #f39c12;"></i><h2 style="font-size: 1.3rem;" id="customAlertTitle">Alert</h2><p style="margin-bottom: 25px;" id="customAlertText">Message goes here.</p><button class="btn" onclick="document.getElementById('customAlertModal').classList.remove('active')" style="width: 100%;">OK</button></div></div>
 
     <script>
@@ -209,7 +221,7 @@
             window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(err => console.log('SW error: ', err)));
         }
         let deferredPrompt; const installAppBtn = document.getElementById('installAppBtn');
-        window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; installAppBtn.style.display = 'inline-block'; });
+        window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; installAppBtn.style.display = 'inline-flex'; });
         installAppBtn.addEventListener('click', async () => { installAppBtn.style.display = 'none'; deferredPrompt.prompt(); const { outcome } = await deferredPrompt.userChoice; deferredPrompt = null; });
     </script>
 
@@ -421,7 +433,6 @@
         cancelLogoutBtn.addEventListener('click', () => logoutConfirmModal.classList.remove('active'));
         confirmLogoutBtn.addEventListener('click', () => { confirmLogoutBtn.innerText = "Logging out..."; signOut(auth).then(() => { logoutConfirmModal.classList.remove('active'); confirmLogoutBtn.innerText = "Yes, Logout"; }); });
 
-        // 🔥 NAYA: Sirf Boss ko Admin Panel ka Button Dikhana
         const vipAdminBtn = document.getElementById('vipAdminBtn');
 
         onAuthStateChanged(auth, (user) => {
@@ -431,9 +442,9 @@
                 const reviewerInput = document.getElementById('reviewerName'); if(reviewerInput) reviewerInput.value = "Posting as: " + user.displayName;
                 if (currentAppId) window.loadLiveReviews(currentAppId);
 
-                // Check agar Boss (Shubham) hai
+                // VIP Admin button logic
                 if (user.email === ADMIN_EMAIL) {
-                    vipAdminBtn.style.display = 'inline-block';
+                    vipAdminBtn.style.display = 'inline-flex';
                 } else {
                     vipAdminBtn.style.display = 'none';
                 }
