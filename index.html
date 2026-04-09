@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* CSS Variables (VIP Default Theme) */
+        /* CSS Variables */
         :root {
             --bg-gradient: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
             --glass-bg: rgba(255, 255, 255, 0.05);
@@ -25,7 +25,6 @@
             --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
-        /* 🔥 NAYA: Light Mode Theme */
         body.theme-light {
             --bg-gradient: linear-gradient(135deg, #f5f7fa, #c3cfe2);
             --glass-bg: rgba(255, 255, 255, 0.7);
@@ -37,7 +36,6 @@
             --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
         }
 
-        /* 🔥 NAYA: Pure Dark Mode (OLED) Theme */
         body.theme-dark {
             --bg-gradient: #0f0f0f;
             --glass-bg: rgba(255, 255, 255, 0.02);
@@ -70,11 +68,10 @@
         .search-bar input { width: 100%; padding: 10px 40px 10px 20px; border-radius: 20px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.1); color: var(--text-main); outline: none; transition: 0.3s ease; }
         .search-bar input:focus { border-color: var(--primary-color); box-shadow: 0 0 10px rgba(0, 230, 118, 0.2); }
         .search-bar i.search-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
-        body.theme-light .search-bar input { background: rgba(255,255,255,0.5); } /* Light mode input fix */
+        body.theme-light .search-bar input { background: rgba(255,255,255,0.5); }
 
         .auth-section { display: flex; align-items: center; gap: 15px; }
         
-        /* 🔥 Theme Toggle Button CSS */
         .theme-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-main); width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; font-size: 1.1rem; }
         .theme-btn:hover { background: rgba(150, 150, 150, 0.2); transform: scale(1.05); }
 
@@ -163,7 +160,6 @@
         .review-actions button { background: transparent; border: none; cursor: pointer; font-size: 0.85rem; transition: opacity 0.3s; font-family: 'Poppins', sans-serif; display: flex; align-items: center; gap: 5px; font-weight: 500;}
         .review-actions button:hover { opacity: 0.7; }
         
-        /* 🔥 LIKES BUTTON CSS */
         .btn-like { color: var(--text-muted); }
         .btn-like.liked { color: #e74c3c; }
         .btn-like.liked i { animation: pop 0.3s ease; }
@@ -191,6 +187,22 @@
         .prev-btn { left: 20px; } .next-btn { right: 20px; }
 
         .logout-btn-modal { padding: 10px 30px; background: rgba(225, 48, 108, 0.8); color: white; border: none; border-radius: 25px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
+
+        /* 🔥 NAYA: Download Loading Animation CSS */
+        #downloadOverlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 10000; opacity: 0; visibility: hidden; transition: 0.3s ease;
+        }
+        #downloadOverlay.active { opacity: 1; visibility: visible; }
+        .progress-box { width: 80%; max-width: 350px; text-align: center; }
+        .dl-icon { font-size: 4rem; color: var(--primary-color); margin-bottom: 20px; animation: bounceDl 1s infinite alternate; }
+        @keyframes bounceDl { 0% { transform: translateY(0); } 100% { transform: translateY(-15px); } }
+        .progress-title { color: white; font-size: 1.2rem; margin-bottom: 10px; font-weight: 600;}
+        .progress-percent { color: var(--primary-color); font-size: 2rem; font-weight: 700; margin-bottom: 15px;}
+        .progress-bar-bg { width: 100%; height: 12px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden;}
+        .progress-bar-fill { height: 100%; width: 0%; background: var(--primary-color); transition: width 0.1s linear;}
 
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 15px; }
@@ -266,13 +278,13 @@
     <div class="modal-overlay" id="contactModal"><div class="modal-content" style="max-width: 600px;"><button class="close-btn" onclick="window.closeContactModal()"><i class="fas fa-times"></i></button><div class="modal-section" style="border-top: none; padding-top: 30px;"><h3 style="color: var(--primary-color); text-align: center; margin-bottom: 10px;">Contact Our Team</h3><p style="text-align: center; color: var(--text-muted); font-size: 0.9rem;">Get in touch with the creators on Instagram.</p><div class="contact-grid"><a href="https://www.instagram.com/i_am_shubham_singh_0001?igsh=MWduMDRnY2RlZm1ldQ==" target="_blank" class="contact-card"><i class="fab fa-instagram"></i><div class="contact-info"><h4>Shubham</h4><p>Lead Developer</p></div></a><a href="https://www.instagram.com/arpittt__06?igsh=a29hbWZhaGRqZ3Fi" target="_blank" class="contact-card"><i class="fab fa-instagram"></i><div class="contact-info"><h4>Arpit</h4><p>Idea Finder</p></div></a><a href="https://www.instagram.com/_mr_abhishek_patel00?igsh=aHhmMmttajd3OHhv" target="_blank" class="contact-card"><i class="fab fa-instagram"></i><div class="contact-info"><h4>Abhishek</h4><p>Design Finder</p></div></a><a href="https://www.instagram.com/kartik_o707?igsh=MTcxaXcyd21qeXMxYQ==" target="_blank" class="contact-card"><i class="fab fa-instagram"></i><div class="contact-info"><h4>Kartik</h4><p>Full Supporter</p></div></a></div></div></div></div>
     
     <div class="modal-overlay" id="screenshotModal"><button class="close-btn" style="position: absolute; top: 20px; right: 20px; z-index: 2010;" onclick="window.closeScreenshotModal()"><i class="fas fa-times"></i></button><button class="nav-btn prev-btn" onclick="window.prevScreenshot(event)"><i class="fas fa-chevron-left"></i></button><button class="nav-btn next-btn" onclick="window.nextScreenshot(event)"><i class="fas fa-chevron-right"></i></button><img id="fullScreenshot" src="" alt="Full Screen Preview"></div>
-    <div class="modal-overlay" id="logoutConfirmModal"><div class="login-box" style="padding: 30px;"><i class="fas fa-sign-out-alt logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #E1306C;"></i><h2 style="font-size: 1.3rem;">Logout</h2><p style="margin-bottom: 25px;">Are you sure you want to logout from SAAK App Hub?</p><div style="display: flex; gap: 15px; justify-content: center;"><button id="cancelLogoutBtn" class="btn" style="background: rgba(150,150,150,0.1); color: var(--text-main); border: 1px solid rgba(150,150,150,0.2);">Cancel</button><button id="confirmLogoutBtn" class="logout-btn-modal" style="margin: 0;">Yes, Logout</button></div></div></div>
-    <div class="modal-overlay" id="deleteConfirmModal"><div class="login-box" style="padding: 30px;"><i class="fas fa-trash logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #E1306C;"></i><h2 style="font-size: 1.3rem;">Delete Review</h2><p style="margin-bottom: 25px;">Are you sure you want to delete this review permanently?</p><div style="display: flex; gap: 15px; justify-content: center;"><button onclick="document.getElementById('deleteConfirmModal').classList.remove('active')" class="btn" style="background: rgba(150,150,150,0.1); color: var(--text-main); border: 1px solid rgba(150,150,150,0.2);">Cancel</button><button id="confirmDeleteBtn" class="logout-btn-modal" style="margin: 0;">Yes, Delete</button></div></div></div>
+    <div class="modal-overlay" id="logoutConfirmModal"><div class="login-box" style="padding: 30px;"><i class="fas fa-sign-out-alt logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #E1306C;"></i><h2 style="font-size: 1.3rem; color: var(--text-main);">Logout</h2><p style="margin-bottom: 25px;">Are you sure you want to logout from SAAK App Hub?</p><div style="display: flex; gap: 15px; justify-content: center;"><button id="cancelLogoutBtn" class="btn" style="background: rgba(150,150,150,0.1); color: var(--text-main); border: 1px solid rgba(150,150,150,0.2);">Cancel</button><button id="confirmLogoutBtn" class="logout-btn-modal" style="margin: 0;">Yes, Logout</button></div></div></div>
+    <div class="modal-overlay" id="deleteConfirmModal"><div class="login-box" style="padding: 30px;"><i class="fas fa-trash logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #E1306C;"></i><h2 style="font-size: 1.3rem; color: var(--text-main);">Delete Review</h2><p style="margin-bottom: 25px;">Are you sure you want to delete this review permanently?</p><div style="display: flex; gap: 15px; justify-content: center;"><button onclick="document.getElementById('deleteConfirmModal').classList.remove('active')" class="btn" style="background: rgba(150,150,150,0.1); color: var(--text-main); border: 1px solid rgba(150,150,150,0.2);">Cancel</button><button id="confirmDeleteBtn" class="logout-btn-modal" style="margin: 0;">Yes, Delete</button></div></div></div>
     
     <div class="modal-overlay" id="customAlertModal" style="z-index: 10001;">
         <div class="login-box" style="padding: 30px;">
             <i class="fas fa-info-circle logo-icon" id="alertIcon" style="font-size: 4rem; margin-bottom: 15px; transition: 0.3s;"></i>
-            <h2 style="font-size: 1.6rem; margin-bottom: 10px; transition: 0.3s;" id="customAlertTitle">Alert</h2>
+            <h2 style="font-size: 1.6rem; margin-bottom: 10px; transition: 0.3s; color: var(--text-main);" id="customAlertTitle">Alert</h2>
             <p style="color: var(--text-muted); margin-bottom: 25px;" id="customAlertText">Message goes here.</p>
             <button class="btn" id="alertBtn" onclick="document.getElementById('customAlertModal').classList.remove('active')" style="width: 100%;">Got it!</button>
         </div>
@@ -281,12 +293,23 @@
     <div class="modal-overlay" id="replyModal">
         <div class="login-box" style="padding: 30px;">
             <i class="fas fa-reply logo-icon" style="font-size: 2.5rem; margin-bottom: 15px; color: #3498db;"></i>
-            <h2 style="font-size: 1.3rem;">Developer Reply</h2>
+            <h2 style="font-size: 1.3rem; color: var(--text-main);">Developer Reply</h2>
             <p style="color: var(--text-muted); margin-bottom: 15px; font-size: 0.9rem;">Your reply will be visible publicly to all users.</p>
             <textarea id="replyTextInput" rows="3" placeholder="Type your professional reply here..." style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(150,150,150,0.1); border: 1px solid rgba(150,150,150,0.2); color: var(--text-main); outline: none; margin-bottom: 20px; font-family: 'Poppins', sans-serif; resize: none;"></textarea>
             <div style="display: flex; gap: 15px; justify-content: center;">
                 <button onclick="window.closeReplyModal()" class="btn" style="background: rgba(150,150,150,0.1); color: var(--text-main); border: 1px solid rgba(150,150,150,0.2);">Cancel</button>
                 <button id="confirmReplyBtn" class="logout-btn-modal" style="margin: 0; background: #3498db;" onclick="window.submitReply()">Post Reply</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="downloadOverlay">
+        <div class="progress-box">
+            <i class="fas fa-cloud-download-alt dl-icon"></i>
+            <div class="progress-title">Preparing Download</div>
+            <div class="progress-percent" id="downloadPercent">0%</div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="downloadBarFill"></div>
             </div>
         </div>
     </div>
@@ -303,7 +326,6 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        // 🔥 NAYA: arrayRemove added for unliking
         import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc, updateDoc, setDoc, getDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -322,7 +344,6 @@
 
         const ADMIN_EMAIL = "shubhamsinghmzp1122@gmail.com";
 
-        // 🔥 THEME LOGIC
         const themes = ['default', 'light', 'dark'];
         let currentThemeIndex = 0;
 
@@ -340,7 +361,6 @@
                 icon.className = "fas fa-moon";
                 metaColor.content = "#0f0f0f";
             } else {
-                // Default theme (Current VIP Gradient)
                 icon.className = "fas fa-desktop";
                 metaColor.content = "#0f2027";
             }
@@ -352,11 +372,9 @@
             applyTheme(themes[currentThemeIndex]);
         }
 
-        // Load saved theme on startup
         const savedTheme = localStorage.getItem('saak_theme') || 'default';
         currentThemeIndex = themes.indexOf(savedTheme) !== -1 ? themes.indexOf(savedTheme) : 0;
         applyTheme(themes[currentThemeIndex]);
-
 
         window.showCustomAlert = function(msg, title="Notice", type="info") {
             const titleEl = document.getElementById('customAlertTitle');
@@ -435,17 +453,46 @@
             renderApps(appsData.filter(app => app.name.toLowerCase().includes(term)));
         });
 
+        // 🔥 NAYA: Handle Install with Loading Animation!
         window.handleInstall = async function(appId, link) {
-            window.open(link, '_blank');
-            if (auth.currentUser) {
-                const uid = auth.currentUser.uid;
-                const statRef = doc(db, "app_stats", appId);
-                try {
-                    const snap = await getDoc(statRef);
-                    if (snap.exists()) { await updateDoc(statRef, { downloadedBy: arrayUnion(uid) }); } 
-                    else { await setDoc(statRef, { downloadedBy: [uid] }); }
-                } catch (e) {}
-            }
+            const overlay = document.getElementById('downloadOverlay');
+            const percentText = document.getElementById('downloadPercent');
+            const barFill = document.getElementById('downloadBarFill');
+            
+            overlay.classList.add('active');
+            let progress = 0;
+            
+            // Artificial Loading for 1.5 to 2 seconds
+            const interval = setInterval(async () => {
+                progress += Math.floor(Math.random() * 15) + 5; 
+                if(progress >= 100) {
+                    progress = 100;
+                    percentText.innerText = progress + '%';
+                    barFill.style.width = progress + '%';
+                    
+                    clearInterval(interval);
+                    setTimeout(async () => {
+                        overlay.classList.remove('active');
+                        percentText.innerText = '0%';
+                        barFill.style.width = '0%';
+                        window.open(link, '_blank');
+                        
+                        // Firebase Update
+                        if (auth.currentUser) {
+                            const uid = auth.currentUser.uid;
+                            const statRef = doc(db, "app_stats", appId);
+                            try {
+                                const snap = await getDoc(statRef);
+                                if (snap.exists()) { await updateDoc(statRef, { downloadedBy: arrayUnion(uid) }); } 
+                                else { await setDoc(statRef, { downloadedBy: [uid] }); }
+                            } catch (e) {}
+                        }
+                    }, 500); // 0.5 sec ruk ke link open karega
+                } else {
+                    percentText.innerText = progress + '%';
+                    barFill.style.width = progress + '%';
+                }
+            }, 150); // har 150ms me number badhega
         }
 
         window.handleShare = async function(appName, shortDesc, downloadLink) {
@@ -482,22 +529,15 @@
 
         window.closeModal = function() { document.getElementById('appModal').classList.remove('active'); document.body.style.overflow = 'auto'; currentAppId = null; window.cancelEdit(); if(unsubscribeReviews) { unsubscribeReviews(); unsubscribeReviews = null; } if(unsubscribeDownloads) { unsubscribeDownloads(); unsubscribeDownloads = null; } }
 
-        // 🔥 NAYA: Review Like Toggle Function
         window.toggleLike = async function(reviewId) {
-            if (!auth.currentUser) { 
-                window.showCustomAlert("Please login to like reviews!", "Login Required", "error"); 
-                return; 
-            }
+            if (!auth.currentUser) { window.showCustomAlert("Please login to like reviews!", "Login Required", "error"); return; }
             const rev = window.currentReviewsMap[reviewId];
             if (!rev) return;
             const uid = auth.currentUser.uid;
             const revRef = doc(db, "reviews", reviewId);
             try {
-                if (rev.likedBy && rev.likedBy.includes(uid)) {
-                    await updateDoc(revRef, { likedBy: arrayRemove(uid) });
-                } else {
-                    await updateDoc(revRef, { likedBy: arrayUnion(uid) });
-                }
+                if (rev.likedBy && rev.likedBy.includes(uid)) { await updateDoc(revRef, { likedBy: arrayRemove(uid) }); } 
+                else { await updateDoc(revRef, { likedBy: arrayUnion(uid) }); }
             } catch(e) { console.error("Error liking review:", e); }
         }
 
@@ -515,7 +555,6 @@
                 const appIndex = appsData.findIndex(a => a.id === appId);
                 if(appIndex !== -1) { appsData[appIndex].rating = avg; const term = document.getElementById('searchInput').value.toLowerCase(); if (term) renderApps(appsData.filter(app => app.name.toLowerCase().includes(term))); else renderApps(appsData); }
                 
-                // Sort by likes first, then timestamp
                 appReviews.sort((a, b) => {
                     const likesA = a.likedBy ? a.likedBy.length : 0;
                     const likesB = b.likedBy ? b.likedBy.length : 0;
@@ -540,12 +579,10 @@
                         `;
                     }
 
-                    // 🔥 NAYA: Like Button Logic
                     let likesCount = rev.likedBy ? rev.likedBy.length : 0;
                     let isLiked = auth.currentUser && rev.likedBy && rev.likedBy.includes(auth.currentUser.uid);
                     let likeIcon = isLiked ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>';
                     
-                    // Saare users like kar sakte hain
                     let actionBtns = `<div class="review-actions">
                         <button class="btn-like ${isLiked ? 'liked' : ''}" onclick="window.toggleLike('${rev.id}')">${likeIcon} <span style="margin-left: 2px;">${likesCount > 0 ? likesCount : 'Like'}</span></button>
                     `;
@@ -558,7 +595,7 @@
                         if (isAdmin) { actionBtns += `<button class="btn-reply" onclick="window.openReplyModal('${rev.id}')"><i class="fas fa-reply"></i> Reply</button>`; }
                         if (isOwner || isAdmin) { actionBtns += `<button class="btn-delete" onclick="window.confirmDeleteReview('${rev.id}')"><i class="fas fa-trash"></i> Delete</button>`; }
                     }
-                    actionBtns += `</div>`; // Close actions div
+                    actionBtns += `</div>`; 
                     
                     const card = document.createElement('div'); 
                     card.className = `review-card ${rev.developerReply ? 'has-reply' : ''}`;
@@ -595,13 +632,9 @@
             btn.disabled = true;
 
             try {
-                await updateDoc(doc(db, "reviews", replyingToReviewId), {
-                    developerReply: text
-                });
+                await updateDoc(doc(db, "reviews", replyingToReviewId), { developerReply: text });
                 window.closeReplyModal();
-                if(text !== "") {
-                    window.showCustomAlert("Reply posted successfully! 🎉", "Awesome!", "success");
-                }
+                if(text !== "") { window.showCustomAlert("Reply posted successfully! 🎉", "Awesome!", "success"); }
             } catch (e) {
                 console.error("Error posting reply:", e);
                 window.showCustomAlert("Error posting reply. Check connection.", "Error", "error");
