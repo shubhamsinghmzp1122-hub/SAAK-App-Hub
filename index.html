@@ -188,9 +188,21 @@
 
         .logout-btn-modal { padding: 10px 30px; background: rgba(225, 48, 108, 0.8); color: white; border: none; border-radius: 25px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
 
-        /* Download Overlay CSS (Hidden permanently but kept for safety) */
-        #downloadOverlay { display: none; }
-        .progress-box { display: none; }
+        /* 🔥 NAYA: Download Loading Animation CSS */
+        #downloadOverlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 10000; opacity: 0; visibility: hidden; transition: 0.3s ease;
+        }
+        #downloadOverlay.active { opacity: 1; visibility: visible; }
+        .progress-box { width: 80%; max-width: 350px; text-align: center; }
+        .dl-icon { font-size: 4rem; color: var(--primary-color); margin-bottom: 20px; animation: bounceDl 1s infinite alternate; }
+        @keyframes bounceDl { 0% { transform: translateY(0); } 100% { transform: translateY(-15px); } }
+        .progress-title { color: white; font-size: 1.2rem; margin-bottom: 10px; font-weight: 600;}
+        .progress-percent { color: var(--primary-color); font-size: 2rem; font-weight: 700; margin-bottom: 15px;}
+        .progress-bar-bg { width: 100%; height: 12px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden;}
+        .progress-bar-fill { height: 100%; width: 0%; background: var(--primary-color); transition: width 0.1s linear;}
 
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 15px; }
@@ -287,6 +299,17 @@
             <div style="display: flex; gap: 15px; justify-content: center;">
                 <button onclick="window.closeReplyModal()" class="btn" style="background: rgba(150,150,150,0.1); color: var(--text-main); border: 1px solid rgba(150,150,150,0.2);">Cancel</button>
                 <button id="confirmReplyBtn" class="logout-btn-modal" style="margin: 0; background: #3498db;" onclick="window.submitReply()">Post Reply</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="downloadOverlay">
+        <div class="progress-box">
+            <i class="fas fa-cloud-download-alt dl-icon"></i>
+            <div class="progress-title">Preparing Download</div>
+            <div class="progress-percent" id="downloadPercent">0%</div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="downloadBarFill"></div>
             </div>
         </div>
     </div>
@@ -430,34 +453,46 @@
             renderApps(appsData.filter(app => app.name.toLowerCase().includes(term)));
         });
 
-        // 🔥 100% WORKING FIX: No delay, direct immediate click to break out of PWA
-        window.handleInstall = function(appId, link) {
-            let finalUrl = link;
+        // 🔥 NAYA: Handle Install with Loading Animation!
+        window.handleInstall = async function(appId, link) {
+            const overlay = document.getElementById('downloadOverlay');
+            const percentText = document.getElementById('downloadPercent');
+            const barFill = document.getElementById('downloadBarFill');
             
-            // Android Chrome Intent banayenge
-            if (navigator.userAgent.match(/Android/i)) {
-                let cleanUrl = link.replace(/^https?:\/\//, '');
-                finalUrl = `intent://${cleanUrl}#Intent;scheme=https;package=com.android.chrome;action=android.intent.action.VIEW;end;`;
-            }
-
-            // Bina kisi delay ke direct naya tab kholenge! Chrome isko real click maanega.
-            const a = document.createElement('a');
-            a.href = finalUrl;
-            a.target = '_blank';
-            a.rel = 'noopener noreferrer';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            overlay.classList.add('active');
+            let progress = 0;
             
-            // Firebase Update (Background me chalta rahega bina install button roke)
-            if (auth.currentUser) {
-                const uid = auth.currentUser.uid;
-                const statRef = doc(db, "app_stats", appId);
-                getDoc(statRef).then(snap => {
-                    if (snap.exists()) { updateDoc(statRef, { downloadedBy: arrayUnion(uid) }); } 
-                    else { setDoc(statRef, { downloadedBy: [uid] }); }
-                }).catch(e => console.log(e));
-            }
+            // Artificial Loading for 1.5 to 2 seconds
+            const interval = setInterval(async () => {
+                progress += Math.floor(Math.random() * 15) + 5; 
+                if(progress >= 100) {
+                    progress = 100;
+                    percentText.innerText = progress + '%';
+                    barFill.style.width = progress + '%';
+                    
+                    clearInterval(interval);
+                    setTimeout(async () => {
+                        overlay.classList.remove('active');
+                        percentText.innerText = '0%';
+                        barFill.style.width = '0%';
+                        window.open(link, '_blank');
+                        
+                        // Firebase Update
+                        if (auth.currentUser) {
+                            const uid = auth.currentUser.uid;
+                            const statRef = doc(db, "app_stats", appId);
+                            try {
+                                const snap = await getDoc(statRef);
+                                if (snap.exists()) { await updateDoc(statRef, { downloadedBy: arrayUnion(uid) }); } 
+                                else { await setDoc(statRef, { downloadedBy: [uid] }); }
+                            } catch (e) {}
+                        }
+                    }, 500); // 0.5 sec ruk ke link open karega
+                } else {
+                    percentText.innerText = progress + '%';
+                    barFill.style.width = progress + '%';
+                }
+            }, 150); // har 150ms me number badhega
         }
 
         window.handleShare = async function(appName, shortDesc, downloadLink) {
@@ -703,4 +738,4 @@
         });
     </script>
 </body>
-</html>
+                                                                                                                                                                                                                                                                                                                                                                                                      </html>
