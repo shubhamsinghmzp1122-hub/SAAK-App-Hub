@@ -453,7 +453,7 @@
             renderApps(appsData.filter(app => app.name.toLowerCase().includes(term)));
         });
 
-        // 🔥 NAYA: Handle Install with Loading Animation!
+        // 🔥 VIP FIX: Direct Open via link element to force Chrome's native handling!
         window.handleInstall = async function(appId, link) {
             const overlay = document.getElementById('downloadOverlay');
             const percentText = document.getElementById('downloadPercent');
@@ -462,7 +462,6 @@
             overlay.classList.add('active');
             let progress = 0;
             
-            // Artificial Loading for 1.5 to 2 seconds
             const interval = setInterval(async () => {
                 progress += Math.floor(Math.random() * 15) + 5; 
                 if(progress >= 100) {
@@ -475,9 +474,15 @@
                         overlay.classList.remove('active');
                         percentText.innerText = '0%';
                         barFill.style.width = '0%';
-                        window.open(link, '_blank');
                         
-                        // Firebase Update
+                        // FIX: Create an invisible link and click it to break out of standalone context cleanly
+                        const a = document.createElement('a');
+                        a.href = link;
+                        a.target = '_blank';
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        
                         if (auth.currentUser) {
                             const uid = auth.currentUser.uid;
                             const statRef = doc(db, "app_stats", appId);
@@ -487,12 +492,12 @@
                                 else { await setDoc(statRef, { downloadedBy: [uid] }); }
                             } catch (e) {}
                         }
-                    }, 500); // 0.5 sec ruk ke link open karega
+                    }, 500); 
                 } else {
                     percentText.innerText = progress + '%';
                     barFill.style.width = progress + '%';
                 }
-            }, 150); // har 150ms me number badhega
+            }, 150); 
         }
 
         window.handleShare = async function(appName, shortDesc, downloadLink) {
@@ -738,4 +743,4 @@
         });
     </script>
 </body>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   </html>
+</html>
