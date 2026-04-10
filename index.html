@@ -475,7 +475,9 @@
                         overlay.classList.remove('active');
                         percentText.innerText = '0%';
                         barFill.style.width = '0%';
-                        window.open(link, '_blank');
+                        
+                        // FIX: Changed from window.open(link, '_blank') to window.location.href to ensure PWA install triggers
+                        window.location.href = link; 
                         
                         // Firebase Update
                         if (auth.currentUser) {
