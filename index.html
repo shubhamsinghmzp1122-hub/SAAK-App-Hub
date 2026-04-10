@@ -453,7 +453,7 @@
             renderApps(appsData.filter(app => app.name.toLowerCase().includes(term)));
         });
 
-        // 🔥 VIP FIX: Direct Open via link element to force Chrome's native handling!
+        // ⭐ VIP FIX: Force open in MAIN Chrome browser using Android Intent ⭐
         window.handleInstall = async function(appId, link) {
             const overlay = document.getElementById('downloadOverlay');
             const percentText = document.getElementById('downloadPercent');
@@ -475,13 +475,13 @@
                         percentText.innerText = '0%';
                         barFill.style.width = '0%';
                         
-                        // FIX: Create an invisible link and click it to break out of standalone context cleanly
-                        const a = document.createElement('a');
-                        a.href = link;
-                        a.target = '_blank';
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
+                        // VIP CHROME INTENT LOGIC
+                        let finalUrl = link;
+                        if (navigator.userAgent.match(/Android/i)) {
+                            let cleanUrl = link.replace(/^https?:\/\//, '');
+                            finalUrl = `intent://${cleanUrl}#Intent;scheme=https;package=com.android.chrome;end;`;
+                        }
+                        window.location.href = finalUrl;
                         
                         if (auth.currentUser) {
                             const uid = auth.currentUser.uid;
