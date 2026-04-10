@@ -188,22 +188,6 @@
 
         .logout-btn-modal { padding: 10px 30px; background: rgba(225, 48, 108, 0.8); color: white; border: none; border-radius: 25px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
 
-        /* 🔥 NAYA: Download Loading Animation CSS */
-        #downloadOverlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px);
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 10000; opacity: 0; visibility: hidden; transition: 0.3s ease;
-        }
-        #downloadOverlay.active { opacity: 1; visibility: visible; }
-        .progress-box { width: 80%; max-width: 350px; text-align: center; }
-        .dl-icon { font-size: 4rem; color: var(--primary-color); margin-bottom: 20px; animation: bounceDl 1s infinite alternate; }
-        @keyframes bounceDl { 0% { transform: translateY(0); } 100% { transform: translateY(-15px); } }
-        .progress-title { color: white; font-size: 1.2rem; margin-bottom: 10px; font-weight: 600;}
-        .progress-percent { color: var(--primary-color); font-size: 2rem; font-weight: 700; margin-bottom: 15px;}
-        .progress-bar-bg { width: 100%; height: 12px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden;}
-        .progress-bar-fill { height: 100%; width: 0%; background: var(--primary-color); transition: width 0.1s linear;}
-
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 15px; }
             .search-bar { width: 100%; }
@@ -264,7 +248,7 @@
                 <i class="fas fa-user-shield"></i> Open Admin Panel
             </button>
             <button id="installAppBtn" class="action-btn install-btn" style="display: none;">
-                <i class="fas fa-mobile-alt"></i> Install App on Phone
+                <i class="fas fa-download"></i> How to Install
             </button>
             <button class="action-btn team-btn" onclick="window.openTeamModal()">
                 <i class="fas fa-users"></i> Team Information
@@ -272,7 +256,7 @@
         </div>
     </div> 
 
-    <div class="modal-overlay" id="appModal"><div class="modal-content"><button class="close-btn" onclick="window.closeModal()"><i class="fas fa-times"></i></button><div class="modal-header-info"><img id="modalIcon" src="" alt="App Icon"><div class="modal-titles"><h2 id="modalName">App Name</h2><p style="color: var(--primary-color)" id="modalDev">Developer</p><div class="modal-meta"><div><strong id="modalRating">... <i class="fas fa-star" style="color:#ffd700"></i></strong><br><span id="modalReviewCount">Loading</span></div><div><strong id="modalDownloads">...</strong><br>Downloads</div><div><strong id="modalSize">25 MB</strong><br>Size</div><div><strong id="modalVersion">1.0.0</strong><br>Version</div></div><div style="display: flex; gap: 10px; margin-top: 15px; width: 100%;"><button id="modalInstallBtn" class="btn" style="flex: 1;"><i class="fas fa-download"></i> Install</button><button id="modalShareBtn" class="btn" style="flex: 1; background: rgba(150,150,150,0.1); color: var(--text-main); border: 1px solid var(--glass-border);"><i class="fas fa-share-nodes"></i> Share</button></div></div></div><div class="screenshots" id="modalScreenshots"></div><div class="modal-section"><h4>About this app</h4><p id="modalFullDesc"></p><br><small style="color:var(--text-muted)">Released on: <span id="modalDate"></span></small></div><div class="modal-section"><h4>Key Features</h4><ul id="modalFeatures"></ul></div><div class="modal-section"><h4>What's New</h4><p id="modalWhatsNew" style="white-space: pre-line;"></p></div><div class="modal-section"><h4>Ratings and Reviews</h4><div class="review-form" id="reviewFormSection"><p style="margin-bottom: 10px;" id="reviewFormTitle">Rate this app:</p><div class="star-rating-input"><input type="radio" id="star5" name="rating" value="5"><label for="star5" class="fas fa-star"></label><input type="radio" id="star4" name="rating" value="4"><label for="star4" class="fas fa-star"></label><input type="radio" id="star3" name="rating" value="3"><label for="star3" class="fas fa-star"></label><input type="radio" id="star2" name="rating" value="2"><label for="star2" class="fas fa-star"></label><input type="radio" id="star1" name="rating" value="1"><label for="star1" class="fas fa-star"></label></div><input type="text" id="reviewerName" placeholder="Posting as..." readonly><textarea id="reviewText" rows="3" placeholder="Describe your experience (what's good, bad, bugs, suggestions...)"></textarea><button id="submitReviewBtn" class="btn" onclick="window.submitReview()">Submit Review</button><button id="cancelEditBtn" class="btn" style="display: none; background: #e74c3c;" onclick="window.cancelEdit()">Cancel Edit</button></div><div class="review-list" id="reviewList"></div></div></div></div>
+    <div class="modal-overlay" id="appModal"><div class="modal-content"><button class="close-btn" onclick="window.closeModal()"><i class="fas fa-times"></i></button><div class="modal-header-info"><img id="modalIcon" src="" alt="App Icon"><div class="modal-titles"><h2 id="modalName">App Name</h2><p style="color: var(--primary-color)" id="modalDev">Developer</p><div class="modal-meta"><div><strong id="modalRating">... <i class="fas fa-star" style="color:#ffd700"></i></strong><br><span id="modalReviewCount">Loading</span></div><div><strong id="modalDownloads">...</strong><br>Downloads</div><div><strong id="modalSize">25 MB</strong><br>Size</div><div><strong id="modalVersion">1.0.0</strong><br>Version</div></div><div style="display: flex; gap: 10px; margin-top: 15px; width: 100%;"><button id="modalInstallBtn" class="btn" style="flex: 1;"><i class="fas fa-download"></i> How to Install</button><button id="modalShareBtn" class="btn" style="flex: 1; background: rgba(150,150,150,0.1); color: var(--text-main); border: 1px solid var(--glass-border);"><i class="fas fa-share-nodes"></i> Share</button></div></div></div><div class="screenshots" id="modalScreenshots"></div><div class="modal-section"><h4>About this app</h4><p id="modalFullDesc"></p><br><small style="color:var(--text-muted)">Released on: <span id="modalDate"></span></small></div><div class="modal-section"><h4>Key Features</h4><ul id="modalFeatures"></ul></div><div class="modal-section"><h4>What's New</h4><p id="modalWhatsNew" style="white-space: pre-line;"></p></div><div class="modal-section"><h4>Ratings and Reviews</h4><div class="review-form" id="reviewFormSection"><p style="margin-bottom: 10px;" id="reviewFormTitle">Rate this app:</p><div class="star-rating-input"><input type="radio" id="star5" name="rating" value="5"><label for="star5" class="fas fa-star"></label><input type="radio" id="star4" name="rating" value="4"><label for="star4" class="fas fa-star"></label><input type="radio" id="star3" name="rating" value="3"><label for="star3" class="fas fa-star"></label><input type="radio" id="star2" name="rating" value="2"><label for="star2" class="fas fa-star"></label><input type="radio" id="star1" name="rating" value="1"><label for="star1" class="fas fa-star"></label></div><input type="text" id="reviewerName" placeholder="Posting as..." readonly><textarea id="reviewText" rows="3" placeholder="Describe your experience (what's good, bad, bugs, suggestions...)"></textarea><button id="submitReviewBtn" class="btn" onclick="window.submitReview()">Submit Review</button><button id="cancelEditBtn" class="btn" style="display: none; background: #e74c3c;" onclick="window.cancelEdit()">Cancel Edit</button></div><div class="review-list" id="reviewList"></div></div></div></div>
     
     <div class="modal-overlay" id="teamModal"><div class="modal-content" style="max-width: 600px;"><button class="close-btn" onclick="window.closeTeamModal()"><i class="fas fa-times"></i></button><div class="modal-section" style="border-top: none; padding-top: 30px;"><h2 style="color: var(--primary-color); text-align: center; margin-bottom: 15px;">Team Information</h2><div style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 30px; text-align: center;"><p style="margin-bottom: 10px;"><strong>About the Developer Team</strong></p><p style="margin-bottom: 10px;">This application has been proudly developed and published by Shubham, who leads the overall app development, coding, and project execution.</p><p style="margin-bottom: 10px;">Arpit contributed as the Idea Finder, helping with creative concepts, feature planning, and innovative app ideas.</p><p style="margin-bottom: 10px;">Abhishek worked as the Design Finder, supporting the visual design, layout ideas, and user interface improvements.</p><p style="margin-bottom: 10px;">Kartik has been the Full Supporter, providing continuous support, feedback throughout the complete development process.</p><p>Together, this team focuses on creating simple, useful, and enjoyable applications for users.</p></div><div style="text-align: center; margin-top: 20px;"><button class="btn" onclick="window.openContactModal()" style="font-size: 1.1rem; padding: 10px 30px;">Contact Us</button></div></div></div></div>
     <div class="modal-overlay" id="contactModal"><div class="modal-content" style="max-width: 600px;"><button class="close-btn" onclick="window.closeContactModal()"><i class="fas fa-times"></i></button><div class="modal-section" style="border-top: none; padding-top: 30px;"><h3 style="color: var(--primary-color); text-align: center; margin-bottom: 10px;">Contact Our Team</h3><p style="text-align: center; color: var(--text-muted); font-size: 0.9rem;">Get in touch with the creators on Instagram.</p><div class="contact-grid"><a href="https://www.instagram.com/i_am_shubham_singh_0001?igsh=MWduMDRnY2RlZm1ldQ==" target="_blank" class="contact-card"><i class="fab fa-instagram"></i><div class="contact-info"><h4>Shubham</h4><p>Lead Developer</p></div></a><a href="https://www.instagram.com/arpittt__06?igsh=a29hbWZhaGRqZ3Fi" target="_blank" class="contact-card"><i class="fab fa-instagram"></i><div class="contact-info"><h4>Arpit</h4><p>Idea Finder</p></div></a><a href="https://www.instagram.com/_mr_abhishek_patel00?igsh=aHhmMmttajd3OHhv" target="_blank" class="contact-card"><i class="fab fa-instagram"></i><div class="contact-info"><h4>Abhishek</h4><p>Design Finder</p></div></a><a href="https://www.instagram.com/kartik_o707?igsh=MTcxaXcyd21qeXMxYQ==" target="_blank" class="contact-card"><i class="fab fa-instagram"></i><div class="contact-info"><h4>Kartik</h4><p>Full Supporter</p></div></a></div></div></div></div>
@@ -303,13 +287,18 @@
         </div>
     </div>
 
-    <div id="downloadOverlay">
-        <div class="progress-box">
-            <i class="fas fa-cloud-download-alt dl-icon"></i>
-            <div class="progress-title">Preparing Download</div>
-            <div class="progress-percent" id="downloadPercent">0%</div>
-            <div class="progress-bar-bg">
-                <div class="progress-bar-fill" id="downloadBarFill"></div>
+    <div class="modal-overlay" id="howToInstallModal" style="z-index: 10001;">
+        <div class="login-box" style="padding: 30px; text-align: left;">
+            <i class="fas fa-download logo-icon" style="font-size: 3rem; margin-bottom: 15px; color: var(--primary-color); display: block; text-align: center;"></i>
+            <h2 style="font-size: 1.5rem; margin-bottom: 15px; color: var(--text-main); text-align: center;">How to Install</h2>
+            <div style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 25px; line-height: 1.6;">
+                <p style="margin-bottom: 8px;">1. Click <b>"Open App"</b> below.</p>
+                <p style="margin-bottom: 8px;">2. Click the <b>3-dots menu (⋮)</b> in Chrome (top-right).</p>
+                <p>3. Select <b>"Install app"</b>.</p>
+            </div>
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button class="btn" style="background: rgba(150,150,150,0.1); color: var(--text-main); border: 1px solid var(--glass-border);" onclick="document.getElementById('howToInstallModal').classList.remove('active')">Cancel</button>
+                <button class="btn" id="howToInstallOpenBtn" style="flex: 1;">Open App</button>
             </div>
         </div>
     </div>
@@ -442,7 +431,7 @@
                         </div>
                         <p>${app.shortDesc}</p>
                     </div>
-                    <button class="btn" onclick="event.stopPropagation(); window.handleInstall('${app.id}', '${app.downloadLink}')">Install</button>
+                    <button class="btn" onclick="event.stopPropagation(); window.handleInstall('${app.id}', '${app.downloadLink}')">How to Install</button>
                 `;
                 grid.appendChild(card);
             });
@@ -453,46 +442,26 @@
             renderApps(appsData.filter(app => app.name.toLowerCase().includes(term)));
         });
 
-        // 🔥 NAYA: Handle Install with Loading Animation!
-        window.handleInstall = async function(appId, link) {
-            const overlay = document.getElementById('downloadOverlay');
-            const percentText = document.getElementById('downloadPercent');
-            const barFill = document.getElementById('downloadBarFill');
+        // ⭐ NAYA: Direct popup to teach user how to install from Chrome ⭐
+        window.handleInstall = function(appId, link) {
+            const modal = document.getElementById('howToInstallModal');
+            modal.classList.add('active');
             
-            overlay.classList.add('active');
-            let progress = 0;
-            
-            // Artificial Loading for 1.5 to 2 seconds
-            const interval = setInterval(async () => {
-                progress += Math.floor(Math.random() * 15) + 5; 
-                if(progress >= 100) {
-                    progress = 100;
-                    percentText.innerText = progress + '%';
-                    barFill.style.width = progress + '%';
-                    
-                    clearInterval(interval);
-                    setTimeout(async () => {
-                        overlay.classList.remove('active');
-                        percentText.innerText = '0%';
-                        barFill.style.width = '0%';
-                        window.open(link, '_blank');
-                        
-                        // Firebase Update
-                        if (auth.currentUser) {
-                            const uid = auth.currentUser.uid;
-                            const statRef = doc(db, "app_stats", appId);
-                            try {
-                                const snap = await getDoc(statRef);
-                                if (snap.exists()) { await updateDoc(statRef, { downloadedBy: arrayUnion(uid) }); } 
-                                else { await setDoc(statRef, { downloadedBy: [uid] }); }
-                            } catch (e) {}
-                        }
-                    }, 500); // 0.5 sec ruk ke link open karega
-                } else {
-                    percentText.innerText = progress + '%';
-                    barFill.style.width = progress + '%';
+            document.getElementById('howToInstallOpenBtn').onclick = async function() {
+                modal.classList.remove('active');
+                window.open(link, '_blank');
+                
+                // Track in Firebase quietly
+                if (auth.currentUser) {
+                    const uid = auth.currentUser.uid;
+                    const statRef = doc(db, "app_stats", appId);
+                    try {
+                        const snap = await getDoc(statRef);
+                        if (snap.exists()) { await updateDoc(statRef, { downloadedBy: arrayUnion(uid) }); } 
+                        else { await setDoc(statRef, { downloadedBy: [uid] }); }
+                    } catch (e) {}
                 }
-            }, 150); // har 150ms me number badhega
+            };
         }
 
         window.handleShare = async function(appName, shortDesc, downloadLink) {
@@ -695,7 +664,7 @@
         }
 
         window.onclick = function(event) {
-            const modals = ['appModal', 'teamModal', 'contactModal', 'screenshotModal', 'logoutConfirmModal', 'customAlertModal', 'deleteConfirmModal', 'replyModal'];
+            const modals = ['appModal', 'teamModal', 'contactModal', 'screenshotModal', 'logoutConfirmModal', 'customAlertModal', 'deleteConfirmModal', 'replyModal', 'howToInstallModal'];
             modals.forEach(id => { const m = document.getElementById(id); if (event.target == m) { if (id === 'appModal') window.closeModal(); else if (id === 'teamModal') window.closeTeamModal(); else if (id === 'contactModal') window.closeContactModal(); else if (id === 'screenshotModal') window.closeScreenshotModal(); else if (id === 'replyModal') window.closeReplyModal(); else m.classList.remove('active'); } });
         }
 
@@ -738,4 +707,4 @@
         });
     </script>
 </body>
-                                                                                                                                                                                                                                                                                                                                                                                                      </html>
+</html>
