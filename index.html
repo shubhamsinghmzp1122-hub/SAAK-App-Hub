@@ -13,7 +13,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* CSS Variables */
+        /* CSS YAHAN AAYEGA (Jab aap mangoge) */
+                /* CSS Variables */
         :root {
             --bg-gradient: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
             --glass-bg: rgba(255, 255, 255, 0.05);
@@ -215,9 +216,30 @@
             .vip-toast { width: 100%; transform: translateY(-150%); }
             .vip-toast.show { transform: translateY(0); }
         }
+
+        /* ⭐ NAYA: 3D Particle Canvas Style ⭐ */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0; /* Background par rahega */
+            pointer-events: none; /* Clicks buttons par pass hone dega */
+            opacity: 0.8; /* Thoda transparent taaki content dikhe */
+        }
+        
+        /* Ensure baaki elements upar rahein */
+        #loginScreen, #mainAppContent, .modal-overlay, #toastContainer {
+            position: relative;
+            z-index: 10;
+        }
+
     </style>
 </head>
 <body>
+
+    <canvas id="particle-canvas"></canvas>
 
     <div id="toastContainer"></div>
 
@@ -335,15 +357,152 @@
     </div>
 
     <script>
+        // NORMAL JAVASCRIPT YAHAN AAYEGA (Jab aap mangoge)
+            <script>
+        // ==========================================
+        // 1. PWA & SERVICE WORKER LOGIC
+        // ==========================================
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(err => console.log('SW error: ', err)));
         }
         let deferredPrompt; const installAppBtn = document.getElementById('installAppBtn');
         window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; installAppBtn.style.display = 'inline-flex'; });
         installAppBtn.addEventListener('click', async () => { installAppBtn.style.display = 'none'; deferredPrompt.prompt(); const { outcome } = await deferredPrompt.userChoice; deferredPrompt = null; });
+
+        // ==========================================
+        // ⭐ NAYA: 3D INTERACTIVE PARTICLE NETWORK ⭐
+        // ==========================================
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        let particlesArray;
+
+        // Mouse/Touch tracking
+        let mouse = { x: null, y: null, radius: (canvas.height/8) * (canvas.width/8) };
+        window.addEventListener('mousemove', (event) => { mouse.x = event.x; mouse.y = event.y; });
+        window.addEventListener('mouseout', () => { mouse.x = undefined; mouse.y = undefined; });
+        window.addEventListener('touchmove', (event) => { mouse.x = event.touches[0].clientX; mouse.y = event.touches[0].clientY; });
+        window.addEventListener('touchend', () => { mouse.x = undefined; mouse.y = undefined; });
+
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x; this.y = y; this.directionX = directionX; this.directionY = directionY; this.size = size; this.color = color;
+            }
+            draw() {
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                const isLight = document.body.classList.contains('theme-light');
+                ctx.fillStyle = isLight ? 'rgba(0, 184, 92, 0.6)' : 'rgba(0, 230, 118, 0.6)';
+                ctx.fill();
+            }
+            update() {
+                if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
+                if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
+
+                // Mouse Collision
+                let dx = mouse.x - this.x; let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx*dx + dy*dy);
+                if (distance < mouse.radius + this.size){
+                    if (mouse.x < this.x && this.x < canvas.width - this.size * 10) this.x += 3;
+                    if (mouse.x > this.x && this.x > this.size * 10) this.x -= 3;
+                    if (mouse.y < this.y && this.y < canvas.height - this.size * 10) this.y += 3;
+                    if (mouse.y > this.y && this.y > this.size * 10) this.y -= 3;
+                }
+                this.x += this.directionX; this.y += this.directionY;
+                this.draw();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 10000; // Density control
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 2) + 1;
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 1.5) - 0.75;
+                let directionY = (Math.random() * 1.5) - 0.75;
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, '#00e676'));
+            }
+        }
+
+        function animateParticles() {
+            requestAnimationFrame(animateParticles);
+            ctx.clearRect(0,0,innerWidth, innerHeight);
+            for (let i = 0; i < particlesArray.length; i++) { particlesArray[i].update(); }
+            connectParticles();
+        }
+
+        function connectParticles() {
+            let opacityValue = 1;
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
+                    + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                    if (distance < (canvas.width/9) * (canvas.height/9)) {
+                        opacityValue = 1 - (distance/15000);
+                        const isLight = document.body.classList.contains('theme-light');
+                        ctx.strokeStyle = isLight ? `rgba(0, 184, 92, ${opacityValue})` : `rgba(0, 230, 118, ${opacityValue})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath(); ctx.moveTo(particlesArray[a].x, particlesArray[a].y); ctx.lineTo(particlesArray[b].x, particlesArray[b].y); ctx.stroke();
+                    }
+                }
+            }
+        }
+        window.addEventListener('resize', () => { canvas.width = innerWidth; canvas.height = innerHeight; mouse.radius = ((canvas.height/8) * (canvas.width/8)); initParticles(); });
+        initParticles(); animateParticles();
+
+        // ==========================================
+        // 2. UI & MODAL LOGIC
+        // ==========================================
+        window.showToast = function(title, message, type = 'info') {
+            const container = document.getElementById('toastContainer'); const toast = document.createElement('div'); toast.className = 'vip-toast';
+            let iconClass = 'fas fa-bell'; let color = 'var(--primary-color)';
+            if(type === 'reply') { iconClass = 'fas fa-reply-all'; color = '#3498db'; toast.style.borderLeftColor = color; toast.style.borderColor = `rgba(52, 152, 219, 0.4)`; } 
+            else if(type === 'newapp') { iconClass = 'fas fa-rocket'; color = '#ff00ff'; toast.style.borderLeftColor = color; toast.style.borderColor = `rgba(255, 0, 255, 0.4)`; }
+            toast.innerHTML = `<i class="${iconClass} toast-icon" style="color: ${color};"></i><div class="toast-content"><h4 style="color: ${color};">${title}</h4><p>${message}</p></div>`;
+            toast.onclick = () => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 500); };
+            container.appendChild(toast); setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => { if(toast.parentElement) { toast.classList.remove('show'); setTimeout(() => toast.remove(), 500); } }, 6000);
+        }
+
+        window.showCustomAlert = function(msg, title="Notice", type="info") {
+            const titleEl = document.getElementById('customAlertTitle'); const icon = document.getElementById('alertIcon'); const btn = document.getElementById('alertBtn');
+            titleEl.innerText = title; document.getElementById('customAlertText').innerText = msg;
+            if(type === 'error') { icon.className = "fas fa-exclamation-triangle logo-icon"; icon.style.color = "#ff4757"; titleEl.style.color = "#ff4757"; btn.style.background = "#ff4757"; btn.style.color = "white"; btn.innerText = "Try Again"; } 
+            else if(type === 'success') { icon.className = "fas fa-check-circle logo-icon"; icon.style.color = "#00e676"; titleEl.style.color = "#00e676"; btn.style.background = "#00e676"; btn.style.color = "black"; btn.innerText = "Awesome!"; } 
+            else { icon.className = "fas fa-info-circle logo-icon"; icon.style.color = "#3498db"; titleEl.style.color = "#3498db"; btn.style.background = "#3498db"; btn.style.color = "white"; btn.innerText = "Got it!"; }
+            document.getElementById('customAlertModal').classList.add('active');
+        }
+
+        let isAnimating = false;
+        function updateNavButtons() { const prevBtn = document.querySelector('.prev-btn'); const nextBtn = document.querySelector('.next-btn'); if(!prevBtn || !nextBtn) return; prevBtn.style.display = window.currentScreenshotIndex <= 0 ? 'none' : 'flex'; nextBtn.style.display = window.currentScreenshotIndex >= window.currentScreenshots.length - 1 ? 'none' : 'flex'; }
+        window.openScreenshotModal = function(index) { window.currentScreenshotIndex = index; const imgElement = document.getElementById('fullScreenshot'); imgElement.style.transition = 'none'; imgElement.classList.remove('swipe-left', 'swipe-right'); imgElement.src = window.currentScreenshots[window.currentScreenshotIndex]; void imgElement.offsetWidth; imgElement.style.transition = ''; updateNavButtons(); document.getElementById('screenshotModal').classList.add('active'); }
+        window.closeScreenshotModal = function() { document.getElementById('screenshotModal').classList.remove('active'); if (!document.getElementById('appModal').classList.contains('active') && !document.getElementById('teamModal').classList.contains('active') && !document.getElementById('contactModal').classList.contains('active') && !document.getElementById('replyModal').classList.contains('active')) { document.body.style.overflow = 'auto'; } }
+        function changeScreenshot(direction) { if (isAnimating || window.currentScreenshots.length <= 1) return; if (direction === 'next' && window.currentScreenshotIndex >= window.currentScreenshots.length - 1) return; if (direction === 'prev' && window.currentScreenshotIndex <= 0) return; isAnimating = true; const imgElement = document.getElementById('fullScreenshot'); imgElement.classList.add(direction === 'next' ? 'swipe-left' : 'swipe-right'); setTimeout(() => { window.currentScreenshotIndex += direction === 'next' ? 1 : -1; imgElement.src = window.currentScreenshots[window.currentScreenshotIndex]; imgElement.style.transition = 'none'; imgElement.classList.remove('swipe-left', 'swipe-right'); imgElement.classList.add(direction === 'next' ? 'swipe-right' : 'swipe-left'); void imgElement.offsetWidth; imgElement.style.transition = ''; imgElement.classList.remove('swipe-left', 'swipe-right'); updateNavButtons(); setTimeout(() => { isAnimating = false; }, 300); }, 300); }
+        window.nextScreenshot = function(e) { if(e) e.stopPropagation(); changeScreenshot('next'); }
+        window.prevScreenshot = function(e) { if(e) e.stopPropagation(); changeScreenshot('prev'); }
+        
+        let touchStartX = 0, touchEndX = 0; const screenshotModalElement = document.getElementById('screenshotModal'); 
+        screenshotModalElement.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true}); 
+        screenshotModalElement.addEventListener('touchend', e => { touchEndX = e.changedTouches[0].screenX; if (!screenshotModalElement.classList.contains('active')) return; if (touchStartX - touchEndX > 50) window.nextScreenshot(); else if (touchEndX - touchStartX > 50) window.prevScreenshot(); }, {passive: true});
+        
+        window.openTeamModal = () => { document.getElementById('teamModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
+        window.closeTeamModal = () => { document.getElementById('teamModal').classList.remove('active'); if(!document.getElementById('contactModal').classList.contains('active')) document.body.style.overflow = 'auto'; }
+        window.openContactModal = () => { window.closeTeamModal(); document.getElementById('contactModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
+        window.closeContactModal = () => { document.getElementById('contactModal').classList.remove('active'); document.body.style.overflow = 'auto'; }
+
+        // Modal Click Outside Logic
+        window.onclick = function(event) {
+            const modals = ['appModal', 'teamModal', 'contactModal', 'screenshotModal', 'logoutConfirmModal', 'customAlertModal', 'deleteConfirmModal', 'replyModal', 'howToInstallModal'];
+            modals.forEach(id => { const m = document.getElementById(id); if (event.target == m) { if (id === 'appModal') window.closeModal(); else if (id === 'teamModal') window.closeTeamModal(); else if (id === 'contactModal') window.closeContactModal(); else if (id === 'screenshotModal') window.closeScreenshotModal(); else if (id === 'replyModal') window.closeReplyModal(); else m.classList.remove('active'); } });
+        }
+    </script>
+
     </script>
 
     <script type="module">
+        // FIREBASE JAVASCRIPT YAHAN AAYEGA (Jab aap mangoge)
+            <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc, updateDoc, setDoc, getDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
@@ -396,71 +555,8 @@
         currentThemeIndex = themes.indexOf(savedTheme) !== -1 ? themes.indexOf(savedTheme) : 0;
         applyTheme(themes[currentThemeIndex]);
 
-        // ⭐ NAYA: VIP Toast Notification Function ⭐
-        window.showToast = function(title, message, type = 'info') {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = 'vip-toast';
-            
-            let iconClass = 'fas fa-bell';
-            let color = 'var(--primary-color)';
-            
-            if(type === 'reply') { 
-                iconClass = 'fas fa-reply-all'; color = '#3498db'; 
-                toast.style.borderLeftColor = color; toast.style.borderColor = `rgba(52, 152, 219, 0.4)`;
-            } else if(type === 'newapp') { 
-                iconClass = 'fas fa-rocket'; color = '#ff00ff'; 
-                toast.style.borderLeftColor = color; toast.style.borderColor = `rgba(255, 0, 255, 0.4)`;
-            }
-
-            toast.innerHTML = `
-                <i class="${iconClass} toast-icon" style="color: ${color};"></i>
-                <div class="toast-content">
-                    <h4 style="color: ${color};">${title}</h4>
-                    <p>${message}</p>
-                </div>
-            `;
-            
-            // Click to dismiss
-            toast.onclick = () => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 500);
-            };
-
-            container.appendChild(toast);
-            setTimeout(() => toast.classList.add('show'), 10);
-            
-            // Auto hide after 6 seconds
-            setTimeout(() => {
-                if(toast.parentElement) {
-                    toast.classList.remove('show');
-                    setTimeout(() => toast.remove(), 500);
-                }
-            }, 6000);
-        }
-
-        window.showCustomAlert = function(msg, title="Notice", type="info") {
-            const titleEl = document.getElementById('customAlertTitle');
-            const icon = document.getElementById('alertIcon');
-            const btn = document.getElementById('alertBtn');
-            
-            titleEl.innerText = title;
-            document.getElementById('customAlertText').innerText = msg;
-            
-            if(type === 'error') { 
-                icon.className = "fas fa-exclamation-triangle logo-icon"; icon.style.color = "#ff4757"; titleEl.style.color = "#ff4757"; btn.style.background = "#ff4757"; btn.style.color = "white"; btn.innerText = "Try Again";
-            } else if(type === 'success') { 
-                icon.className = "fas fa-check-circle logo-icon"; icon.style.color = "#00e676"; titleEl.style.color = "#00e676"; btn.style.background = "#00e676"; btn.style.color = "black"; btn.innerText = "Awesome!";
-            } else { 
-                icon.className = "fas fa-info-circle logo-icon"; icon.style.color = "#3498db"; titleEl.style.color = "#3498db"; btn.style.background = "#3498db"; btn.style.color = "white"; btn.innerText = "Got it!";
-            }
-            document.getElementById('customAlertModal').classList.add('active');
-        }
-
         let appsData = [];
         let currentAppId = null;
-        let currentScreenshots = [];
-        let currentScreenshotIndex = 0;
         let unsubscribeReviews = null; 
         let unsubscribeDownloads = null; 
         window.currentReviewsMap = {}; 
@@ -557,8 +653,8 @@
             document.getElementById('modalShareBtn').onclick = () => window.handleShare(app.name, app.shortDesc, app.downloadLink);
             const featuresList = document.getElementById('modalFeatures'); featuresList.innerHTML = '';
             if (app.features && Array.isArray(app.features)) { app.features.forEach(f => { let li = document.createElement('li'); li.innerText = f; featuresList.appendChild(li); }); }
-            const screensContainer = document.getElementById('modalScreenshots'); screensContainer.innerHTML = ''; currentScreenshots = app.screenshots || []; 
-            currentScreenshots.forEach((src, index) => { let img = document.createElement('img'); img.src = src; img.onclick = () => window.openScreenshotModal(index); screensContainer.appendChild(img); });
+            const screensContainer = document.getElementById('modalScreenshots'); screensContainer.innerHTML = ''; window.currentScreenshots = app.screenshots || []; 
+            window.currentScreenshots.forEach((src, index) => { let img = document.createElement('img'); img.src = src; img.onclick = () => window.openScreenshotModal(index); screensContainer.appendChild(img); });
             window.loadLiveReviews(appId);
             if(unsubscribeDownloads) unsubscribeDownloads();
             unsubscribeDownloads = onSnapshot(doc(db, "app_stats", appId), (docSnap) => {
@@ -692,26 +788,10 @@
         
         window.submitReview = async function() { if (!auth.currentUser) { window.showCustomAlert("Please login first to submit a review!", "Login Required", "error"); return; } const name = auth.currentUser.displayName || "Anonymous User"; const text = document.getElementById('reviewText').value.trim(); let rating = 0; const radios = document.getElementsByName('rating'); for (let r of radios) { if (r.checked) { rating = r.value; break; } } if (rating === 0) { window.showCustomAlert("Please select a star rating.", "Missing Rating", "error"); return; } if (text === '') { window.showCustomAlert("Please write a review comment.", "Missing Comment", "error"); return; } const submitBtn = document.getElementById('submitReviewBtn'); submitBtn.innerText = editingReviewId ? "Updating..." : "Submitting..."; submitBtn.disabled = true; try { if (editingReviewId) { await updateDoc(doc(db, "reviews", editingReviewId), { rating: Number(rating), text: text, timestamp: Date.now() }); window.showCustomAlert("Your review has been successfully updated!", "Success", "success"); } else { await addDoc(collection(db, "reviews"), { appId: currentAppId, name: name, rating: Number(rating), text: text, timestamp: Date.now(), userId: auth.currentUser.uid, likedBy: [] }); window.showCustomAlert("Thank you! Your review has been posted.", "Success", "success"); } window.cancelEdit(); } catch (error) { window.showCustomAlert("Error saving review.", "Error", "error"); } finally { submitBtn.innerText = editingReviewId ? "Update Review" : "Submit Review"; submitBtn.disabled = false; } }
 
-        let isAnimating = false;
-        function updateNavButtons() { const prevBtn = document.querySelector('.prev-btn'); const nextBtn = document.querySelector('.next-btn'); if(!prevBtn || !nextBtn) return; prevBtn.style.display = currentScreenshotIndex <= 0 ? 'none' : 'flex'; nextBtn.style.display = currentScreenshotIndex >= currentScreenshots.length - 1 ? 'none' : 'flex'; }
-        window.openScreenshotModal = function(index) { currentScreenshotIndex = index; const imgElement = document.getElementById('fullScreenshot'); imgElement.style.transition = 'none'; imgElement.classList.remove('swipe-left', 'swipe-right'); imgElement.src = currentScreenshots[currentScreenshotIndex]; void imgElement.offsetWidth; imgElement.style.transition = ''; updateNavButtons(); document.getElementById('screenshotModal').classList.add('active'); }
-        window.closeScreenshotModal = function() { document.getElementById('screenshotModal').classList.remove('active'); if (!document.getElementById('appModal').classList.contains('active') && !document.getElementById('teamModal').classList.contains('active') && !document.getElementById('contactModal').classList.contains('active') && !document.getElementById('replyModal').classList.contains('active')) { document.body.style.overflow = 'auto'; } }
-        function changeScreenshot(direction) { if (isAnimating || currentScreenshots.length <= 1) return; if (direction === 'next' && currentScreenshotIndex >= currentScreenshots.length - 1) return; if (direction === 'prev' && currentScreenshotIndex <= 0) return; isAnimating = true; const imgElement = document.getElementById('fullScreenshot'); imgElement.classList.add(direction === 'next' ? 'swipe-left' : 'swipe-right'); setTimeout(() => { currentScreenshotIndex += direction === 'next' ? 1 : -1; imgElement.src = currentScreenshots[currentScreenshotIndex]; imgElement.style.transition = 'none'; imgElement.classList.remove('swipe-left', 'swipe-right'); imgElement.classList.add(direction === 'next' ? 'swipe-right' : 'swipe-left'); void imgElement.offsetWidth; imgElement.style.transition = ''; imgElement.classList.remove('swipe-left', 'swipe-right'); updateNavButtons(); setTimeout(() => { isAnimating = false; }, 300); }, 300); }
-        window.nextScreenshot = function(e) { if(e) e.stopPropagation(); changeScreenshot('next'); }
-        window.prevScreenshot = function(e) { if(e) e.stopPropagation(); changeScreenshot('prev'); }
-        let touchStartX = 0, touchEndX = 0; const screenshotModalElement = document.getElementById('screenshotModal'); screenshotModalElement.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true}); screenshotModalElement.addEventListener('touchend', e => { touchEndX = e.changedTouches[0].screenX; handleSwipe(); }, {passive: true}); function handleSwipe() { if (!screenshotModalElement.classList.contains('active')) return; if (touchStartX - touchEndX > 50) window.nextScreenshot(); else if (touchEndX - touchStartX > 50) window.prevScreenshot(); }
-        window.openTeamModal = () => { document.getElementById('teamModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
-        window.closeTeamModal = () => { document.getElementById('teamModal').classList.remove('active'); if(!document.getElementById('contactModal').classList.contains('active')) document.body.style.overflow = 'auto'; }
-        window.openContactModal = () => { window.closeTeamModal(); document.getElementById('contactModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
-        window.closeContactModal = () => { document.getElementById('contactModal').classList.remove('active'); document.body.style.overflow = 'auto'; }
-
-        // ⭐ NAYA: Listen for New Apps ⭐
         let isInitialAppLoad = true;
         async function fetchInitialApps() {
             const appsRef = collection(db, "apps");
             onSnapshot(appsRef, (snapshot) => {
-                
-                // Naya App Aane Par Toast Dikhao (First time load ko ignore karo)
                 snapshot.docChanges().forEach((change) => {
                     if (change.type === "added" && !isInitialAppLoad) {
                         const newApp = change.doc.data();
@@ -744,7 +824,6 @@
             });
         }
 
-        // ⭐ NAYA: Listen for Developer Replies ⭐
         let userReviewsUnsubscribe = null;
         window.userOldReviews = {};
         
@@ -758,9 +837,7 @@
                         const data = change.doc.data();
                         const oldData = window.userOldReviews[change.doc.id];
                         
-                        // Check agar reply update hua hai
                         if (data.developerReply && (!oldData || oldData.developerReply !== data.developerReply)) {
-                            // Find app name
                             const appInfo = appsData.find(a => a.id === data.appId);
                             const appNameStr = appInfo ? appInfo.name : "an app";
                             window.showToast("Developer Replied! 💬", `Admin replied to your review on ${appNameStr}.`, "reply");
@@ -768,7 +845,6 @@
                     }
                 });
                 
-                // Update old cache
                 window.userOldReviews = {};
                 snapshot.forEach(doc => {
                     window.userOldReviews[doc.id] = doc.data();
@@ -779,11 +855,6 @@
         window.onload = () => {
             renderShimmer();
             fetchInitialApps();
-        }
-
-        window.onclick = function(event) {
-            const modals = ['appModal', 'teamModal', 'contactModal', 'screenshotModal', 'logoutConfirmModal', 'customAlertModal', 'deleteConfirmModal', 'replyModal', 'howToInstallModal'];
-            modals.forEach(id => { const m = document.getElementById(id); if (event.target == m) { if (id === 'appModal') window.closeModal(); else if (id === 'teamModal') window.closeTeamModal(); else if (id === 'contactModal') window.closeContactModal(); else if (id === 'screenshotModal') window.closeScreenshotModal(); else if (id === 'replyModal') window.closeReplyModal(); else m.classList.remove('active'); } });
         }
 
         const loginScreen = document.getElementById('loginScreen'); const mainAppContent = document.getElementById('mainAppContent'); const loginBtn = document.getElementById('googleLoginBtn'); const userName = document.getElementById('userName'); const logoutBtn = document.getElementById('logoutBtn'); const logoutConfirmModal = document.getElementById('logoutConfirmModal'); const confirmLogoutBtn = document.getElementById('confirmLogoutBtn'); const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
@@ -811,7 +882,6 @@
                 const reviewerInput = document.getElementById('reviewerName'); if(reviewerInput) reviewerInput.value = "Posting as: " + user.displayName;
                 if (currentAppId) window.loadLiveReviews(currentAppId);
                 
-                // ⭐ NAYA: Start listening for replies as soon as user logs in ⭐
                 listenToUserReviews(user.uid);
                 
                 if (user.email === ADMIN_EMAIL) {
@@ -827,6 +897,8 @@
                 const reviewerInput = document.getElementById('reviewerName'); if(reviewerInput) reviewerInput.value = ''; window.cancelEdit();
             }
         });
+    </script>
+
     </script>
 </body>
 </html>
