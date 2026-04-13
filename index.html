@@ -216,17 +216,28 @@
             .vip-toast { width: 100%; transform: translateY(-150%); }
             .vip-toast.show { transform: translateY(0); }
         }
-
-        /* ⭐ NAYA: 3D Particle Canvas Style ⭐ */
+                /* ⭐ FIXED: 3D Particle Canvas Style ⭐ */
         #particle-canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 0; /* Background par rahega */
-            pointer-events: none; /* Clicks buttons par pass hone dega */
-            opacity: 0.8; /* Thoda transparent taaki content dikhe */
+            z-index: 1; /* Body background ke upar rahega */
+            pointer-events: none; /* 100% Clicks ko button tak pass hone dega */
+        }
+        
+        /* Particles dikhane ke liye Login screen ka pichla background transparent kiya */
+        #loginScreen {
+            background: transparent !important; 
+        }
+        
+        /* App ke main elements ko Canvas ke aage (Front) rakhne ke liye */
+        .login-box, header, .container, .bottom-actions {
+            position: relative;
+            z-index: 10; 
+        }
+
         }
         
         /* Ensure baaki elements upar rahein */
