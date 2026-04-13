@@ -13,8 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* CSS YAHAN AAYEGA (Jab aap mangoge) */
-                /* CSS Variables */
+        /* CSS Variables */
         :root {
             --bg-gradient: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
             --glass-bg: rgba(255, 255, 255, 0.05);
@@ -54,14 +53,56 @@
         ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
         ::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 4px; }
 
-        #loginScreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-gradient); display: flex; justify-content: center; align-items: center; z-index: 9999; transition: background 0.5s ease; }
-        .login-box { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 40px 30px; border-radius: 20px; text-align: center; backdrop-filter: blur(10px); box-shadow: var(--card-shadow); width: 90%; max-width: 400px; animation: fadeIn 0.8s ease; transition: all 0.5s ease;}
+        /* ⭐ FIXED: Login Screen & Canvas Z-Index ⭐ */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1; /* Background par rahega */
+            pointer-events: none; /* Clicks pass hone dega */
+        }
+
+        #loginScreen { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            /* Login screen transparent taaki piche ka canvas dikhe */
+            background: transparent; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 9999; /* Sabse upar taaki click ho sake */
+            transition: background 0.5s ease; 
+        }
+
+        .login-box { 
+            background: var(--glass-bg); 
+            border: 1px solid var(--glass-border); 
+            padding: 40px 30px; 
+            border-radius: 20px; 
+            text-align: center; 
+            backdrop-filter: blur(10px); 
+            box-shadow: var(--card-shadow); 
+            width: 90%; 
+            max-width: 400px; 
+            animation: fadeIn 0.8s ease; 
+            transition: all 0.5s ease;
+            position: relative; /* Zaroori hai z-index ke liye */
+            z-index: 10000; /* Clickability ke liye sabse upar */
+        }
+        
         .login-box i.logo-icon { font-size: 3.5rem; color: var(--primary-color); margin-bottom: 15px; }
         .login-box h2 { color: var(--text-main); margin-bottom: 10px; font-size: 1.6rem; }
         .login-box p { color: var(--text-muted); margin-bottom: 30px; font-size: 0.95rem; }
 
-        .google-style-btn { background: #ffffff !important; color: #3c4043 !important; border: 1px solid #dadce0 !important; box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15); font-weight: 500; border-radius: 25px; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px 25px; width: 100%; font-size: 1.05rem; cursor: pointer; transition: all 0.3s ease; }
+        .google-style-btn { background: #ffffff !important; color: #3c4043 !important; border: 1px solid #dadce0 !important; box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15); font-weight: 500; border-radius: 25px; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px 25px; width: 100%; font-size: 1.05rem; cursor: pointer; transition: all 0.3s ease; position: relative; z-index: 10001; }
         .google-style-btn:hover { background: #f8f9fa !important; box-shadow: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15); }
+
+        #mainAppContent { position: relative; z-index: 10; }
 
         header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: var(--glass-bg); backdrop-filter: blur(10px); border-bottom: 1px solid var(--glass-border); position: sticky; top: 0; z-index: 100; transition: all 0.5s ease;}
         .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary-color); display: flex; align-items: center; gap: 10px; }
@@ -216,27 +257,6 @@
             .vip-toast { width: 100%; transform: translateY(-150%); }
             .vip-toast.show { transform: translateY(0); }
         }
-                /* ⭐ FIXED: 3D Particle Canvas Style ⭐ */
-        #particle-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 1; /* Body background ke upar rahega */
-            pointer-events: none; /* 100% Clicks ko button tak pass hone dega */
-        }
-        
-        /* Particles dikhane ke liye Login screen ka pichla background transparent kiya */
-        #loginScreen {
-            background: transparent !important; 
-        }
-        
-        /* App ke main elements ko Canvas ke aage (Front) rakhne ke liye */
-        .login-box, header, .container, .bottom-actions {
-            position: relative;
-            z-index: 10; 
-        }
     </style>
 </head>
 <body>
@@ -245,7 +265,7 @@
 
     <div id="toastContainer"></div>
 
-    <div id="loginScreen" style="display: flex;">
+    <div id="loginScreen">
         <div class="login-box">
             <i class="fa-brands fa-google-play logo-icon"></i>
             <h2>SAAK App Hub</h2>
@@ -359,8 +379,6 @@
     </div>
 
     <script>
-        // NORMAL JAVASCRIPT YAHAN AAYEGA (Jab aap mangoge)
-            <script>
         // ==========================================
         // 1. PWA & SERVICE WORKER LOGIC
         // ==========================================
@@ -500,11 +518,7 @@
         }
     </script>
 
-    </script>
-
     <script type="module">
-        // FIREBASE JAVASCRIPT YAHAN AAYEGA (Jab aap mangoge)
-            <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc, updateDoc, setDoc, getDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
@@ -899,8 +913,6 @@
                 const reviewerInput = document.getElementById('reviewerName'); if(reviewerInput) reviewerInput.value = ''; window.cancelEdit();
             }
         });
-    </script>
-
     </script>
 </body>
 </html>
